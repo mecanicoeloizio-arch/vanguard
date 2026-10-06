@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Grupo Eloizio - Painel Administrativo, Módulos & CLI (PHP 8)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .font-mono { font-family: 'JetBrains Mono', monospace; }
+  </style>
+</head>
+<body class="bg-slate-100 text-slate-900 antialiased">
+
+  <!-- Admin Login Protection Overlay (auth.php) -->
+  <div id="adminAuthWall" class="fixed inset-0 z-50 bg-slate-950/90 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="bg-slate-900 text-white rounded-3xl shadow-2xl max-w-md w-full p-8 border border-slate-800 space-y-6 animate-in zoom-in-95">
+      <div class="text-center space-y-2">
+        <div class="w-16 h-16 rounded-2xl bg-indigo-500/20 text-indigo-400 border border-indigo-500/30 flex items-center justify-center mx-auto text-2xl font-bold">
+          🔒
+        </div>
+        <span class="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+          Modo Produção • Acesso Restrito
+        </span>
+        <h2 class="text-2xl font-black text-white">Grupo Eloizio — Painel Admin</h2>
+        <p class="text-xs text-slate-400 leading-relaxed">
+          Autenticação obrigatória para acessar o Terminal CLI, Módulos e Auditoria de Segurança.
+        </p>
+      </div>
+
+      <div id="adminLoginErro" class="hidden p-3 bg-rose-500/20 border border-rose-500/40 text-rose-300 text-xs rounded-xl"></div>
+
+      <form onsubmit="fazerLoginAdmin(event)" class="space-y-4">
+        <div>
+          <label class="block text-xs font-bold text-slate-300 uppercase mb-1">E-mail do Administrador</label>
+          <input type="email" id="adminEmail" required placeholder="mecanicoeloizio@gmail.com" class="w-full px-3.5 py-2.5 text-xs bg-slate-950 border border-slate-700 text-white rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-hidden font-sans">
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-300 uppercase mb-1">Senha de Acesso</label>
+          <input type="password" id="adminSenha" required placeholder="Digite sua senha de acesso" class="w-full px-3.5 py-2.5 text-xs bg-slate-950 border border-slate-700 text-white rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-hidden font-sans">
+        </div>
+
+        <button type="submit" id="btnAdminLogin" class="w-full py-3 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl font-bold text-xs shadow-lg transition cursor-pointer">
+          Autenticar Acesso Administrativo &rarr;
+        </button>
+      </form>
+
+      <div class="text-center pt-2">
+        <a href="index.html" class="text-xs text-slate-400 hover:text-white transition">
+          &larr; Voltar para a Página Principal
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header class="bg-linear-to-r from-slate-950 via-indigo-950 to-slate-900 text-white p-6 shadow-md border-b border-indigo-900/40">
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+      <div>
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-300 text-xs font-bold mb-2">
+          <span>⚙️ Painel de Administração • Produção Oficial (PHP 8)</span>
+        </div>
+        <h1 class="text-2xl sm:text-3xl font-black">Grupo Eloizio — Gestão Modular & Terminal CLI</h1>
+        <p class="text-xs text-slate-300 mt-1">
+          Controle de Módulos, Terminal de Linha de Comando (CLI), Auditoria de Segurança e Cofre de Tokens.
+        </p>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <div id="adminUserBadge" class="hidden px-3 py-1.5 rounded-xl bg-white/10 text-xs font-bold text-slate-200">
+          👤 <span id="adminNomeTxt">Administrador</span>
+        </div>
+        <a href="index.html" class="px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-xl text-xs font-bold transition">
+          &larr; Voltar ao Site
+        </a>
+        <button onclick="executarComandoCLI('security:audit')" class="px-4 py-2 bg-emerald-500 hover:bg-emerald-400 text-slate-950 rounded-xl text-xs font-black transition cursor-pointer">
+          🛡️ Auditoria Completa
+        </button>
+        <button onclick="sairAdmin()" class="px-3 py-2 bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 border border-rose-500/30 rounded-xl text-xs font-bold transition cursor-pointer">
+          Sair
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Navigation Tabs -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6">
+    <div class="flex items-center gap-2 bg-white p-1.5 rounded-2xl border border-slate-200 overflow-x-auto shadow-2xs">
+      <button onclick="trocarAba('modulos')" id="tabModulos" class="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-indigo-600 text-white transition">
+        📦 Módulos do Sistema
+      </button>
+      <button onclick="trocarAba('cli')" id="tabCli" class="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold text-slate-600 hover:text-slate-900 transition">
+        💻 Terminal CLI
+      </button>
+      <button onclick="trocarAba('seguranca')" id="tabSeguranca" class="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold text-slate-600 hover:text-slate-900 transition">
+        🛡️ Auditoria de Segurança
+      </button>
+    </div>
+
+    <!-- Conteúdo da Aba 1: Módulos do Sistema -->
+    <div id="abaModulos" class="mt-6 space-y-6">
+      <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs flex items-center justify-between">
+        <div>
+          <h3 class="font-black text-base text-slate-900">Gerenciador de Módulos (PHP 8 Modular)</h3>
+          <p class="text-xs text-slate-500">Módulos podem ser ativados, desativados ou atualizados sob demanda.</p>
+        </div>
+        <button onclick="recarregarModulos()" class="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold transition">
+          🔄 Atualizar Lista
+        </button>
+      </div>
+
+      <div id="gridModulos" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- Renderizado dinamicamente via JS -->
+      </div>
+    </div>
+
+    <!-- Conteúdo da Aba 2: Terminal CLI -->
+    <div id="abaCli" class="mt-6 space-y-6 hidden">
+      <div class="bg-slate-900 p-4 rounded-2xl text-white space-y-2">
+        <span class="text-xs font-bold text-emerald-400 uppercase tracking-wider block">Atalhos de Comandos Rápidos:</span>
+        <div class="flex flex-wrap gap-2 text-xs font-mono">
+          <button onclick="executarComandoCLI('system:status')" class="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-emerald-300 rounded-lg">system:status</button>
+          <button onclick="executarComandoCLI('security:audit')" class="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-emerald-300 rounded-lg">security:audit</button>
+          <button onclick="executarComandoCLI('module:list')" class="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-emerald-300 rounded-lg">module:list</button>
+          <button onclick="executarComandoCLI('finance:reconcile')" class="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-emerald-300 rounded-lg">finance:reconcile</button>
+          <button onclick="executarComandoCLI('ai:test')" class="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-emerald-300 rounded-lg">ai:test</button>
+          <button onclick="executarComandoCLI('backup:create')" class="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-emerald-300 rounded-lg">backup:create</button>
+          <button onclick="executarComandoCLI('help')" class="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-emerald-300 rounded-lg">help</button>
+        </div>
+      </div>
+
+      <div class="bg-slate-950 rounded-2xl border border-slate-800 text-slate-200 font-mono shadow-2xl overflow-hidden flex flex-col h-[480px]">
+        <div class="bg-slate-900/90 px-4 py-2 border-b border-slate-800 flex items-center justify-between text-xs">
+          <span class="text-slate-400 font-bold">root@grupoeloizio-php8:~$</span>
+          <span class="text-[11px] text-slate-500">Terminal CLI v2.5.0</span>
+        </div>
+        <div id="cliOutput" class="flex-1 p-4 overflow-y-auto space-y-3 text-xs">
+          <div class="text-slate-500">Terminal Administrativo do Grupo Eloizio conectado via admin_cli.php. Digite "help" para ver os comandos.</div>
+        </div>
+        <form onsubmit="submeterCLI(event)" class="p-3 bg-slate-900 border-t border-slate-800 flex items-center gap-2 text-xs">
+          <span class="text-emerald-400 font-bold">$</span>
+          <input type="text" id="cliCmdInput" placeholder="Digite um comando..." class="flex-1 bg-transparent text-white font-mono text-xs focus:outline-hidden">
+          <button type="submit" class="px-4 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-bold rounded-lg text-xs">Executar</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Conteúdo da Aba 3: Auditoria de Segurança -->
+    <div id="abaSeguranca" class="mt-6 space-y-6 hidden">
+      <div class="bg-linear-to-r from-slate-900 via-indigo-950 to-slate-900 text-white p-6 rounded-3xl border border-indigo-900/40 flex items-center justify-between">
+        <div>
+          <span class="text-xs font-bold text-emerald-400 block mb-1">Verificação Total de Segurança</span>
+          <h3 class="text-xl font-black">Scanner dos Pontos Sensíveis (Login, Financeiro, IA)</h3>
+          <p class="text-xs text-slate-300 mt-1">Relatório executivo gerado via security_audit.php</p>
+        </div>
+        <div class="text-right">
+          <span class="text-3xl font-black text-emerald-400 block" id="secScore">98/100</span>
+          <span class="text-[10px] text-slate-400 font-bold">STATUS: SEGURO</span>
+        </div>
+      </div>
+
+      <div id="secCategorias" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- Preenchido via JS chamando security_audit.php -->
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function trocarAba(aba) {
+      ['Modulos', 'Cli', 'Seguranca'].forEach(a => {
+        document.getElementById('aba' + a).classList.add('hidden');
+        document.getElementById('tab' + a).className = 'px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold text-slate-600 hover:text-slate-900 transition';
+      });
+
+      if (aba === 'modulos') {
+        document.getElementById('abaModulos').classList.remove('hidden');
+        document.getElementById('tabModulos').className = 'px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-indigo-600 text-white transition';
+        recarregarModulos();
+      } else if (aba === 'cli') {
+        document.getElementById('abaCli').classList.remove('hidden');
+        document.getElementById('tabCli').className = 'px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-indigo-600 text-white transition';
+      } else if (aba === 'seguranca') {
+        document.getElementById('abaSeguranca').classList.remove('hidden');
+        document.getElementById('tabSeguranca').className = 'px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-indigo-600 text-white transition';
+        carregarAuditoriaSeguranca();
+      }
+    }
+
+    async function recarregarModulos() {
+      try {
+        const res = await fetch('admin_cli.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ command: 'module:list' })
+        });
+        const data = await res.json();
+        
+        // Carrega os módulos default
+        const modulos = [
+          { id: 'mod_core', slug: 'core_system', name: 'Núcleo Central & Segurança Multi-Módulos', version: '2.5.0', enabled: true, isCore: true, desc: 'RBAC, controle de sessão, criptografia SHA-256 e orquestração.' },
+          { id: 'mod_camilla_ai', slug: 'camilla_faria_ai_assistant', name: 'Atendente Inteligente Camilla Faria', version: '3.1.0', enabled: true, isCore: false, desc: 'Assistente executiva com IA multimodal, diagnóstico de fotos e vendas.' },
+          { id: 'mod_mercadopago', slug: 'mercadopago_gateway', name: 'Mercado Pago Checkout & PIX', version: '2.4.0', enabled: true, isCore: false, desc: 'Gateway oficial de recebimento com conciliação contábil automática.' },
+          { id: 'mod_maquinas', slug: 'maquinas_costura_mecanica', name: 'Oficina de Máquinas de Costura (São Gonçalo)', version: '1.5.0', enabled: true, isCore: false, desc: 'Compra, venda, conserto, reforma de máquinas e peças.' },
+          { id: 'mod_contabilidade', slug: 'contabilidade_assessoria_online', name: 'Contabilidade e Assessoria 100% Online', version: '1.8.0', enabled: true, isCore: false, desc: 'MEI, CNPJ, DASN e assessoria digital ágil sem burocracia.' },
+          { id: 'mod_cursos', slug: 'cursos_livres_online', name: 'Cursos Livres com Certificação Oficial MEC', version: '2.1.0', enabled: true, isCore: false, desc: 'Aulas online, provas, certificados ICP-Edu (LDB Art. 42) e carteirinha DNE.' }
+        ];
+
+        const grid = document.getElementById('gridModulos');
+        grid.innerHTML = modulos.map(m => `
+          <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs space-y-3">
+            <div class="flex items-center justify-between">
+              <div>
+                <h4 class="font-extrabold text-sm text-slate-900">${m.name}</h4>
+                <div class="flex items-center gap-2 mt-0.5">
+                  <code class="text-[10px] bg-slate-100 px-1 py-0.5 rounded font-mono">${m.slug}</code>
+                  <span class="text-[10px] text-slate-400 font-bold">v${m.version}</span>
+                </div>
+              </div>
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${m.enabled ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-100 text-slate-600'}">
+                ${m.enabled ? '● Ativo' : '○ Desativado'}
+              </span>
+            </div>
+            <p class="text-xs text-slate-600 bg-slate-50 p-2.5 rounded-xl border border-slate-100">${m.desc}</p>
+            <div class="flex items-center justify-between pt-2 border-t border-slate-100 text-xs">
+              <span class="text-[10px] text-slate-400">${m.isCore ? 'Módulo Core Vital' : 'Extensão Opcional'}</span>
+              <button onclick="executarComandoCLI('module:update ${m.slug}')" class="px-3 py-1 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-lg font-bold text-xs">
+                Atualizar Módulo
+              </button>
+            </div>
+          </div>
+        `).join('');
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    async function executarComandoCLI(cmd) {
+      trocarAba('cli');
+      const outputArea = document.getElementById('cliOutput');
+      outputArea.innerHTML += `<div class="text-emerald-400 font-bold"><span class="text-slate-500">[${new Date().toLocaleTimeString()}]</span> admin@grupo-eloizio:~$ ${cmd}</div>`;
+      outputArea.scrollTop = outputArea.scrollHeight;
+
+      try {
+        const res = await fetch('admin_cli.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ command: cmd })
+        });
+        const data = await res.json();
+        outputArea.innerHTML += `<pre class="text-slate-300 whitespace-pre-wrap pl-4 border-l-2 border-slate-800 bg-slate-900/40 p-2 rounded-lg">${data.output}</pre>`;
+        outputArea.scrollTop = outputArea.scrollHeight;
+      } catch (err) {
+        outputArea.innerHTML += `<div class="text-rose-400">Erro ao executar comando via admin_cli.php: ${err.message}</div>`;
+      }
+    }
+
+    function submeterCLI(e) {
+      e.preventDefault();
+      const input = document.getElementById('cliCmdInput');
+      const cmd = input.value.trim();
+      if (!cmd) return;
+      input.value = '';
+      executarComandoCLI(cmd);
+    }
+
+    async function carregarAuditoriaSeguranca() {
+      try {
+        const res = await fetch('security_audit.php');
+        const data = await res.json();
+        document.getElementById('secScore').innerText = data.overallScore + '/100';
+
+        const catDiv = document.getElementById('secCategorias');
+        const cats = [
+          { title: '1. Login & Autenticação', score: data.categories.authentication.score, checks: data.categories.authentication.checks },
+          { title: '2. Financeiro & Mercado Pago', score: data.categories.financial.score, checks: data.categories.financial.checks },
+          { title: '3. IA Camilla Faria', score: data.categories.ai_guardrails.score, checks: data.categories.ai_guardrails.checks },
+          { title: '4. Proteção de Dados & MEC', score: data.categories.data_protection.score, checks: data.categories.data_protection.checks },
+        ];
+
+        catDiv.innerHTML = cats.map(c => `
+          <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs space-y-3">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-2">
+              <h4 class="font-extrabold text-sm text-slate-900">${c.title}</h4>
+              <span class="px-2 py-0.5 rounded-full text-xs font-black bg-emerald-100 text-emerald-800">${c.score}%</span>
+            </div>
+            <div class="space-y-2">
+              ${c.checks.map(chk => `
+                <div class="p-2 bg-slate-50 rounded-xl border border-slate-100 text-xs">
+                  <span class="font-bold text-slate-800 block">✔ ${chk.name}</span>
+                  <span class="text-[11px] text-slate-500">${chk.detail}</span>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `).join('');
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    // Autenticação & Proteção de Sessão Admin
+    async function verificarSessaoAdmin() {
+      try {
+        const res = await fetch('auth.php?action=check_session');
+        const data = await res.json();
+
+        if (data.authenticated && data.user && data.user.role === 'admin') {
+          liberarPainelAdmin(data.user);
+        } else {
+          document.getElementById('adminAuthWall').classList.remove('hidden');
+        }
+      } catch (err) {
+        // Fallback em caso de offline/dev
+        document.getElementById('adminAuthWall').classList.remove('hidden');
+      }
+    }
+
+    function liberarPainelAdmin(user) {
+      document.getElementById('adminAuthWall').classList.add('hidden');
+      document.getElementById('adminUserBadge').classList.remove('hidden');
+      document.getElementById('adminNomeTxt').innerText = user.name;
+      recarregarModulos();
+    }
+
+    async function fazerLoginAdmin(e) {
+      e.preventDefault();
+      const email = document.getElementById('adminEmail').value.trim();
+      const password = document.getElementById('adminSenha').value.trim();
+      const errBox = document.getElementById('adminLoginErro');
+      const btn = document.getElementById('btnAdminLogin');
+
+      errBox.classList.add('hidden');
+      btn.innerText = 'Autenticando...';
+      btn.disabled = true;
+
+      try {
+        const res = await fetch('auth.php?action=login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+        const data = await res.json();
+
+        if (data.success && data.user) {
+          if (data.user.role !== 'admin') {
+            errBox.innerText = 'Acesso negado: Este usuário não possui privilégios de administrador.';
+            errBox.classList.remove('hidden');
+          } else {
+            liberarPainelAdmin(data.user);
+          }
+        } else {
+          errBox.innerText = data.error || 'Credenciais inválidas. Verifique os dados digitados.';
+          errBox.classList.remove('hidden');
+        }
+      } catch (err) {
+        errBox.innerText = 'Erro ao conectar ao auth.php: ' + err.message;
+        errBox.classList.remove('hidden');
+      } finally {
+        btn.innerText = 'Autenticar Acesso Administrativo →';
+        btn.disabled = false;
+      }
+    }
+
+    async function sairAdmin() {
+      try {
+        await fetch('auth.php?action=logout');
+      } catch {}
+      location.href = 'index.html';
+    }
+
+    // Inicia verificação de sessão de administrador
+    verificarSessaoAdmin();
+  </script>
+</body>
+</html>

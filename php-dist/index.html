@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Grupo Eloizio - Cursos 100% Online, Contabilidade & Máquinas de Costura</title>
+  <meta name="description" content="Grupo Eloizio: Cursos Livres com Certificação Oficial MEC, Contabilidade e Assessoria Digital 100% Online, e Oficina Mecânica de Máquinas de Costura em São Gonçalo - RJ.">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 antialiased selection:bg-indigo-600 selection:text-white">
+
+  <!-- Top Announcement Bar -->
+  <header class="bg-slate-950 text-white text-xs py-2 px-4 border-b border-indigo-950">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
+      <div class="flex items-center gap-2">
+        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+        <span>Atendimento Oficial Grupo Eloizio • WhatsApp Oficial: <strong>(21) 99613-4073</strong></span>
+      </div>
+      <div class="flex items-center gap-4 text-slate-300">
+        <span>CEO Eloizio: (21) 98764-8727</span>
+        <span class="text-indigo-400">•</span>
+        <a href="admin.html" class="text-indigo-400 hover:text-white font-bold transition">Painel Admin & CLI &rarr;</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Navbar -->
+  <nav class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-xs">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center font-black text-lg shadow-md">
+          GE
+        </div>
+        <div>
+          <h1 class="text-base font-black tracking-tight leading-none text-slate-950">Grupo Eloizio</h1>
+          <span class="text-[10px] text-slate-500 font-semibold tracking-wide">São Gonçalo - RJ & Brasil Online</span>
+        </div>
+      </div>
+
+      <div class="hidden md:flex items-center gap-6 text-xs font-bold text-slate-700">
+        <a href="#pilares" class="hover:text-indigo-600 transition">Pilares de Atuação</a>
+        <a href="#cursos" class="hover:text-indigo-600 transition">Cursos Livres MEC</a>
+        <a href="#maquinas" class="hover:text-indigo-600 transition">Máquinas de Costura</a>
+        <a href="#contabilidade" class="hover:text-indigo-600 transition">Contabilidade Online</a>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <button onclick="abrirModalAuth()" id="btnAuthNav" class="px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs transition shadow-sm cursor-pointer flex items-center gap-1.5">
+          <span>🔒 Entrar / Login</span>
+        </button>
+        <button onclick="abrirCamilla()" class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs transition shadow-sm cursor-pointer flex items-center gap-2">
+          <span>☕ Falar com Camilla Faria</span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="relative bg-linear-to-b from-slate-900 via-indigo-950 to-slate-900 text-white py-16 sm:py-24 px-4 overflow-hidden">
+    <div class="max-w-7xl mx-auto text-center space-y-6 relative z-10">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/20 border border-indigo-400/30 text-indigo-300 text-xs font-bold">
+        <span>🚀 3 Pilares Integrados de Sucesso • Grupo Eloizio</span>
+      </div>
+      <h2 class="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight max-w-4xl mx-auto leading-tight">
+        Educação Profissional, Assessoria Contábil & Oficina de Máquinas de Costura
+      </h2>
+      <p class="text-sm sm:text-base text-slate-300 max-w-2xl mx-auto leading-relaxed">
+        Soluções completas lideradas pelo CEO Eloizio e pela Gerente Geral Camilla Faria. Atendimento direto, dinâmico e pagamentos 100% seguros pelo Mercado Pago.
+      </p>
+
+      <div class="flex flex-wrap items-center justify-center gap-3 pt-4">
+        <button onclick="abrirCamilla()" class="px-6 py-3 rounded-2xl bg-indigo-600 hover:bg-indigo-500 text-white font-black text-xs sm:text-sm transition shadow-lg shadow-indigo-600/30 cursor-pointer">
+          Conversar com a Atendente Camilla
+        </button>
+        <button onclick="abrirModalPagamento('Curso Engenharia de Software Moderna', 1606.50)" class="px-6 py-3 rounded-2xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs sm:text-sm border border-white/20 transition cursor-pointer">
+          Checkout Mercado Pago (Cupom CAMILLA15)
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pilares de Atuação -->
+  <section id="pilares" class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center space-y-2 mb-12">
+      <span class="text-xs font-black uppercase text-indigo-600 tracking-wider">Escopo de Atuação</span>
+      <h3 class="text-2xl sm:text-3xl font-black text-slate-900">Os 3 Pilares do Grupo Eloizio</h3>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <!-- Pilar 1 -->
+      <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-xs space-y-4 hover:border-indigo-300 transition">
+        <div class="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-xl font-black">
+          🎓
+        </div>
+        <h4 class="text-lg font-black text-slate-900">1. Cursos Livres 100% Online</h4>
+        <p class="text-xs text-slate-600 leading-relaxed">
+          Formações profissionais com alta vendabilidade, videoaulas completas, Certificado Oficial com amparo na Lei nº 9.394/96 Art. 42 e Carteirinha Estudantil DNE Nacional (Lei 12.933/13).
+        </p>
+        <button onclick="abrirModalPagamento('Matrícula Curso Livre com Certificado MEC', 1606.50)" class="w-full py-2.5 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-900 font-bold text-xs transition cursor-pointer">
+          Ver Cursos & Matricular &rarr;
+        </button>
+      </div>
+
+      <!-- Pilar 2 -->
+      <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-xs space-y-4 hover:border-indigo-300 transition">
+        <div class="w-12 h-12 rounded-2xl bg-sky-50 text-sky-600 flex items-center justify-center text-xl font-black">
+          💼
+        </div>
+        <h4 class="text-lg font-black text-slate-900">2. Contabilidade 100% Online</h4>
+        <p class="text-xs text-slate-600 leading-relaxed">
+          Assessoria prática, ágil e digital para MEI e empresas. Abertura de CNPJ em 24h, declaração anual de faturamento (DASN), emissão de notas fiscais e certidões negativas sem burocracia.
+        </p>
+        <button onclick="abrirModalPagamento('Assessoria Contábil Digital Mensal', 199.90)" class="w-full py-2.5 rounded-xl bg-sky-50 hover:bg-sky-100 text-sky-900 font-bold text-xs transition cursor-pointer">
+          Contratar Assessoria Digital &rarr;
+        </button>
+      </div>
+
+      <!-- Pilar 3 -->
+      <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-xs space-y-4 hover:border-indigo-300 transition">
+        <div class="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center text-xl font-black">
+          🪡
+        </div>
+        <h4 class="text-lg font-black text-slate-900">3. Máquinas de Costura & Mecânica</h4>
+        <p class="text-xs text-slate-600 leading-relaxed">
+          Oficina especializada em São Gonçalo - RJ liderada pelo CEO Eloizio. Compra, venda, conserto e reforma completa de máquinas industriais (reta, overloque) e domésticas (Singer, Siruba, Brother).
+        </p>
+        <button onclick="abrirCamillaFoto()" class="w-full py-2.5 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-900 font-bold text-xs transition cursor-pointer">
+          Enviar Foto da Máquina para Diagnóstico &rarr;
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Vitrine de Cursos -->
+  <section id="cursos" class="py-16 bg-slate-100 border-t border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center space-y-2 mb-10">
+        <span class="text-xs font-black uppercase text-indigo-600 tracking-wider">Educação com Certificação MEC</span>
+        <h3 class="text-2xl sm:text-3xl font-black text-slate-900">Formações Online em Destaque</h3>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Curso 1 -->
+        <div class="bg-white rounded-3xl overflow-hidden border border-slate-200 shadow-xs flex flex-col justify-between">
+          <div class="p-6 space-y-3">
+            <span class="px-2.5 py-1 rounded-full text-[10px] font-black bg-indigo-100 text-indigo-800 uppercase">Tecnologia & Cloud</span>
+            <h4 class="text-base font-black text-slate-900">Engenharia de Software Moderna & Microsserviços</h4>
+            <p class="text-xs text-slate-500 leading-relaxed">
+              Domine arquiteturas escaláveis, Docker, APIs RESTful, segurança avançada e testes automatizados.
+            </p>
+            <div class="text-xs text-slate-600 pt-2 space-y-1">
+              <div>• Carga Horária: <strong>160 horas</strong></div>
+              <div>• Certificado MEC (LDB Art. 42) + Carteirinha DNE</div>
+            </div>
+          </div>
+          <div class="p-6 bg-slate-50 border-t border-slate-100 flex items-center justify-between">
+            <div>
+              <span class="text-[10px] text-slate-400 line-through block">De R$ 1.890,00</span>
+              <span class="text-lg font-black text-emerald-600">12x R$ 133,87</span>
+              <span class="text-[10px] text-indigo-600 font-bold block">com cupom CAMILLA15</span>
+            </div>
+            <button onclick="abrirModalPagamento('Engenharia de Software Moderna', 1606.50)" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold text-xs transition cursor-pointer">
+              Matricular
+            </button>
+          </div>
+        </div>
+
+        <!-- Curso 2 -->
+        <div class="bg-white rounded-3xl overflow-hidden border border-slate-200 shadow-xs flex flex-col justify-between">
+          <div class="p-6 space-y-3">
+            <span class="px-2.5 py-1 rounded-full text-[10px] font-black bg-sky-100 text-sky-800 uppercase">Gestão & Finanças</span>
+            <h4 class="text-base font-black text-slate-900">Gestão Contábil Prática para MEI e Pequenas Empresas</h4>
+            <p class="text-xs text-slate-500 leading-relaxed">
+              Aprenda a estruturar o fluxo de caixa, rotinas tributárias do Simples Nacional e emissão de notas fiscais.
+            </p>
+            <div class="text-xs text-slate-600 pt-2 space-y-1">
+              <div>• Carga Horária: <strong>80 horas</strong></div>
+              <div>• Certificado Oficial + Carteirinha Estudantil</div>
+            </div>
+          </div>
+          <div class="p-6 bg-slate-50 border-t border-slate-100 flex items-center justify-between">
+            <div>
+              <span class="text-[10px] text-slate-400 line-through block">De R$ 890,00</span>
+              <span class="text-lg font-black text-emerald-600">12x R$ 63,04</span>
+              <span class="text-[10px] text-indigo-600 font-bold block">com cupom CAMILLA15</span>
+            </div>
+            <button onclick="abrirModalPagamento('Gestão Contábil Prática', 756.50)" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold text-xs transition cursor-pointer">
+              Matricular
+            </button>
+          </div>
+        </div>
+
+        <!-- Curso 3 -->
+        <div class="bg-white rounded-3xl overflow-hidden border border-slate-200 shadow-xs flex flex-col justify-between">
+          <div class="p-6 space-y-3">
+            <span class="px-2.5 py-1 rounded-full text-[10px] font-black bg-amber-100 text-amber-800 uppercase">Mecânica & Oficina</span>
+            <h4 class="text-base font-black text-slate-900">Manutenção e Regulagem de Máquinas de Costura Industriais</h4>
+            <p class="text-xs text-slate-500 leading-relaxed">
+              Curso prático com o mestre Eloizio: sincronismo de lançadeira, regulagem de calcador e motor direct-drive.
+            </p>
+            <div class="text-xs text-slate-600 pt-2 space-y-1">
+              <div>• Carga Horária: <strong>120 horas</strong></div>
+              <div>• Certificado Oficial + Suporte Técnico da Oficina</div>
+            </div>
+          </div>
+          <div class="p-6 bg-slate-50 border-t border-slate-100 flex items-center justify-between">
+            <div>
+              <span class="text-[10px] text-slate-400 line-through block">De R$ 1.200,00</span>
+              <span class="text-lg font-black text-emerald-600">12x R$ 85,00</span>
+              <span class="text-[10px] text-indigo-600 font-bold block">com cupom CAMILLA15</span>
+            </div>
+            <button onclick="abrirModalPagamento('Manutenção de Máquinas de Costura', 1020.00)" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold text-xs transition cursor-pointer">
+              Matricular
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Modal de Pagamento Mercado Pago -->
+  <div id="modalPagamento" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-xs hidden items-center justify-center p-4">
+    <div class="bg-white rounded-3xl shadow-2xl max-w-md w-full overflow-hidden border border-slate-200">
+      <div class="bg-linear-to-r from-slate-950 via-indigo-950 to-indigo-900 text-white p-5 flex items-center justify-between">
+        <div>
+          <span class="text-[10px] font-black uppercase text-indigo-300">Mercado Pago Checkout Oficial</span>
+          <h3 id="modalTitulo" class="text-base font-black">Pagamento do Pedido</h3>
+        </div>
+        <button onclick="fecharModalPagamento()" class="text-slate-400 hover:text-white p-1">&times;</button>
+      </div>
+
+      <div class="p-6 space-y-4 text-xs">
+        <div class="p-3 bg-indigo-50 rounded-2xl border border-indigo-100 flex items-center justify-between">
+          <span class="font-bold text-indigo-950">Valor a Pagar:</span>
+          <span id="modalValor" class="text-xl font-black text-emerald-600">R$ 0,00</span>
+        </div>
+
+        <div class="space-y-2">
+          <label class="font-bold text-slate-700 block">Forma de Pagamento</label>
+          <div class="grid grid-cols-3 gap-2">
+            <button type="button" onclick="selecionarMetodo('pix')" id="btnPix" class="py-2.5 rounded-xl border border-indigo-600 bg-indigo-50 text-indigo-900 font-bold text-center">
+              ⚡ PIX Instantâneo
+            </button>
+            <button type="button" onclick="selecionarMetodo('credit_card')" id="btnCartao" class="py-2.5 rounded-xl border border-slate-200 text-slate-700 font-bold text-center">
+              💳 Cartão 12x
+            </button>
+            <button type="button" onclick="selecionarMetodo('boleto')" id="btnBoleto" class="py-2.5 rounded-xl border border-slate-200 text-slate-700 font-bold text-center">
+              📄 Boleto
+            </button>
+          </div>
+        </div>
+
+        <div class="space-y-2">
+          <div>
+            <label class="font-bold text-slate-700 block mb-0.5">Seu Nome Completo</label>
+            <input type="text" id="pagadorNome" placeholder="Ex: Roberto Carlos Silva" class="w-full p-2.5 rounded-xl border border-slate-200 bg-slate-50">
+          </div>
+          <div>
+            <label class="font-bold text-slate-700 block mb-0.5">Seu E-mail</label>
+            <input type="email" id="pagadorEmail" placeholder="cliente@exemplo.com" class="w-full p-2.5 rounded-xl border border-slate-200 bg-slate-50">
+          </div>
+        </div>
+
+        <!-- Área de Resultado do Pagamento -->
+        <div id="resultadoPagamento" class="hidden p-3 bg-emerald-50 border border-emerald-200 rounded-xl space-y-2">
+          <span class="font-bold text-emerald-800 block text-xs" id="resultadoMsg">Pagamento processado com sucesso!</span>
+          <div id="pixPayloadArea" class="hidden space-y-1">
+            <span class="text-[10px] text-slate-500 font-bold block">Código Copia e Cola (EMV BR Code):</span>
+            <textarea id="pixCodeText" readonly rows="2" class="w-full p-2 font-mono text-[10px] bg-white border border-slate-200 rounded-lg"></textarea>
+          </div>
+        </div>
+
+        <button onclick="confirmarPagamento()" id="btnProcessar" class="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-black text-xs transition cursor-pointer shadow-md">
+          Confirmar Pagamento no Mercado Pago
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Widget Flutuante Camilla Faria -->
+  <div id="widgetCamilla" class="fixed bottom-6 right-6 z-40">
+    <button onclick="abrirCamilla()" class="px-4 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-full font-bold text-xs shadow-xl flex items-center gap-2 cursor-pointer hover:scale-105 transition">
+      <span>☕</span>
+      <span>Camilla Faria (Grupo Eloizio)</span>
+      <span class="w-2.5 h-2.5 bg-emerald-400 rounded-full animate-pulse"></span>
+    </button>
+  </div>
+
+  <!-- Janela de Chat da Camilla Faria -->
+  <div id="chatCamilla" class="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 w-[95vw] sm:w-[400px] h-[600px] max-h-[90vh] bg-white rounded-3xl shadow-2xl border border-slate-200 hidden flex-col overflow-hidden">
+    <div class="bg-linear-to-r from-slate-950 via-indigo-950 to-indigo-900 text-white p-4 flex items-center justify-between">
+      <div class="flex items-center gap-2.5">
+        <div class="w-9 h-9 rounded-xl bg-indigo-500/20 text-indigo-300 flex items-center justify-center font-bold text-xs">CF</div>
+        <div>
+          <h4 class="font-extrabold text-sm">Camilla Faria</h4>
+          <span class="text-[10px] text-indigo-200">Gerente Geral • Grupo Eloizio</span>
+        </div>
+      </div>
+      <button onclick="fecharCamilla()" class="text-slate-400 hover:text-white text-lg">&times;</button>
+    </div>
+
+    <!-- Seletor de Perfil -->
+    <div class="bg-slate-900 text-white px-3 py-1.5 flex items-center justify-between text-[11px] border-b border-indigo-950">
+      <span class="text-[10px] text-indigo-300">Falar como:</span>
+      <select id="chatRole" class="bg-slate-800 text-white text-[10px] rounded px-2 py-0.5 border border-slate-700">
+        <option value="client">Cliente Final</option>
+        <option value="technician">Técnico Mecânico</option>
+        <option value="subscriber">Assinante / Aluno</option>
+      </select>
+    </div>
+
+    <!-- Mensagens -->
+    <div id="mensagensArea" class="flex-1 p-4 overflow-y-auto space-y-3 text-xs bg-slate-50">
+      <div class="bg-white p-3 rounded-2xl border border-slate-200 shadow-2xs">
+        <strong class="text-indigo-950 block mb-1">Camilla Faria:</strong>
+        <p class="text-slate-700 leading-relaxed" id="msgBoasVindas">
+          Olá! ☕ Eu sou a <strong>Camilla Faria</strong>, Gerente Geral do Grupo Eloizio. Depois do meu primeiro café já dei boot total e estou a mil! Como posso te ajudar hoje? Temos Cursos Online com Certificado MEC, Contabilidade 100% Online e nossa Oficina de Máquinas de Costura em São Gonçalo - RJ!
+        </p>
+      </div>
+    </div>
+
+    <!-- Barra de Input com Câmera para Fotos -->
+    <div class="p-3 bg-white border-t border-slate-200 flex items-center gap-2">
+      <input type="file" id="fotoInput" accept="image/*" class="hidden" onchange="enviarFoto(event)">
+      <button type="button" onclick="document.getElementById('fotoInput').click()" class="p-2 text-slate-500 hover:text-indigo-600 hover:bg-indigo-50 rounded-xl" title="Enviar foto de máquina de costura ou peça mecânica">
+        📷
+      </button>
+      <input type="text" id="chatInput" placeholder="Fale com a Camilla..." class="flex-1 px-3 py-2 text-xs bg-slate-50 border border-slate-300 rounded-xl focus:outline-hidden" onkeydown="if(event.key === 'Enter') enviarMensagemChat()">
+      <button type="button" onclick="enviarMensagemChat()" class="px-3 py-2 bg-indigo-600 text-white rounded-xl font-bold text-xs hover:bg-indigo-700">
+        Enviar
+      </button>
+    </div>
+  </div>
+
+  <!-- Modal de Login & Autenticação Segura (PHP 8 auth.php) -->
+  <div id="modalAuth" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-xs hidden items-center justify-center p-4">
+    <div class="bg-white rounded-3xl shadow-2xl max-w-md w-full overflow-hidden border border-slate-200">
+      <div class="bg-linear-to-r from-slate-950 via-indigo-950 to-slate-900 text-white p-5 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-2xl bg-indigo-500/20 text-indigo-300 border border-indigo-400/30 flex items-center justify-center font-bold">
+            🔒
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="text-[10px] uppercase font-black tracking-widest text-emerald-400">Modo Produção</span>
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+            </div>
+            <h3 class="font-extrabold text-base text-white">Grupo Eloizio — Acesso Seguro</h3>
+          </div>
+        </div>
+        <button onclick="fecharModalAuth()" class="text-slate-400 hover:text-white text-xl cursor-pointer">&times;</button>
+      </div>
+
+      <div class="p-6 space-y-4">
+        <div id="authErroMsg" class="hidden p-3 bg-rose-50 border border-rose-200 text-rose-800 text-xs rounded-xl"></div>
+        <div id="authSucessoMsg" class="hidden p-3 bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs rounded-xl"></div>
+
+        <form id="formLoginPhp" onsubmit="submeterLoginPhp(event)" class="space-y-4">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">E-mail Cadastrado</label>
+            <input type="email" id="authEmail" required placeholder="mecanicoeloizio@gmail.com ou seu e-mail" class="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-300 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-hidden">
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Senha de Acesso</label>
+            <input type="password" id="authSenha" required placeholder="Digite sua senha de acesso" class="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-300 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-hidden">
+          </div>
+
+          <div class="flex items-center justify-between text-[11px] text-slate-500">
+            <span>🛡️ Criptografia SHA-256 & LGPD</span>
+            <span class="text-indigo-600 font-semibold cursor-pointer">Esqueceu a senha?</span>
+          </div>
+
+          <button type="submit" id="btnSubmitAuth" class="w-full py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-black text-xs transition shadow-md cursor-pointer">
+            Entrar no Sistema
+          </button>
+        </form>
+
+        <div id="areaUsuarioLogado" class="hidden space-y-3">
+          <div class="p-3 bg-indigo-50 rounded-2xl border border-indigo-100 flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold" id="usrAvatarText">GE</div>
+            <div>
+              <div class="font-extrabold text-xs text-indigo-950" id="usrNomeDisplay">Usuário</div>
+              <div class="text-[10px] text-indigo-700" id="usrEmailDisplay">email@exemplo.com</div>
+            </div>
+          </div>
+          <div class="grid grid-cols-2 gap-2 pt-1">
+            <a href="admin.html" id="linkPainelAdmin" class="py-2.5 px-3 bg-slate-900 text-white rounded-xl text-center text-xs font-bold hover:bg-slate-800 transition">
+              ⚙️ Painel Admin & CLI
+            </a>
+            <button onclick="fazerLogoutPhp()" class="py-2.5 px-3 bg-rose-50 text-rose-700 border border-rose-200 rounded-xl text-center text-xs font-bold hover:bg-rose-100 transition cursor-pointer">
+              Sair da Conta
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let metodoSelecionado = 'pix';
+    let valorAtual = 1606.50;
+    let tituloAtual = 'Curso Grupo Eloizio';
+
+    function abrirModalPagamento(titulo, valor) {
+      tituloAtual = titulo;
+      valorAtual = valor;
+      document.getElementById('modalTitulo').innerText = titulo;
+      document.getElementById('modalValor').innerText = 'R$ ' + valor.toFixed(2).replace('.', ',');
+      document.getElementById('modalPagamento').classList.remove('hidden');
+      document.getElementById('modalPagamento').classList.add('flex');
+    }
+
+    function fecharModalPagamento() {
+      document.getElementById('modalPagamento').classList.add('hidden');
+      document.getElementById('modalPagamento').classList.remove('flex');
+      document.getElementById('resultadoPagamento').classList.add('hidden');
+    }
+
+    function selecionarMetodo(metodo) {
+      metodoSelecionado = metodo;
+      ['btnPix', 'btnCartao', 'btnBoleto'].forEach(id => {
+        document.getElementById(id).className = 'py-2.5 rounded-xl border border-slate-200 text-slate-700 font-bold text-center';
+      });
+      if (metodo === 'pix') document.getElementById('btnPix').className = 'py-2.5 rounded-xl border border-indigo-600 bg-indigo-50 text-indigo-900 font-bold text-center';
+      if (metodo === 'credit_card') document.getElementById('btnCartao').className = 'py-2.5 rounded-xl border border-indigo-600 bg-indigo-50 text-indigo-900 font-bold text-center';
+      if (metodo === 'boleto') document.getElementById('btnBoleto').className = 'py-2.5 rounded-xl border border-indigo-600 bg-indigo-50 text-indigo-900 font-bold text-center';
+    }
+
+    async function confirmarPagamento() {
+      const nome = document.getElementById('pagadorNome').value || 'Cliente Grupo Eloizio';
+      const email = document.getElementById('pagadorEmail').value || 'cliente@grupoeloizio.com.br';
+      const btn = document.getElementById('btnProcessar');
+      btn.innerText = 'Processando no Mercado Pago...';
+      btn.disabled = true;
+
+      try {
+        const res = await fetch('mercadopago.php?action=process_payment', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            title: tituloAtual,
+            amount: valorAtual,
+            paymentMethod: metodoSelecionado,
+            payerName: nome,
+            payerEmail: email,
+            installments: 12
+          })
+        });
+
+        const data = await res.json();
+        const resDiv = document.getElementById('resultadoPagamento');
+        resDiv.classList.remove('hidden');
+
+        if (data.success) {
+          document.getElementById('resultadoMsg').innerText = '✔ ' + data.message + ' ID: ' + data.payment.id;
+          if (data.payment.qrCodePix) {
+            document.getElementById('pixPayloadArea').classList.remove('hidden');
+            document.getElementById('pixCodeText').value = data.payment.qrCodePix;
+          }
+        } else {
+          document.getElementById('resultadoMsg').innerText = 'Erro: ' + (data.error || 'Falha ao processar pagamento');
+        }
+      } catch (err) {
+        alert('Erro ao conectar ao script mercadopago.php: ' + err.message);
+      } finally {
+        btn.innerText = 'Confirmar Pagamento no Mercado Pago';
+        btn.disabled = false;
+      }
+    }
+
+    function abrirCamilla() {
+      document.getElementById('chatCamilla').classList.remove('hidden');
+      document.getElementById('chatCamilla').classList.add('flex');
+    }
+
+    function fecharCamilla() {
+      document.getElementById('chatCamilla').classList.add('hidden');
+      document.getElementById('chatCamilla').classList.remove('flex');
+    }
+
+    function abrirCamillaFoto() {
+      abrirCamilla();
+      document.getElementById('fotoInput').click();
+    }
+
+    async function enviarMensagemChat() {
+      const input = document.getElementById('chatInput');
+      const text = input.value.trim();
+      if (!text) return;
+
+      const area = document.getElementById('mensagensArea');
+      area.innerHTML += `<div class="text-right"><span class="bg-indigo-600 text-white p-2.5 rounded-2xl inline-block max-w-[85%]">${text}</span></div>`;
+      input.value = '';
+      area.scrollTop = area.scrollHeight;
+
+      try {
+        const role = document.getElementById('chatRole').value;
+        const res = await fetch('camilla_ia.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message: text, interlocutorRole: role })
+        });
+        const data = await res.json();
+        const reply = data.reply || 'Camilla Faria pronta para atender você no WhatsApp 21 996134073!';
+        area.innerHTML += `<div class="bg-white p-3 rounded-2xl border border-slate-200"><strong class="text-indigo-950 block mb-1">Camilla Faria:</strong><div class="whitespace-pre-line text-slate-800">${reply}</div></div>`;
+        area.scrollTop = area.scrollHeight;
+      } catch (err) {
+        area.innerHTML += `<div class="bg-rose-50 p-2.5 rounded-xl text-rose-800 text-xs">Erro ao conectar com camilla_ia.php. Use o WhatsApp oficial: 21 996134073.</div>`;
+      }
+    }
+
+    function enviarFoto(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = async function() {
+        const base64 = reader.result;
+        const area = document.getElementById('mensagensArea');
+        area.innerHTML += `<div class="text-right space-y-1"><span class="bg-indigo-600 text-white p-2 rounded-xl inline-block text-[11px]">📷 Foto enviada para diagnóstico mecânico</span></div>`;
+        area.scrollTop = area.scrollHeight;
+
+        try {
+          const role = document.getElementById('chatRole').value;
+          const res = await fetch('camilla_ia.php?action=multimedia', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ imageBase64: base64, description: file.name, interlocutorRole: role })
+          });
+          const data = await res.json();
+          area.innerHTML += `<div class="bg-white p-3 rounded-2xl border border-slate-200"><strong class="text-indigo-950 block mb-1">Camilla Faria (Diagnóstico de Máquina):</strong><div class="whitespace-pre-line text-slate-800">${data.diagnosis}</div></div>`;
+          area.scrollTop = area.scrollHeight;
+        } catch {
+          alert('Falha ao processar imagem via camilla_ia.php');
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+
+    // Funções de Autenticação Segura (auth.php)
+    function abrirModalAuth() {
+      document.getElementById('modalAuth').classList.remove('hidden');
+      document.getElementById('modalAuth').classList.add('flex');
+    }
+
+    function fecharModalAuth() {
+      document.getElementById('modalAuth').classList.add('hidden');
+      document.getElementById('modalAuth').classList.remove('flex');
+      document.getElementById('authErroMsg').classList.add('hidden');
+      document.getElementById('authSucessoMsg').classList.add('hidden');
+    }
+
+    async function submeterLoginPhp(e) {
+      e.preventDefault();
+      const email = document.getElementById('authEmail').value.trim();
+      const password = document.getElementById('authSenha').value.trim();
+      const erroBox = document.getElementById('authErroMsg');
+      const sucessoBox = document.getElementById('authSucessoMsg');
+      const btn = document.getElementById('btnSubmitAuth');
+
+      erroBox.classList.add('hidden');
+      sucessoBox.classList.add('hidden');
+      btn.innerText = 'Verificando...';
+      btn.disabled = true;
+
+      try {
+        const res = await fetch('auth.php?action=login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+        const data = await res.json();
+
+        if (data.success && data.user) {
+          sucessoBox.innerText = 'Login realizado com sucesso! Bem-vindo, ' + data.user.name;
+          sucessoBox.classList.remove('hidden');
+          atualizarUiUsuarioLogado(data.user);
+          setTimeout(() => fecharModalAuth(), 1200);
+        } else {
+          erroBox.innerText = data.error || 'Credenciais inválidas. Tente novamente.';
+          erroBox.classList.remove('hidden');
+        }
+      } catch (err) {
+        erroBox.innerText = 'Erro ao conectar ao auth.php: ' + err.message;
+        erroBox.classList.remove('hidden');
+      } finally {
+        btn.innerText = 'Entrar no Sistema';
+        btn.disabled = false;
+      }
+    }
+
+    function atualizarUiUsuarioLogado(user) {
+      const btnNav = document.getElementById('btnAuthNav');
+      if (btnNav) {
+        btnNav.innerHTML = `<span>👤 ${user.name.split(' ')[0]} (${user.role.toUpperCase()})</span>`;
+        btnNav.className = 'px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs transition shadow-sm cursor-pointer flex items-center gap-1.5';
+      }
+
+      document.getElementById('formLoginPhp').classList.add('hidden');
+      document.getElementById('areaUsuarioLogado').classList.remove('hidden');
+      document.getElementById('usrNomeDisplay').innerText = user.name;
+      document.getElementById('usrEmailDisplay').innerText = user.email;
+      document.getElementById('usrAvatarText').innerText = user.name.slice(0, 2).toUpperCase();
+
+      if (user.role === 'admin') {
+        document.getElementById('linkPainelAdmin').classList.remove('hidden');
+      }
+    }
+
+    async function fazerLogoutPhp() {
+      try {
+        await fetch('auth.php?action=logout');
+      } catch {}
+      location.reload();
+    }
+
+    async function checarSessaoPhp() {
+      try {
+        const res = await fetch('auth.php?action=check_session');
+        const data = await res.json();
+        if (data.authenticated && data.user) {
+          atualizarUiUsuarioLogado(data.user);
+        }
+      } catch {}
+    }
+
+    // Checa sessão ao carregar a página
+    checarSessaoPhp();
+  </script>
+</body>
+</html>

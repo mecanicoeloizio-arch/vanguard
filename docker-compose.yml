@@ -1,0 +1,57 @@
+services:
+  # Contêiner Principal da Aplicação com o nome solicitado: Vanguard
+  Vanguard:
+    container_name: Vanguard
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - DB_HOST=vanguard-db
+      - DB_PORT=3306
+      - DB_NAME=eduvanguard_db
+      - DB_USER=vanguard_user
+      - DB_PASS=vanguard_secret_pass_2026
+    env_file:
+      - .env
+    depends_on:
+      vanguard-db:
+        condition: service_healthy
+    networks:
+      - vanguard-net
+
+  # Banco de Dados MySQL Provisionado Automaticamente
+  vanguard-db:
+    container_name: vanguard-db
+    image: mysql:8.0
+    restart: unless-stopped
+    command: --default-authentication-plugin=mysql_native_password --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    environment:
+      MYSQL_ROOT_PASSWORD: root_vanguard_secure_pass
+      MYSQL_DATABASE: eduvanguard_db
+      MYSQL_USER: vanguard_user
+      MYSQL_PASSWORD: vanguard_secret_pass_2026
+    ports:
+      - "3306:3306"
+    volumes:
+      - vanguard_db_data:/var/lib/mysql
+      # O database.sql é carregado no primeiro boot do banco
+      - ./database.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot_vanguard_secure_pass"]
+      timeout: 10s
+      retries: 5
+    networks:
+      - vanguard-net
+
+volumes:
+  vanguard_db_data:
+    driver: local
+
+networks:
+  vanguard-net:
+    driver: bridge

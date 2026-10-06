@@ -1,0 +1,7 @@
+{
+  "name": "EduVanguard - Sistema de Gestão Escolar & Cursos Online",
+  "description": "Plataforma educacional integrada para Direção, Professores e Alunos com vitrine de cursos, aulas online, boletim, provas, emissão de documentos via Mercado Pago, gestão financeira e relatórios ERP.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
+
