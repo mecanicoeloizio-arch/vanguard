@@ -1,156 +1,70 @@
-# 🚀 Grupo Eloizio — Pacote de Scripts Nativos em PHP 8, HTML5, CSS3, JavaScript & cURL
+# 🚀 Grupo Eloizio — Pacote Completo PHP 8, HTML5, CSS3, JavaScript Vanilla & cURL
 
-Este pacote contém a conversão completa e modular do sistema do **Grupo Eloizio** para **PHP 8.1+**, **HTML5**, **Tailwind CSS**, **JavaScript Vanilla** e **cURL**.
+Este pacote contém o sistema completo e 100% autônomo do **Grupo Eloizio** construído em **PHP 8.1+**, **HTML5**, **Tailwind CSS**, **JavaScript** e **cURL**.
 
-Pronto para deploy imediato em **Hostinger**, **cPanel**, **Apache**, **Nginx**, **VPS Linux**, ou **Docker**.
+### 🌟 Destaque de Transporte
+> **NÃO PRECISA DE NENHUMA INSTALAÇÃO!**  
+> Basta transportar e colocar todo o conteúdo desta pasta (`php-dist/`) diretamente dentro da pasta **`public_html`** do seu servidor cPanel, Apache, HostGator, Hostinger, Locaweb ou Nginx.  
+> Não precisa rodar `npm install`, não precisa de `composer install`, não precisa de Node.js no servidor de produção.
 
 ---
 
-## 📂 Estrutura dos Arquivos (`/php-dist`)
+## 🔑 Credenciais Master de Acesso
+- **Senha Master Oficial:** `ELOIZIO@MASTER2026`
+- **E-mail do Administrador / CEO:** `mecanicoeloizio@gmail.com` ou `eloizio@grupoeloizio.com.br`
+- **Expert Vanguard & Marketing:** `sofia@grupoeloizio.com.br` (Cupom ativo: `SOFIA15` com -15% OFF)
+- **Aluno Padrão:** `aluno@grupoeloizio.com.br`
+- **Professor / Docente:** `mariana.fernandes@grupoeloizio.com.br`
 
-| Arquivo | Descrição & Função |
+---
+
+## 📂 Catálogo Completo de Páginas & Recursos (`public_html`)
+
+| Arquivo | Descrição & Recursos |
 | :--- | :--- |
-| `index.html` | Portal público responsivo (HTML5 + Tailwind + JS) com os 3 Pilares: Cursos Livres MEC, Contabilidade 100% Online e Oficina de Máquinas de Costura em São Gonçalo - RJ. Inclui chat da **Camilla Faria** com suporte a fotos e checkout Mercado Pago. |
-| `admin.html` | Painel Administrativo moderno (HTML5 + Tailwind + JS) com Gerenciador de Módulos dinâmico, Terminal CLI interativo e Painel de Auditoria Total de Segurança. |
-| `config.php` | Configurações centrais do sistema, constantes do Grupo Eloizio, credenciais do Mercado Pago, Google Gemini, headers de segurança e funções auxiliares. |
-| `database.php` | Gerenciador de Banco de Dados PDO com suporte automático a **MySQL 8 / MariaDB** e fallback portátil para **SQLite**. |
-| `auth.php` | Módulo de autenticação segura, verificação de hash (Bcrypt / Argon2id), proteção contra força bruta (lockout de 30s após 5 falhas), sessões seguras e validação 2FA. |
-| `camilla_ia.php` | Atendente Inteligente **Camilla Faria** com integração ao Google Gemini 3.1 Pro via cURL, diagnóstico multimídia de fotos de máquinas e peças, saudação dinâmica de horário ("café"), cupom `CAMILLA15` (-15%) e fallback cognitivo local em PHP 8. |
-| `mercadopago.php` | Gateway oficial do **Mercado Pago** via cURL: Checkout Pro (Preferências), PIX instantâneo com geração de QR Code e código Copia e Cola, Cartão em até 12x, validação HMAC SHA-256 de webhooks e limites financeiros. |
-| `admin_cli.php` | Console e Terminal Administrativo executável via **Linha de Comando (CLI)** (`php admin_cli.php <comando>`) ou via **Requisição HTTP POST** (usado pelo `admin.html` e cURL). |
-| `security_audit.php` | Scanner e auditoria dos pontos sensíveis de segurança (Login, Financeiro, IA e Proteção de Dados com certificados MEC). Retorna score 0-100% e conformidade LGPD. |
-| `curl_commands.sh` | Script bash executável com 15+ comandos cURL pré-configurados para testar todas as rotas e funções do sistema. |
-| `database.sql` | Esquema relacional completo (19 tabelas) com RBAC, vitrine, módulos, tickets de conserto mecânico, transações Mercado Pago e certificados ICP-Edu. |
+| **`index.php`** | **Vitrine de Cursos Oficiais & Portal Principal:** Catálogo com filtros por categoria (Tecnologia, Engenharia, Negócios, Design), modal com ementa completa de aulas, cálculo de parcelamento em até 12x e checkout de matrícula via PIX Mercado Pago. |
+| **`aluno.php`** | **Portal Acadêmico do Aluno:** Videoaulas com player LMS, anotações, transcrição, materiais para download, **Simulador Técnico Interativo** (com teste de componentes de máquinas de costura e injeção, ajuste de RPM, tensão e osciloscópio), Boletim Escolar com notas e faltas, avaliações online, emissão de Certificado Oficial com QR Code e histórico financeiro. |
+| **`professor.php`** | **Portal do Professor:** Lançamento de notas bimestrais (N1, N2, Trabalhos), registro de presença/frequência dos alunos com cálculo automático de porcentagem, gerenciamento de módulos e aulas. |
+| **`admin.php`** | **Painel Executivo da Direção (CEO Eloizio & Sofia Vanguard):** Catálogo de cursos com exclusão e edição, **Preenchimento de Cursos via Texto (Rápido)** com formulário e modelos pré-formatados, Gestão completa de Matrículas e Alunos, CRM de Propostas Comerciais de Cursos e Alunos com cupom `SOFIA15`, Conciliação financeira Mercado Pago e Auditoria com logs da Senha Master `ELOIZIO@MASTER2026`. |
+| **`propostas.php`** | **Central de Propostas de Cursos & Alunos:** Simulador e gerador de Proposta Comercial Personalizada com desconto de 15% (Cupom `SOFIA15`), cálculo de 12x sem juros, link direto para conversa no WhatsApp oficial do aluno, histórico de propostas ativas (CRM) e Propostas de Novos Cursos submetidas pela comunidade. |
+| **`validar_certificado.php`** | **Validador Oficial de Certificados:** Consulta pública por código de registro (ex: `CERT-2026-BR-8912`) ou hash SHA-256, exibição do certificado oficial autêntico com QR Code, dados do formando, carga horária, assinaturas e botão de impressão em papel timbrado ou PDF. |
+| **`calendario.php`** | **Calendário Acadêmico & Biblioteca Digital:** Cronograma com aulas inaugurais, plantões de dúvidas ao vivo com o CEO Eloizio, datas de avaliações e acervo de apostilas em PDF para download gratuito. |
+| **`chat.php`** | **Chat Acadêmico & Central de Mensagens:** Canais de atendimento (Mural Geral de Avisos, Atendimento com a Expert Sofia Vanguard, Oficina & Máquinas com Eloizio Silva, Tira-Dúvidas dos Alunos) com envio de mensagens em tempo real. |
+| **`manuais.php`** | **Manuais do Sistema & Procedimentos:** Manual do Aluno, Manual do Administrador, Manual do Professor e Guia Operacional de Deploy. |
+| **`auth.php`** | **Autenticação Segura & Senha Master:** Login unificado para Aluno, Professor e Administrador, bloqueio de força bruta e bypass imediato com a Senha Master `ELOIZIO@MASTER2026`. |
+| **`dados.php`** | **Repositório Central de Dados:** Base portátil de cursos, ementas, alunos, propostas comerciais, notas, avaliações, certificados e mensagens com cache JSON automático. |
+| **`mercadopago.php`** | **Gateway Mercado Pago Nativo:** Checkout Pro, PIX com QR Code dinâmico e validação HMAC SHA-256 de webhooks via cURL. |
+| **`sofia_ia.php`** | **Sofia Vanguard — Expert em Cursos & Marketing:** Diagnóstico técnico multimodal de máquinas e motor cognitivo especialista com psicologia de marketing educacional. |
+| **`admin_cli.php`** | **Terminal CLI Administrativo:** Comandos de auditoria, diagnóstico de sistema e conciliação financeira. |
+| **`header.php` / `footer.php`** | **Cabeçalho e Rodapé Universais:** Navbar responsiva com menu desktop e drawer mobile, modal universal de login com a Senha Master e links integrados. |
 
 ---
 
-## ⚡ Como Rodar Localmente com PHP 8
+## 🚀 Como Fazer o Deploy na Hospedagem (cPanel / Apache)
 
-1. Inicie o servidor embutido do PHP 8 na pasta `php-dist`:
+1. Conecte-se ao seu cPanel ou FTP (FileZilla);
+2. Navegue até a pasta raiz do seu domínio (geralmente **`public_html/`**);
+3. Envie todos os arquivos da pasta **`php-dist/`** diretamente para dentro de **`public_html/`**;
+4. Pronto! Acesse seu domínio:  
+   - `https://seudominio.com.br/` (abre automaticamente `index.php`)
+   - `https://seudominio.com.br/admin.php` (painel da Direção)
+   - `https://seudominio.com.br/propostas.php` (central de propostas)
+   - `https://seudominio.com.br/aluno.php` (portal do aluno)
+
+---
+
+## 🧪 Testando Localmente com Servidor Embutido do PHP
+
+Caso queira testar na sua máquina antes de enviar para o servidor:
+
 ```bash
 cd php-dist
 php -S 0.0.0.0:8000
 ```
 
-2. Abra no navegador:
-- **Portal Principal:** `http://localhost:8000/index.html`
-- **Painel Administrativo & Terminal:** `http://localhost:8000/admin.html`
-
-3. Teste via cURL:
-```bash
-chmod +x curl_commands.sh
-./curl_commands.sh
-```
-
----
-
-## 🛠️ Execução de Comandos via Linha de Comando (CLI)
-
-O script `admin_cli.php` pode ser executado diretamente no terminal do servidor:
-
-```bash
-# Ver ajuda e lista de comandos
-php admin_cli.php help
-
-# Diagnóstico geral de saúde e telemetria
-php admin_cli.php system:status
-
-# Auditoria profunda de segurança
-php admin_cli.php security:audit
-
-# Listar todos os módulos do sistema
-php admin_cli.php module:list
-
-# Ativar um módulo específico
-php admin_cli.php module:enable contabilidade_assessoria_online
-
-# Desativar um módulo não-essencial
-php admin_cli.php module:disable maquinas_costura_mecanica
-
-# Recarregar e verificar dependências de um módulo
-php admin_cli.php module:update mercadopago_gateway
-
-# Conciliação financeira do Mercado Pago
-php admin_cli.php finance:reconcile
-
-# Testar o motor cognitivo da Camilla Faria
-php admin_cli.php ai:test
-
-# Gerar snapshot de backup do sistema
-php admin_cli.php backup:create
-```
-
----
-
-## 🌐 Deploy em Servidores Web (Apache / Nginx / Hostinger / cPanel)
-
-### 1. Servidor Apache (`.htaccess`)
-Crie um arquivo `.htaccess` na raiz do diretório web:
-```apache
-<IfModule mod_rewrite.c>
-    RewriteEngine On
-    RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteCond %{REQUEST_FILENAME} !-d
-</IfModule>
-
-# Headers de Segurança
-<IfModule mod_headers.c>
-    Header set X-Content-Type-Options "nosniff"
-    Header set X-Frame-Options "SAMEORIGIN"
-    Header set X-XSS-Protection "1; mode=block"
-    Header set Referrer-Policy "strict-origin-when-cross-origin"
-</IfModule>
-```
-
-### 2. Servidor Nginx (`nginx.conf`)
-```nginx
-location / {
-    try_files $uri $uri/ /index.html;
-}
-
-location ~ \.php$ {
-    include fastcgi_params;
-    fastcgi_pass unix:/var/run/php/php8.2-fpm.sock;
-    fastcgi_index index.php;
-    fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
-}
-```
-
----
-
-## 🔑 Variáveis de Ambiente Suportadas
-
-Você pode definir as seguintes variáveis no seu servidor (`.env`, `php.ini` ou variáveis do sistema operacional):
-
-| Variável | Padrão | Descrição |
-| :--- | :--- | :--- |
-| `MERCADOPAGO_ACCESS_TOKEN` | Token Sandbox | Access Token da API do Mercado Pago |
-| `MERCADOPAGO_PUBLIC_KEY` | Public Key | Chave Pública do Mercado Pago |
-| `MERCADOPAGO_WEBHOOK_SECRET`| whsec_... | Segredo HMAC para validar IPN / Webhooks |
-| `MERCADOPAGO_SANDBOX` | `true` | `false` para ambiente de produção |
-| `GEMINI_API_KEY` | - | Chave de API Google AI Gemini para IA Camilla |
-| `DB_DRIVER` | `sqlite` | `sqlite` ou `mysql` |
-| `DB_HOST` | `localhost` | Host do banco de dados MySQL |
-| `DB_DATABASE` | `grupo_eloizio` | Nome da base de dados |
-| `DB_USERNAME` | `root` | Usuário do MySQL |
-| `DB_PASSWORD` | - | Senha do MySQL |
-
----
-
-## 🔒 Pontos Sensíveis de Segurança Verificados
-
-1. **Login & RBAC (`auth.php`):**
-   - Bloqueio automático de 30 segundos após 5 tentativas incorretas consecutivas.
-   - Hash seguro com `password_hash()` (Bcrypt / Argon2id).
-   - Regeneração de ID de sessão após login (`session_regenerate_id(true)`).
-   - Cookies HttpOnly, SameSite=Lax e Secure.
-
-2. **Financeiro & Mercado Pago (`mercadopago.php`):**
-   - Assinatura criptográfica HMAC SHA-256 em webhooks.
-   - Chaves de idempotência anti-duplicação por pedido.
-   - Teto e piso de segurança (rejeição de valores negativos ou acima de R$ 50.000,00).
-
-3. **IA Camilla Faria (`camilla_ia.php`):**
-   - Guardrails estritos anti-jailbreak e sanitização de prompts.
-   - Bloqueio absoluto contra vazamento de tokens, senhas ou chaves.
-   - Mascaramento e conformidade LGPD.
+Abra no navegador:
+- Vitrine: `http://localhost:8000/index.php`
+- Propostas de Cursos e Alunos: `http://localhost:8000/propostas.php`
+- Painel Administrativo: `http://localhost:8000/admin.php`
+- Portal do Aluno: `http://localhost:8000/aluno.php`
+- Validador de Certificados: `http://localhost:8000/validar_certificado.php`

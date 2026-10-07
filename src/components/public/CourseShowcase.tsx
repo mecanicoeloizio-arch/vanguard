@@ -16,7 +16,9 @@ import {
   Users,
   Video,
   FileCheck,
+  FileText,
 } from 'lucide-react';
+import { CourseTextImportModal } from '../admin/CourseTextImportModal';
 
 export const CourseShowcase: React.FC = () => {
   const {
@@ -30,6 +32,7 @@ export const CourseShowcase: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('Todos');
   const [selectedCourseModal, setSelectedCourseModal] = useState<Course | null>(null);
+  const [showTextImportModal, setShowTextImportModal] = useState(false);
 
   const categories = ['Todos', 'Tecnologia', 'Negócios', 'Design', 'Saúde', 'Educação'];
 
@@ -124,17 +127,28 @@ export const CourseShowcase: React.FC = () => {
             </div>
           </div>
 
-          <div className="flex items-center justify-between text-xs text-slate-500 border-t border-slate-100 pt-3">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs text-slate-500 border-t border-slate-100 pt-3">
             <span>
               Exibindo <strong className="text-slate-800">{filteredCourses.length}</strong> cursos disponíveis para matrícula imediata
             </span>
             {currentUser?.role === 'admin' && (
-              <button
-                onClick={() => setActiveNavTab('admin')}
-                className="text-indigo-600 font-bold hover:underline"
-              >
-                + Gerenciar / Inserir Cursos na Administração
-              </button>
+              <div className="flex items-center gap-2 flex-wrap">
+                <button
+                  type="button"
+                  onClick={() => setShowTextImportModal(true)}
+                  className="px-2.5 py-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 rounded-lg text-xs font-black flex items-center gap-1 cursor-pointer transition shadow-2xs"
+                >
+                  <FileText className="w-3.5 h-3.5 text-emerald-600" />
+                  <span>Preencher Cursos via Texto</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setActiveNavTab('admin')}
+                  className="text-indigo-600 font-bold hover:underline"
+                >
+                  + Painel de Gestão
+                </button>
+              </div>
             )}
           </div>
         </div>
@@ -155,27 +169,27 @@ export const CourseShowcase: React.FC = () => {
             <div className="space-y-1">
               <div className="flex items-center gap-2">
                 <span className="px-2 py-0.5 rounded-full text-[10px] font-black uppercase bg-emerald-400 text-slate-950">
-                  Gerente Geral & Atendente 24/7
+                  Expert Vanguard & Carreira
                 </span>
-                <span className="text-xs text-indigo-300 font-medium">Camilla Faria • Grupo Eloizio</span>
+                <span className="text-xs text-indigo-300 font-medium">Sofia • Grupo Eloizio</span>
               </div>
               <h3 className="text-base sm:text-lg font-black text-white">
-                Dúvidas sobre os Cursos, Máquinas ou Assessoria Contábil?
+                Dúvidas sobre o Curso Ideal para seu Crescimento Profissional?
               </h3>
               <p className="text-xs text-slate-300 max-w-xl leading-relaxed">
-                Converse com a Camilla Faria, simule seu parcelamento em até 12x no Mercado Pago ou receba proposta exclusiva no seu WhatsApp com o cupom <strong>CAMILLA15</strong> (-15% OFF).
+                Converse com a <strong>Sofia</strong>, nossa Expert Vanguard! Descubra a melhor formação para sua carreira, simule em até 12x no Mercado Pago ou receba uma proposta personalizada com o cupom <strong>SOFIA15</strong> (-15% OFF).
               </p>
             </div>
           </div>
 
           <div className="flex flex-col sm:flex-row items-center gap-3 w-full md:w-auto shrink-0">
             <a
-              href="https://wa.me/5521996134073?text=Ol%C3%A1%20Camilla%20Faria!%20Estou%20no%20portal%20do%20Grupo%20Eloizio%20e%20gostaria%20de%20atendimento%20com%20o%20cupom%20CAMILLA15."
+              href="https://wa.me/5521996134073?text=Ol%C3%A1%20Sofia!%20Estou%20no%20portal%20do%20Grupo%20Eloizio%20e%20gostaria%20de%20consultoria%20com%20o%20cupom%20SOFIA15."
               target="_blank"
               rel="noreferrer"
               className="w-full sm:w-auto px-5 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold flex items-center justify-center gap-2 shadow-lg shadow-emerald-600/30 transition-all cursor-pointer"
             >
-              <span>📲 Falar no WhatsApp Oficial</span>
+              <span>📲 Falar com a Sofia no WhatsApp</span>
             </a>
           </div>
         </div>
@@ -403,6 +417,12 @@ export const CourseShowcase: React.FC = () => {
           </div>
         </div>
       )}
+
+      {/* Course Text Bulk Import Modal */}
+      <CourseTextImportModal
+        isOpen={showTextImportModal}
+        onClose={() => setShowTextImportModal(false)}
+      />
     </div>
   );
 };

@@ -51,7 +51,7 @@ import {
   Loader2,
 } from 'lucide-react';
 import { IntegrationKeyRecord, IntegrationCategory, SystemModule } from '../../types';
-import { askCamillaAssistant, askSofiaAssistant } from '../../services/sofiaAI';
+import { askSofiaAssistant } from '../../services/sofiaAI';
 
 export const SystemSettingsPanel: React.FC = () => {
   const {
@@ -154,9 +154,9 @@ export const SystemSettingsPanel: React.FC = () => {
   const [isCreatingBackup, setIsCreatingBackup] = useState(false);
   const [backupFeedback, setBackupFeedback] = useState<string | null>(null);
 
-  // Attendant (Camilla / Sofia) settings form states
-  const [attendantName, setAttendantName] = useState(sofiaSettings.name || 'Camilla Faria');
-  const [attendantTitle, setAttendantTitle] = useState(sofiaSettings.title || 'Gerente Geral do Grupo Eloizio');
+  // Attendant (Sofia Vanguard) settings form states
+  const [attendantName, setAttendantName] = useState(sofiaSettings.name || 'Sofia Vanguard');
+  const [attendantTitle, setAttendantTitle] = useState(sofiaSettings.title || 'Expert Vanguard em Cursos & Estratégia Educacional');
   const [sofiaCoupon, setSofiaCoupon] = useState(sofiaSettings.activeCoupon);
   const [sofiaDiscount, setSofiaDiscount] = useState(sofiaSettings.discountPercentage);
   const [sofiaWhatsApp, setSofiaWhatsApp] = useState(sofiaSettings.whatsappNumber || '21996134073');
@@ -581,8 +581,8 @@ export const SystemSettingsPanel: React.FC = () => {
               : 'text-slate-600 hover:text-slate-900'
           }`}
         >
-          <Bot className="w-4 h-4 text-rose-500" />
-          Atendente Camilla Faria
+          <Bot className="w-4 h-4 text-indigo-600" />
+          Atendente Sofia Vanguard (Expert)
         </button>
 
         <button
@@ -846,7 +846,7 @@ export const SystemSettingsPanel: React.FC = () => {
                 { cmd: 'security:audit', label: 'Auditoria Profunda (security:audit)' },
                 { cmd: 'module:list', label: 'Listar Módulos (module:list)' },
                 { cmd: 'finance:reconcile', label: 'Conciliar Mercado Pago (finance:reconcile)' },
-                { cmd: 'ai:test', label: 'Testar Camilla Faria (ai:test)' },
+                { cmd: 'ai:test', label: 'Testar Sofia Vanguard (ai:test)' },
                 { cmd: 'backup:create', label: 'Criar Snapshot (backup:create)' },
                 { cmd: 'db:migrate', label: 'Migrar Banco de Dados (db:migrate)' },
                 { cmd: 'help', label: 'Guia de Ajuda (help)' },
@@ -952,7 +952,7 @@ export const SystemSettingsPanel: React.FC = () => {
               </h3>
               <p className="text-xs text-slate-300 max-w-2xl leading-relaxed">
                 Auditoria contínua de Login (Brute-Force & RBAC), Financeiro (Mercado Pago HMAC & Idempotência),
-                IA de Suporte Camilla Faria (Anti-Jailbreak & LGPD) e Criptografia de Certificados MEC.
+                IA de Suporte Sofia Vanguard (Anti-Jailbreak & LGPD) e Criptografia de Certificados MEC.
               </p>
             </div>
 
@@ -1044,7 +1044,7 @@ export const SystemSettingsPanel: React.FC = () => {
               </div>
             </div>
 
-            {/* 3. IA de Suporte Camilla Faria */}
+            {/* 3. IA Sofia (Expert Vanguard) */}
             <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs space-y-4">
               <div className="flex items-center justify-between border-b border-slate-100 pb-3">
                 <div className="flex items-center gap-2.5">
@@ -1052,7 +1052,7 @@ export const SystemSettingsPanel: React.FC = () => {
                     <Bot className="w-5 h-5" />
                   </div>
                   <div>
-                    <h4 className="font-extrabold text-sm text-slate-900">3. Blindagem da IA (Camilla Faria)</h4>
+                    <h4 className="font-extrabold text-sm text-slate-900">3. Blindagem da IA Sofia (Expert Vanguard)</h4>
                     <span className="text-[10px] text-slate-400 font-bold">Anti-Jailbreak, LGPD e Chaves Blindadas</span>
                   </div>
                 </div>
@@ -1644,26 +1644,26 @@ export const SystemSettingsPanel: React.FC = () => {
       )}
 
       {/* ========================================================================= */}
-      {/* SUBTAB 4: ATTENDANT (CAMILLA FARIA / SOFIA) */}
+      {/* SUBTAB 4: ATTENDANT SOFIA VANGUARD */}
       {/* ========================================================================= */}
       {activeSubTab === 'attendant' && (
         <div className="space-y-6">
           <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
             <div className="flex items-center gap-4">
-              <div className="w-14 h-14 rounded-2xl bg-rose-100 text-rose-600 flex items-center justify-center text-2xl border border-rose-200">
-                🌹
+              <div className="w-14 h-14 rounded-2xl bg-indigo-100 text-indigo-600 flex items-center justify-center text-2xl border border-indigo-200">
+                ✨
               </div>
               <div className="space-y-1">
                 <div className="flex items-center gap-2">
                   <h3 className="text-base font-black text-slate-900">
-                    {attendantName} — Atendente Inteligente & Gerente Geral
+                    {attendantName} — Expert Vanguard em Cursos & Marketing Educacional
                   </h3>
-                  <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-rose-100 text-rose-800">
+                  <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-indigo-100 text-indigo-800">
                     Grupo Eloizio
                   </span>
                 </div>
                 <p className="text-xs text-slate-500">
-                  Responsável pelo atendimento dinâmico, acolhimento de clientes, pré-orçamentos e fechamento com Mercado Pago.
+                  Especialista em cursos, carreiras, psicologia de marketing educacional e fechamento com Mercado Pago.
                 </p>
               </div>
             </div>

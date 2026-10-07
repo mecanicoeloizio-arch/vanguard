@@ -18,6 +18,7 @@ import {
   CheckCircle2,
   AlertCircle,
   FileSpreadsheet,
+  FileText,
   Lock,
   Layers,
   Send,
@@ -33,6 +34,7 @@ import {
 import { UnauthorizedView } from '../auth/UnauthorizedView';
 import { SimulationAuditSuite } from './SimulationAuditSuite';
 import { SystemSettingsPanel } from './SystemSettingsPanel';
+import { CourseTextImportModal } from './CourseTextImportModal';
 
 export const AdminPortal: React.FC = () => {
   const { currentUser } = useApp();
@@ -61,6 +63,9 @@ const AdminPortalContent: React.FC<{ currentUser: any }> = ({ currentUser }) => 
   } = useApp();
 
   const [activeTab, setActiveTab] = useState<'courses' | 'enrollments' | 'financial' | 'reports_erp' | 'security' | 'push' | 'leads' | 'simulation' | 'settings'>('courses');
+
+  // Text bulk import modal
+  const [showTextImportModal, setShowTextImportModal] = useState(false);
 
   // Course management form modal
   const [showCourseModal, setShowCourseModal] = useState(false);
@@ -218,7 +223,7 @@ const AdminPortalContent: React.FC<{ currentUser: any }> = ({ currentUser }) => 
           </div>
           <div className="w-px h-8 bg-white/10 hidden sm:block"></div>
           <div className="text-center sm:text-left">
-            <span className="text-[10px] text-slate-400 uppercase font-semibold block">Leads Camilla IA</span>
+            <span className="text-[10px] text-slate-400 uppercase font-semibold block">Leads Sofia IA</span>
             <span className="text-base sm:text-xl font-black text-amber-400">
               {leads.length}
             </span>
@@ -234,7 +239,7 @@ const AdminPortalContent: React.FC<{ currentUser: any }> = ({ currentUser }) => 
           { id: 'financial', label: 'Módulo Financeiro & Mensalidades', icon: DollarSign },
           { id: 'settings', label: 'Módulos, CLI, Segurança & Tokens', icon: Key },
           { id: 'simulation', label: 'Auditoria de Processos & Transações', icon: Sparkles },
-          { id: 'leads', label: 'Leads & Camilla Faria IA (Vendas)', icon: Bot },
+          { id: 'leads', label: 'Leads & Sofia Vanguard IA (Vendas)', icon: Bot },
           { id: 'reports_erp', label: 'Relatórios Acadêmicos & ERP', icon: Layers },
           { id: 'security', label: 'Segurança & Criptografia LGPD', icon: ShieldCheck },
           { id: 'push', label: 'Disparo de Notificações Push', icon: Bell },
@@ -269,7 +274,37 @@ const AdminPortalContent: React.FC<{ currentUser: any }> = ({ currentUser }) => 
       {/* TAB 1: COURSE MANAGEMENT (VITRINE) */}
       {activeTab === 'courses' && (
         <div className="space-y-6">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
+          {/* Quick Text Import Explanatory Banner (User request: Como preencher cursos via texto) */}
+          <div className="bg-linear-to-r from-emerald-950 via-teal-950 to-slate-900 text-white p-5 sm:p-6 rounded-2xl sm:rounded-3xl border border-emerald-800/50 shadow-md space-y-3">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+              <div className="flex items-center gap-2.5">
+                <div className="w-9 h-9 rounded-xl bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 flex items-center justify-center shadow-inner shrink-0">
+                  <FileText className="w-5 h-5 text-emerald-400" />
+                </div>
+                <div>
+                  <span className="text-[10px] font-black uppercase tracking-wider text-emerald-400">
+                    Recurso Exclusivo de Produtividade
+                  </span>
+                  <h4 className="text-base sm:text-lg font-black text-white leading-tight">
+                    Preenchimento e Importação de Cursos via Texto
+                  </h4>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowTextImportModal(true)}
+                className="w-full sm:w-auto px-4 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-slate-950 rounded-xl text-xs font-black flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20 cursor-pointer transition-all"
+              >
+                <Sparkles className="w-4 h-4 text-slate-950" />
+                <span>Preencher Cursos via Texto Agora</span>
+              </button>
+            </div>
+            <p className="text-xs text-slate-300 leading-relaxed max-w-3xl">
+              <strong>Como fazer:</strong> Basta colar qualquer texto descritivo, ementa de aulas ou lista de cursos (ex: <em>"Título: Mecânica Básica | Preço: 450 | Módulos: ..."</em>). O sistema inteligente interpreta automaticamente todos os dados, cria os módulos e publica direto na Vitrine com checkout integrado no Mercado Pago.
+            </p>
+          </div>
+
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-white p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-xs">
             <div>
               <h3 className="font-extrabold text-slate-900 text-base">
                 Catálogo de Cursos 100% Online na Vitrine
@@ -278,13 +313,24 @@ const AdminPortalContent: React.FC<{ currentUser: any }> = ({ currentUser }) => 
                 Cursos inseridos aqui aparecem imediatamente na página inicial para matrícula e checkout via Mercado Pago.
               </p>
             </div>
-            <button
-              onClick={() => setShowCourseModal(true)}
-              className="px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-black flex items-center gap-2 shadow-xs cursor-pointer"
-            >
-              <PlusCircle className="w-4 h-4" />
-              Cadastrar Novo Curso na Vitrine
-            </button>
+            <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
+              <button
+                type="button"
+                onClick={() => setShowTextImportModal(true)}
+                className="flex-1 sm:flex-initial px-3.5 py-2.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-900 border border-emerald-300 rounded-xl text-xs font-black flex items-center justify-center gap-1.5 cursor-pointer transition shadow-2xs"
+              >
+                <FileText className="w-4 h-4 text-emerald-700" />
+                <span>Preencher via Texto</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setShowCourseModal(true)}
+                className="flex-1 sm:flex-initial px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-black flex items-center justify-center gap-2 shadow-xs cursor-pointer transition"
+              >
+                <PlusCircle className="w-4 h-4" />
+                <span>Cadastrar Manual</span>
+              </button>
+            </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -639,7 +685,7 @@ const AdminPortalContent: React.FC<{ currentUser: any }> = ({ currentUser }) => 
                   {leads.map((lead) => {
                     const cleanPhone = lead.phone.replace(/\D/g, '');
                     const waMessage = encodeURIComponent(
-                      `Olá ${lead.name.split(' ')[0]}! Aqui é da Direção Geral do Grupo Eloizio. Vimos que você conversou com a nossa Gerente Geral Camilla Faria sobre o curso ${lead.courseInterest} e tem direito a 15% de desconto com o cupom CAMILLA15. Como podemos te ajudar a concluir sua matrícula?`
+                      `Olá ${lead.name.split(' ')[0]}! Aqui é da Direção do Grupo Eloizio. Vimos que você conversou com a nossa Expert Vanguard Sofia sobre o curso ${lead.courseInterest} e tem direito a 15% de desconto com o cupom SOFIA15. Como podemos te ajudar a concluir sua matrícula?`
                     );
                     const waLink = `https://wa.me/55${cleanPhone}?text=${waMessage}`;
 
@@ -648,7 +694,7 @@ const AdminPortalContent: React.FC<{ currentUser: any }> = ({ currentUser }) => 
                         <td className="py-3.5 px-4">
                           <div className="font-extrabold text-slate-900">{lead.name}</div>
                           <span className="text-[10px] text-slate-400">
-                            Origem: {lead.source === 'chat_sofia' ? 'Atendente Camilla Faria' : lead.source} • {lead.createdAt?.slice(0, 10)}
+                            Origem: {lead.source === 'chat_sofia' ? 'Sofia (Expert Vanguard)' : lead.source} • {lead.createdAt?.slice(0, 10)}
                           </span>
                         </td>
 
@@ -672,7 +718,7 @@ const AdminPortalContent: React.FC<{ currentUser: any }> = ({ currentUser }) => 
                         <td className="py-3.5 px-4">
                           <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-800 border border-emerald-200 font-mono font-bold text-[11px]">
                             <Sparkles className="w-3 h-3 text-emerald-500" />
-                            CAMILLA15 (-15%)
+                            SOFIA15 (-15%)
                           </div>
                           <div className="text-[10px] text-slate-400 mt-0.5">
                             {lead.proposalCode || 'PROP-2026'}
@@ -1084,6 +1130,12 @@ const AdminPortalContent: React.FC<{ currentUser: any }> = ({ currentUser }) => 
           </form>
         </div>
       )}
+
+      {/* Course Text Bulk Import Modal */}
+      <CourseTextImportModal
+        isOpen={showTextImportModal}
+        onClose={() => setShowTextImportModal(false)}
+      />
     </div>
   );
 };

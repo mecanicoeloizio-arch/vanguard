@@ -292,14 +292,14 @@
     </button>
   </div>
 
-  <!-- Janela de Chat da Camilla Faria -->
+  <!-- Janela de Chat da Sofia Vanguard -->
   <div id="chatCamilla" class="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 w-[95vw] sm:w-[400px] h-[600px] max-h-[90vh] bg-white rounded-3xl shadow-2xl border border-slate-200 hidden flex-col overflow-hidden">
     <div class="bg-linear-to-r from-slate-950 via-indigo-950 to-indigo-900 text-white p-4 flex items-center justify-between">
       <div class="flex items-center gap-2.5">
-        <div class="w-9 h-9 rounded-xl bg-indigo-500/20 text-indigo-300 flex items-center justify-center font-bold text-xs">CF</div>
+        <div class="w-9 h-9 rounded-xl bg-indigo-500/20 text-indigo-300 flex items-center justify-center font-bold text-xs">SV</div>
         <div>
-          <h4 class="font-extrabold text-sm">Camilla Faria</h4>
-          <span class="text-[10px] text-indigo-200">Gerente Geral • Grupo Eloizio</span>
+          <h4 class="font-extrabold text-sm">Sofia Vanguard</h4>
+          <span class="text-[10px] text-indigo-200">Expert em Cursos & Marketing • Grupo Eloizio</span>
         </div>
       </div>
       <button onclick="fecharCamilla()" class="text-slate-400 hover:text-white text-lg">&times;</button>
@@ -309,18 +309,18 @@
     <div class="bg-slate-900 text-white px-3 py-1.5 flex items-center justify-between text-[11px] border-b border-indigo-950">
       <span class="text-[10px] text-indigo-300">Falar como:</span>
       <select id="chatRole" class="bg-slate-800 text-white text-[10px] rounded px-2 py-0.5 border border-slate-700">
-        <option value="client">Cliente Final</option>
+        <option value="client">Cliente / Futuro Aluno</option>
         <option value="technician">Técnico Mecânico</option>
-        <option value="subscriber">Assinante / Aluno</option>
+        <option value="subscriber">Aluno Matriculado</option>
       </select>
     </div>
 
     <!-- Mensagens -->
     <div id="mensagensArea" class="flex-1 p-4 overflow-y-auto space-y-3 text-xs bg-slate-50">
       <div class="bg-white p-3 rounded-2xl border border-slate-200 shadow-2xs">
-        <strong class="text-indigo-950 block mb-1">Camilla Faria:</strong>
+        <strong class="text-indigo-950 block mb-1">Sofia Vanguard:</strong>
         <p class="text-slate-700 leading-relaxed" id="msgBoasVindas">
-          Olá! ☕ Eu sou a <strong>Camilla Faria</strong>, Gerente Geral do Grupo Eloizio. Depois do meu primeiro café já dei boot total e estou a mil! Como posso te ajudar hoje? Temos Cursos Online com Certificado MEC, Contabilidade 100% Online e nossa Oficina de Máquinas de Costura em São Gonçalo - RJ!
+          Olá! ✨ Eu sou a <strong>Sofia</strong>, a <strong>Expert Vanguard</strong> do Grupo Eloizio! Conheço profundamente todas as nossas formações, valores e retorno financeiro no mercado de trabalho. Como posso te guiar hoje rumo à sua independência profissional? Aproveite meu cupom exclusivo <strong>SOFIA15</strong> (-15% OFF)!
         </p>
       </div>
     </div>
@@ -331,7 +331,7 @@
       <button type="button" onclick="document.getElementById('fotoInput').click()" class="p-2 text-slate-500 hover:text-indigo-600 hover:bg-indigo-50 rounded-xl" title="Enviar foto de máquina de costura ou peça mecânica">
         📷
       </button>
-      <input type="text" id="chatInput" placeholder="Fale com a Camilla..." class="flex-1 px-3 py-2 text-xs bg-slate-50 border border-slate-300 rounded-xl focus:outline-hidden" onkeydown="if(event.key === 'Enter') enviarMensagemChat()">
+      <input type="text" id="chatInput" placeholder="Fale com a Sofia Vanguard..." class="flex-1 px-3 py-2 text-xs bg-slate-50 border border-slate-300 rounded-xl focus:outline-hidden" onkeydown="if(event.key === 'Enter') enviarMensagemChat()">
       <button type="button" onclick="enviarMensagemChat()" class="px-3 py-2 bg-indigo-600 text-white rounded-xl font-bold text-xs hover:bg-indigo-700">
         Enviar
       </button>
@@ -357,9 +357,41 @@
         <button onclick="fecharModalAuth()" class="text-slate-400 hover:text-white text-xl cursor-pointer">&times;</button>
       </div>
 
+      <div class="bg-linear-to-r from-amber-50 to-indigo-50 border-b border-amber-200/80 px-4 py-2.5 flex items-center justify-between gap-2">
+        <div class="flex items-center gap-2">
+          <span class="text-sm">🔑</span>
+          <div>
+            <div class="text-[10px] font-black uppercase text-amber-900 tracking-wider">Senha Master Oficial:</div>
+            <div class="font-mono font-black text-xs text-indigo-950">ELOIZIO@MASTER2026</div>
+          </div>
+        </div>
+        <button type="button" onclick="preencherCredenciais('mecanicoeloizio@gmail.com', 'ELOIZIO@MASTER2026')" class="px-2.5 py-1 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-[11px] font-black cursor-pointer shadow-2xs">
+          ⚡ Preencher Master
+        </button>
+      </div>
+
       <div class="p-6 space-y-4">
         <div id="authErroMsg" class="hidden p-3 bg-rose-50 border border-rose-200 text-rose-800 text-xs rounded-xl"></div>
         <div id="authSucessoMsg" class="hidden p-3 bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs rounded-xl"></div>
+
+        <!-- Atalhos de Perfis Rápidos -->
+        <div class="bg-slate-50 p-2.5 rounded-2xl border border-slate-200 space-y-1.5">
+          <span class="text-[10px] font-bold uppercase text-slate-500 tracking-wider block">Acesso Rápido com 1 Clique:</span>
+          <div class="grid grid-cols-2 gap-1.5 text-[11px]">
+            <button type="button" onclick="preencherCredenciais('mecanicoeloizio@gmail.com', 'ELOIZIO@MASTER2026')" class="p-1.5 bg-amber-50 hover:bg-amber-100 border border-amber-200 rounded-lg text-left font-bold text-amber-950">
+              👑 Eloizio (CEO Master)
+            </button>
+            <button type="button" onclick="preencherCredenciais('sofia@grupoeloizio.com.br', 'ELOIZIO@MASTER2026')" class="p-1.5 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 rounded-lg text-left font-bold text-indigo-950">
+              ✨ Sofia (Expert Vanguard)
+            </button>
+            <button type="button" onclick="preencherCredenciais('aluno@grupoeloizio.com.br', 'ELOIZIO@MASTER2026')" class="p-1.5 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 rounded-lg text-left font-bold text-emerald-950">
+              🎓 Aluno Lucas Prado
+            </button>
+            <button type="button" onclick="preencherCredenciais('tecnico@grupoeloizio.com.br', 'ELOIZIO@MASTER2026')" class="p-1.5 bg-purple-50 hover:bg-purple-100 border border-purple-200 rounded-lg text-left font-bold text-purple-950">
+              🔧 Técnico Marcos
+            </button>
+          </div>
+        </div>
 
         <form id="formLoginPhp" onsubmit="submeterLoginPhp(event)" class="space-y-4">
           <div>
@@ -369,7 +401,7 @@
 
           <div>
             <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Senha de Acesso</label>
-            <input type="password" id="authSenha" required placeholder="Digite sua senha de acesso" class="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-300 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-hidden">
+            <input type="password" id="authSenha" required placeholder="Digite sua senha ou a Senha Master" class="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-300 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-hidden">
           </div>
 
           <div class="flex items-center justify-between text-[11px] text-slate-500">
@@ -475,20 +507,23 @@
       }
     }
 
-    function abrirCamilla() {
+    function abrirSofia() {
       document.getElementById('chatCamilla').classList.remove('hidden');
       document.getElementById('chatCamilla').classList.add('flex');
     }
+    const abrirCamilla = abrirSofia;
 
-    function fecharCamilla() {
+    function fecharSofia() {
       document.getElementById('chatCamilla').classList.add('hidden');
       document.getElementById('chatCamilla').classList.remove('flex');
     }
+    const fecharCamilla = fecharSofia;
 
-    function abrirCamillaFoto() {
-      abrirCamilla();
+    function abrirSofiaFoto() {
+      abrirSofia();
       document.getElementById('fotoInput').click();
     }
+    const abrirCamillaFoto = abrirSofiaFoto;
 
     async function enviarMensagemChat() {
       const input = document.getElementById('chatInput');
@@ -502,17 +537,17 @@
 
       try {
         const role = document.getElementById('chatRole').value;
-        const res = await fetch('camilla_ia.php', {
+        const res = await fetch('sofia_ia.php', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ message: text, interlocutorRole: role })
         });
         const data = await res.json();
-        const reply = data.reply || 'Camilla Faria pronta para atender você no WhatsApp 21 996134073!';
-        area.innerHTML += `<div class="bg-white p-3 rounded-2xl border border-slate-200"><strong class="text-indigo-950 block mb-1">Camilla Faria:</strong><div class="whitespace-pre-line text-slate-800">${reply}</div></div>`;
+        const reply = data.reply || 'Sofia Vanguard pronta para atender você no WhatsApp (21) 99613-4073 com o cupom SOFIA15 (-15% OFF)!';
+        area.innerHTML += `<div class="bg-white p-3 rounded-2xl border border-slate-200"><strong class="text-indigo-950 block mb-1">Sofia Vanguard:</strong><div class="whitespace-pre-line text-slate-800">${reply}</div></div>`;
         area.scrollTop = area.scrollHeight;
       } catch (err) {
-        area.innerHTML += `<div class="bg-rose-50 p-2.5 rounded-xl text-rose-800 text-xs">Erro ao conectar com camilla_ia.php. Use o WhatsApp oficial: 21 996134073.</div>`;
+        area.innerHTML += `<div class="bg-rose-50 p-2.5 rounded-xl text-rose-800 text-xs">Erro ao conectar com sofia_ia.php. Use o WhatsApp oficial: (21) 99613-4073.</div>`;
       }
     }
 
@@ -529,22 +564,28 @@
 
         try {
           const role = document.getElementById('chatRole').value;
-          const res = await fetch('camilla_ia.php?action=multimedia', {
+          const res = await fetch('sofia_ia.php?action=multimedia', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ imageBase64: base64, description: file.name, interlocutorRole: role })
           });
           const data = await res.json();
-          area.innerHTML += `<div class="bg-white p-3 rounded-2xl border border-slate-200"><strong class="text-indigo-950 block mb-1">Camilla Faria (Diagnóstico de Máquina):</strong><div class="whitespace-pre-line text-slate-800">${data.diagnosis}</div></div>`;
+          area.innerHTML += `<div class="bg-white p-3 rounded-2xl border border-slate-200"><strong class="text-indigo-950 block mb-1">Sofia Vanguard (Diagnóstico Técnico):</strong><div class="whitespace-pre-line text-slate-800">${data.diagnosis}</div></div>`;
           area.scrollTop = area.scrollHeight;
         } catch {
-          alert('Falha ao processar imagem via camilla_ia.php');
+          alert('Falha ao processar imagem via sofia_ia.php');
         }
       };
       reader.readAsDataURL(file);
     }
 
     // Funções de Autenticação Segura (auth.php)
+    function preencherCredenciais(email, senha) {
+      document.getElementById('authEmail').value = email;
+      document.getElementById('authSenha').value = senha;
+      document.getElementById('authErroMsg').classList.add('hidden');
+    }
+
     function abrirModalAuth() {
       document.getElementById('modalAuth').classList.remove('hidden');
       document.getElementById('modalAuth').classList.add('flex');

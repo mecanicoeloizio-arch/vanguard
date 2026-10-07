@@ -51,7 +51,7 @@ echo -e "\n\n${BLUE}4. CRIAR PREFERÊNCIA DE CHECKOUT NO MERCADO PAGO${NC}"
 curl -s -X POST "${BASE_URL}/mercadopago.php?action=create_preference" \
   -H "Content-Type: application/json" \
   -d '{
-    "title": "Curso Engenharia de Software Moderna (Cupom CAMILLA15)",
+    "title": "Curso Engenharia de Software Moderna (Cupom SOFIA15)",
     "amount": 1606.50,
     "payerEmail": "aluno@grupoeloizio.com.br",
     "payerName": "Lucas Silva Prado",
@@ -100,27 +100,27 @@ curl -s -X POST "${BASE_URL}/mercadopago.php?action=webhook" \
     }
   }'
 
-# 8. Conversa com Atendente Inteligente Camilla Faria (Cliente Final)
-echo -e "\n\n${BLUE}8. CONVERSA COM CAMILLA FARIA (PAPEL: CLIENTE)${NC}"
-curl -s -X POST "${BASE_URL}/camilla_ia.php" \
+# 8. Conversa com Sofia Vanguard (Expert em Cursos & Marketing)
+echo -e "\n\n${BLUE}8. CONVERSA COM SOFIA VANGUARD (PAPEL: CLIENTE)${NC}"
+curl -s -X POST "${BASE_URL}/sofia_ia.php" \
   -H "Content-Type: application/json" \
   -d '{
-    "message": "Olá! Gostaria de saber os serviços de máquinas de costura em São Gonçalo e como parcelar no Mercado Pago.",
+    "message": "Olá! Gostaria de saber os cursos de máquinas de costura e como parcelar no Mercado Pago.",
     "interlocutorRole": "client"
   }'
 
-# 9. Conversa com Atendente Inteligente Camilla Faria (Técnico / Colaborador)
-echo -e "\n\n${BLUE}9. CONVERSA COM CAMILLA FARIA (PAPEL: TÉCNICO MECÂNICO)${NC}"
-curl -s -X POST "${BASE_URL}/camilla_ia.php" \
+# 9. Conversa com Sofia Vanguard (Técnico / Colaborador)
+echo -e "\n\n${BLUE}9. CONVERSA COM SOFIA VANGUARD (PAPEL: TÉCNICO MECÂNICO)${NC}"
+curl -s -X POST "${BASE_URL}/sofia_ia.php" \
   -H "Content-Type: application/json" \
   -d '{
-    "message": "Camilla, preciso das especificações de regulagem da chapa de agulha e folga da lançadeira da Siruba reta.",
+    "message": "Sofia, gostaria de entender a ementa do curso de mecânica de máquinas com o CEO Eloizio e regulagem de lançadeiras.",
     "interlocutorRole": "technician"
   }'
 
 # 10. Diagnóstico Multimídia de Foto de Máquina de Costura
-echo -e "\n\n${BLUE}10. DIAGNÓSTICO MULTIMÍDIA DE FOTO DE MÁQUINA DE COSTURA${NC}"
-curl -s -X POST "${BASE_URL}/camilla_ia.php?action=multimedia" \
+echo -e "\n\n${BLUE}10. DIAGNÓSTICO MULTIMÍDIA DE FOTO DE MÁQUINA DE COSTURA COM SOFIA${NC}"
+curl -s -X POST "${BASE_URL}/sofia_ia.php?action=multimedia" \
   -H "Content-Type: application/json" \
   -d '{
     "imageBase64": "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=",
@@ -147,7 +147,7 @@ curl -s -X POST "${BASE_URL}/admin_cli.php" \
   -d '{"command": "finance:reconcile"}'
 
 # 14. Terminal CLI: Testar Motor Cognitivo e Guardrails da IA
-echo -e "\n\n${BLUE}14. EXECUTAR COMANDO CLI: TESTAR IA CAMILLA FARIA${NC}"
+echo -e "\n\n${BLUE}14. EXECUTAR COMANDO CLI: TESTAR IA SOFIA VANGUARD${NC}"
 curl -s -X POST "${BASE_URL}/admin_cli.php" \
   -H "Content-Type: application/json" \
   -d '{"command": "ai:test"}'

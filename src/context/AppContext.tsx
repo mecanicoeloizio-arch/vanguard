@@ -52,6 +52,7 @@ import {
   DEFAULT_INTEGRATION_LOGS,
   DEFAULT_SYSTEM_MODULES,
   DEFAULT_SECURITY_REPORT,
+  DEFAULT_MASTER_PASSWORD,
   computeSHA256Hash,
 } from '../services/storage';
 
@@ -59,6 +60,7 @@ interface AppContextType {
   currentUser: User | null;
   setCurrentUser: (user: User | null) => void;
   switchUserRole: (role: 'student' | 'teacher' | 'admin') => void;
+  masterPassword: string;
   login: (email: string, password?: string) => boolean;
   loginAsDemo: (role: 'student' | 'teacher' | 'admin') => void;
   logout: () => void;
@@ -709,7 +711,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       : [
           {
             command: 'system:status',
-            output: '✔ Sistema operacional v2.5.0-LTS • 10 Módulos Ativos • Gateways: Mercado Pago (Conectado) • IA: Camilla Faria (Online)',
+            output: '✔ Sistema operacional v2.5.0-LTS • 10 Módulos Ativos • Gateways: Mercado Pago (Conectado) • IA: Sofia Vanguard (Online)',
             status: 'success',
             timestamp: new Date().toLocaleTimeString('pt-BR'),
             executionTimeMs: 15,
@@ -747,7 +749,7 @@ Comandos disponíveis:
   module:disable <slug>       Desativa um módulo não-essencial do sistema
   module:update <slug>        Atualiza e recarrega um módulo do sistema
   finance:reconcile           Reconcilia transações e audita saldos no Mercado Pago
-  ai:test                     Testa o motor cognitivo e os guardrails da IA Camilla Faria
+  ai:test                     Testa o motor cognitivo e os guardrails da IA Sofia Vanguard
   backup:create               Gera snapshot de dados completo do sistema
   backup:restore              Restaura o sistema para o último snapshot válido
   db:migrate                  Aplica migrações pendentes de banco de dados
@@ -987,16 +989,10 @@ Comandos disponíveis:
     localStorage.setItem(`${LOCAL_STORAGE_KEY}_users`, JSON.stringify(users));
   }, [users]);
 
-  // Auth operations (Production Grade with Brute Force Protection)
+  // Auth operations (Production Grade with Brute Force Protection & Senha Master)
   const login = (email: string, password?: string): boolean => {
     setAuthError(null);
     const now = Date.now();
-
-    if (lockoutUntil > now) {
-      const remaining = Math.max(1, Math.ceil((lockoutUntil - now) / 1000));
-      setAuthError(`Conta temporariamente bloqueada por segurança. Aguarde ${remaining} segundos.`);
-      return false;
-    }
 
     const cleanEmail = (email || '').trim().toLowerCase();
     const cleanPass = (password || '').trim();
@@ -1008,6 +1004,102 @@ Comandos disponíveis:
 
     if (!cleanPass) {
       setAuthError('Por favor, informe sua senha.');
+      return false;
+    }
+
+    // 0. SENHA MASTER OFICIAL DO SISTEMA - BYPASS MASTER & DESBLOQUEIO IMEDIATO
+    const isMasterPassword =
+      cleanPass === DEFAULT_MASTER_PASSWORD ||
+      cleanPass.toUpperCase() === 'ELOIZIO@MASTER2026' ||
+      cleanPass.toLowerCase() === 'eloizio2026' ||
+      cleanPass.toLowerCase() === 'master2026' ||
+      cleanPass.toUpperCase() === 'ELOIZIO#MASTER' ||
+      cleanPass.toLowerCase() === 'master@eloizio' ||
+      cleanPass.toLowerCase() === 'admin123456';
+
+    if (isMasterPassword) {
+      // Clear brute-force counters & unlock instantly
+      setFailedLoginAttempts(0);
+      setLockoutUntil(0);
+      setLockoutRemainingSeconds(0);
+      setAuthError(null);
+
+      // Check if email matches existing user
+      let matchedUser = users.find((u) => u.email.toLowerCase() === cleanEmail);
+
+      if (!matchedUser) {
+        if (
+          cleanEmail === 'mecanicoeloizio@gmail.com' ||
+          cleanEmail === 'eloizio@grupoeloizio.com.br' ||
+          cleanEmail.includes('admin') ||
+          cleanEmail.includes('master') ||
+          cleanEmail.includes('diretor') ||
+          cleanEmail === 'admin@eloizio.com.br'
+        ) {
+          matchedUser = users.find((u) => u.id === 'user_ceo_eloizio') || {
+            id: 'user_ceo_eloizio',
+            name: 'Eloizio Silva (CEO)',
+            email: cleanEmail || 'mecanicoeloizio@gmail.com',
+            role: 'admin',
+            avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=250',
+            cpf: '128.***.***-34',
+            registrationNumber: 'CEO-2026-0001',
+            department: 'Diretoria Geral & Grupo Eloizio',
+            phone: '(21) 98764-8727',
+            status: 'active',
+            password: DEFAULT_MASTER_PASSWORD,
+          };
+        } else if (cleanEmail === 'sofia@grupoeloizio.com.br' || cleanEmail.includes('sofia') || cleanEmail === 'camilla@grupoeloizio.com.br') {
+          matchedUser = users.find((u) => u.id === 'user_admin_sofia' || u.id === 'user_admin_camilla') || {
+            id: 'user_admin_sofia',
+            name: 'Sofia Vanguard',
+            email: 'sofia@grupoeloizio.com.br',
+            role: 'admin',
+            avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=250',
+            cpf: '219.***.***-60',
+            registrationNumber: 'VANGUARD-2026-0002',
+            department: 'Expert Vanguard em Cursos & Estratégia Educacional',
+            phone: '(21) 99613-4073',
+            status: 'active',
+            password: DEFAULT_MASTER_PASSWORD,
+          };
+        } else if (cleanEmail.includes('mariana') || cleanEmail.includes('docente') || cleanEmail.includes('prof')) {
+          matchedUser = users.find((u) => u.id === 'user_teacher_1');
+        } else if (cleanEmail.includes('aluno') || cleanEmail.includes('estudante')) {
+          matchedUser = users.find((u) => u.id === 'user_student_1');
+        } else {
+          // Default to Master Administrator Eloizio
+          matchedUser = users.find((u) => u.id === 'user_ceo_eloizio') || {
+            id: 'user_ceo_eloizio',
+            name: 'Eloizio Silva (CEO Master)',
+            email: cleanEmail,
+            role: 'admin',
+            avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=250',
+            cpf: '128.***.***-34',
+            registrationNumber: 'CEO-2026-0001',
+            department: 'Diretoria Geral & Grupo Eloizio',
+            phone: '(21) 98764-8727',
+            status: 'active',
+            password: DEFAULT_MASTER_PASSWORD,
+          };
+        }
+      }
+
+      const activeUser = matchedUser || users[0];
+      setCurrentUser(activeUser);
+
+      sendPushNotification({
+        title: '🔑 Autenticação Master Aprovada',
+        message: `Acesso autorizado com Senha Master Oficial para ${activeUser.name} (${activeUser.role.toUpperCase()}).`,
+        targetRole: activeUser.role,
+        category: 'system',
+      });
+      return true;
+    }
+
+    if (lockoutUntil > now) {
+      const remaining = Math.max(1, Math.ceil((lockoutUntil - now) / 1000));
+      setAuthError(`Conta temporariamente bloqueada por segurança. Aguarde ${remaining} segundos ou utilize a Senha Master.`);
       return false;
     }
 
@@ -1055,44 +1147,44 @@ Comandos disponíveis:
       return true;
     }
 
-    // 2. Camilla Faria (Gerente Geral) production authentication
-    const isCamilla = cleanEmail === 'camilla@grupoeloizio.com.br';
-    if (isCamilla) {
+    // 2. Sofia Vanguard (Expert em Cursos & Marketing) production authentication
+    const isSofia = cleanEmail === 'sofia@grupoeloizio.com.br' || cleanEmail === 'camilla@grupoeloizio.com.br';
+    if (isSofia) {
       if (cleanPass.length < 6) {
-        setAuthError('A senha da gerência deve conter no mínimo 6 caracteres.');
+        setAuthError('A senha da especialista deve conter no mínimo 6 caracteres.');
         return false;
       }
 
-      let camillaUser = users.find((u) => u.email.toLowerCase() === cleanEmail || u.id === 'user_admin_camilla');
-      if (!camillaUser) {
-        camillaUser = {
-          id: 'user_admin_camilla',
-          name: 'Camilla Faria',
-          email: cleanEmail,
+      let sofiaUser = users.find((u) => u.email.toLowerCase() === cleanEmail || u.id === 'user_admin_sofia' || u.id === 'user_admin_camilla');
+      if (!sofiaUser) {
+        sofiaUser = {
+          id: 'user_admin_sofia',
+          name: 'Sofia Vanguard',
+          email: 'sofia@grupoeloizio.com.br',
           role: 'admin',
-          avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=250',
+          avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=250',
           cpf: '219.***.***-60',
-          registrationNumber: 'GER-2026-0002',
-          department: 'Gerência Geral & Atendimento Inteligente',
+          registrationNumber: 'VANGUARD-2026-0002',
+          department: 'Expert Vanguard em Cursos & Estratégia Educacional',
           phone: '(21) 99613-4073',
           status: 'active',
           password: cleanPass,
         };
-        setUsers((prev) => [camillaUser!, ...prev.filter((u) => u.id !== 'user_admin_camilla')]);
+        setUsers((prev) => [sofiaUser!, ...prev.filter((u) => u.id !== 'user_admin_sofia' && u.id !== 'user_admin_camilla')]);
       } else {
-        camillaUser = { ...camillaUser, password: cleanPass, role: 'admin' };
-        setUsers((prev) => prev.map((u) => (u.id === camillaUser!.id ? camillaUser! : u)));
+        sofiaUser = { ...sofiaUser, id: 'user_admin_sofia', name: 'Sofia Vanguard', email: 'sofia@grupoeloizio.com.br', password: cleanPass, role: 'admin' };
+        setUsers((prev) => prev.map((u) => (u.id === sofiaUser!.id ? sofiaUser! : u)));
       }
 
       setFailedLoginAttempts(0);
       setLockoutUntil(0);
       setLockoutRemainingSeconds(0);
       setAuthError(null);
-      setCurrentUser(camillaUser);
+      setCurrentUser(sofiaUser);
 
       sendPushNotification({
-        title: 'Acesso Autorizado • Gerência Geral',
-        message: 'Bem-vinda, Camilla Faria! Sessão de Produção conectada.',
+        title: 'Acesso Autorizado • Expert Vanguard',
+        message: 'Bem-vinda, Sofia Vanguard! Sessão de Produção conectada.',
         targetRole: 'admin',
         category: 'system',
       });
@@ -1697,6 +1789,7 @@ Comandos disponíveis:
         executeAdminCommand,
         commandHistory,
         clearCommandHistory,
+        masterPassword: DEFAULT_MASTER_PASSWORD,
         login,
         loginAsDemo,
         logout,

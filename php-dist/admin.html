@@ -29,6 +29,17 @@
         <p class="text-xs text-slate-400 leading-relaxed">
           Autenticação obrigatória para acessar o Terminal CLI, Módulos e Auditoria de Segurança.
         </p>
+
+        <!-- Senha Master Oficial -->
+        <div class="p-3 rounded-2xl bg-slate-950 border border-amber-400/40 text-left flex items-center justify-between gap-2">
+          <div>
+            <div class="text-[10px] font-black uppercase text-amber-400">Senha Master Oficial:</div>
+            <div class="font-mono font-black text-xs text-amber-200">ELOIZIO@MASTER2026</div>
+          </div>
+          <button type="button" onclick="preencherMasterAdmin()" class="px-2.5 py-1 bg-amber-500 hover:bg-amber-400 text-slate-950 rounded-lg text-[11px] font-black cursor-pointer">
+            ⚡ Preencher
+          </button>
+        </div>
       </div>
 
       <div id="adminLoginErro" class="hidden p-3 bg-rose-500/20 border border-rose-500/40 text-rose-300 text-xs rounded-xl"></div>
@@ -96,8 +107,11 @@
       <button onclick="trocarAba('cli')" id="tabCli" class="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold text-slate-600 hover:text-slate-900 transition">
         💻 Terminal CLI
       </button>
-      <button onclick="trocarAba('seguranca')" id="tabSeguranca" class="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold text-slate-600 hover:text-slate-900 transition">
+      <button onclick="trocarAba('seguranca')" id="tabSeguranca" class="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold text-slate-600 hover:text-slate-900 transition whitespace-nowrap">
         🛡️ Auditoria de Segurança
+      </button>
+      <button onclick="trocarAba('cursos')" id="tabCursos" class="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold text-slate-600 hover:text-slate-900 transition whitespace-nowrap">
+        📝 Preencher Cursos via Texto
       </button>
     </div>
 
@@ -167,27 +181,194 @@
         <!-- Preenchido via JS chamando security_audit.php -->
       </div>
     </div>
+
+    <!-- Conteúdo da Aba 4: Cursos & Preenchimento via Texto -->
+    <div id="abaCursos" class="mt-6 space-y-6 hidden">
+      <!-- Banner Explicativo -->
+      <div class="bg-linear-to-r from-emerald-950 via-teal-950 to-slate-900 text-white p-6 rounded-3xl border border-emerald-800/50 shadow-md space-y-3">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-2xl bg-emerald-500/20 text-emerald-400 border border-emerald-400/30 flex items-center justify-center font-bold text-lg">
+            📝
+          </div>
+          <div>
+            <span class="text-[10px] font-black uppercase tracking-wider text-emerald-400">Produtividade Máxima</span>
+            <h3 class="text-xl font-black text-white">Preenchimento e Importação de Cursos via Texto (PHP + JS)</h3>
+          </div>
+        </div>
+        <p class="text-xs text-slate-300 leading-relaxed max-w-3xl">
+          <strong>Como funciona:</strong> Cole abaixo qualquer texto descritivo, anúncio de WhatsApp, ementa de aulas ou JSON. O sistema identifica automaticamente <strong>Título</strong>, <strong>Preço</strong>, <strong>Carga Horária</strong>, <strong>Instrutor</strong> e <strong>Módulos</strong>, salvando imediatamente para visualização e checkout Mercado Pago.
+        </p>
+      </div>
+
+      <!-- Modelos Prontos do Grupo Eloizio -->
+      <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs space-y-2">
+        <span class="text-xs font-bold text-slate-600 uppercase tracking-wider block">Carregar Modelos Prontos do Grupo Eloizio:</span>
+        <div class="flex flex-wrap gap-2 text-xs">
+          <button type="button" onclick="carregarModeloTexto(1)" class="px-3 py-2 rounded-xl bg-slate-100 hover:bg-emerald-50 hover:text-emerald-900 border border-slate-200 font-bold transition cursor-pointer">
+            🔧 Exemplo 1: Máquinas de Costura & Mecânica
+          </button>
+          <button type="button" onclick="carregarModeloTexto(2)" class="px-3 py-2 rounded-xl bg-slate-100 hover:bg-emerald-50 hover:text-emerald-900 border border-slate-200 font-bold transition cursor-pointer">
+            📊 Exemplo 2: Contabilidade & MEI Online
+          </button>
+          <button type="button" onclick="carregarModeloTexto(3)" class="px-3 py-2 rounded-xl bg-slate-100 hover:bg-emerald-50 hover:text-emerald-900 border border-slate-200 font-bold transition cursor-pointer">
+            ⚡ Exemplo 3: Máquinas Industriais Avançadas
+          </button>
+        </div>
+      </div>
+
+      <!-- Textarea de Importação -->
+      <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs space-y-4">
+        <div class="flex items-center justify-between">
+          <label class="block text-xs font-bold text-slate-700 uppercase">Cole ou Digite o Texto do(s) Curso(s):</label>
+          <button type="button" onclick="document.getElementById('textoCursoInput').value = ''" class="text-xs text-slate-400 hover:text-slate-600 underline cursor-pointer">
+            Limpar Texto
+          </button>
+        </div>
+        <textarea id="textoCursoInput" rows="8" class="w-full p-4 font-mono text-xs bg-slate-50 border border-slate-300 rounded-2xl focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-hidden transition"></textarea>
+
+        <div class="flex flex-wrap items-center justify-between gap-3 pt-2">
+          <button type="button" onclick="interpretarCursosTexto()" class="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-black text-xs rounded-xl shadow-md cursor-pointer transition flex items-center gap-2">
+            <span>✨ Interpretar Texto & Gerar Cursos</span>
+          </button>
+          <div id="statusCursosTexto" class="text-xs font-bold text-slate-600"></div>
+        </div>
+
+        <!-- Pré-Visualização dos Cursos Interpretados -->
+        <div id="resultadoCursosPreview" class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t border-slate-100 hidden">
+        </div>
+      </div>
+    </div>
   </div>
 
   <script>
+    function preencherMasterAdmin() {
+      document.getElementById('adminEmail').value = 'mecanicoeloizio@gmail.com';
+      document.getElementById('adminSenha').value = 'ELOIZIO@MASTER2026';
+    }
+
     function trocarAba(aba) {
-      ['Modulos', 'Cli', 'Seguranca'].forEach(a => {
-        document.getElementById('aba' + a).classList.add('hidden');
-        document.getElementById('tab' + a).className = 'px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold text-slate-600 hover:text-slate-900 transition';
+      ['Modulos', 'Cli', 'Seguranca', 'Cursos'].forEach(a => {
+        const el = document.getElementById('aba' + a);
+        if (el) el.classList.add('hidden');
+        const tabBtn = document.getElementById('tab' + a);
+        if (tabBtn) tabBtn.className = 'px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold text-slate-600 hover:text-slate-900 transition whitespace-nowrap';
       });
 
       if (aba === 'modulos') {
         document.getElementById('abaModulos').classList.remove('hidden');
-        document.getElementById('tabModulos').className = 'px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-indigo-600 text-white transition';
+        document.getElementById('tabModulos').className = 'px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-indigo-600 text-white transition whitespace-nowrap';
         recarregarModulos();
       } else if (aba === 'cli') {
         document.getElementById('abaCli').classList.remove('hidden');
-        document.getElementById('tabCli').className = 'px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-indigo-600 text-white transition';
+        document.getElementById('tabCli').className = 'px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-indigo-600 text-white transition whitespace-nowrap';
       } else if (aba === 'seguranca') {
         document.getElementById('abaSeguranca').classList.remove('hidden');
-        document.getElementById('tabSeguranca').className = 'px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-indigo-600 text-white transition';
+        document.getElementById('tabSeguranca').className = 'px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-indigo-600 text-white transition whitespace-nowrap';
         carregarAuditoriaSeguranca();
+      } else if (aba === 'cursos') {
+        document.getElementById('abaCursos').classList.remove('hidden');
+        document.getElementById('tabCursos').className = 'px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-indigo-600 text-white transition whitespace-nowrap';
+        if (!document.getElementById('textoCursoInput').value) carregarModeloTexto(1);
       }
+    }
+
+    const MODELO_TEXTO_1 = `Título: Mecânica e Manutenção de Máquinas de Costura (Domésticas e Industriais)
+Categoria: Negócios
+Nível: Iniciante
+Preço: 480
+Carga Horária: 80
+Instrutor: Eloizio Silva
+Resumo: Treinamento completo para aprender a consertar, regular ponto, lubrificar e fazer manutenção de máquinas reta, overloque e galoneira.
+Descrição: Curso 100% online desenvolvido especialmente para novos técnicos e costureiras em São Gonçalo e todo o Brasil.
+Módulos:
+- Módulo 1: Anatomia das Máquinas e Ferramentas (4 aulas)
+- Módulo 2: Desmontagem, Limpeza Técnica e Lubrificação (6 aulas)
+- Módulo 3: Sincronismo de Lançadeira e Regulagem de Ponto (8 aulas)
+- Módulo 4: Manutenção de Overloques e Galoneiras (6 aulas)`;
+
+    const MODELO_TEXTO_2 = `Título: Contabilidade e Assessoria Prática para MEI e Microempresas
+Categoria: Negócios
+Nível: Iniciante
+Preço: 320
+Carga Horária: 60
+Instrutor: Sofia Vanguard
+Resumo: Passo a passo prático para organizar a rotina contábil, emissão de notas fiscais e obrigações fiscais 100% online.
+Descrição: Capacitação ágil com foco na gestão contábil moderna e desburocratizada para microempreendedores.
+Módulos:
+- Módulo 1: Fundamentos da Rotina Contábil e Legislação MEI (5 aulas)
+- Módulo 2: Emissão de Notas Fiscais e Tributação (6 aulas)
+- Módulo 3: Controle Financeiro, Fluxo de Caixa e Meios de Pagamento (6 aulas)`;
+
+    const MODELO_TEXTO_3 = `Título: Operação e Ajustes de Máquinas Industriais de Alta Produção
+Categoria: Tecnologia
+Nível: Intermediário
+Preço: 590
+Carga Horária: 100
+Instrutor: Eloizio Silva
+Resumo: Domine o funcionamento de máquinas automáticas, eletrônicas e programáveis para confecções e polos de moda.
+Descrição: Especialização técnica voltada para operadores e mecânicos de chão de fábrica.
+Módulos:
+- Módulo 1: Componentes Eletrônicos e Painéis Programáveis (6 aulas)
+- Módulo 2: Calibração de Sensores e Facas de Corte Automático (8 aulas)`;
+
+    function carregarModeloTexto(num) {
+      const txt = num === 1 ? MODELO_TEXTO_1 : (num === 2 ? MODELO_TEXTO_2 : MODELO_TEXTO_3);
+      document.getElementById('textoCursoInput').value = txt;
+      interpretarCursosTexto();
+    }
+
+    function interpretarCursosTexto() {
+      const raw = document.getElementById('textoCursoInput').value.trim();
+      const statusEl = document.getElementById('statusCursosTexto');
+      const previewEl = document.getElementById('resultadoCursosPreview');
+      previewEl.innerHTML = '';
+
+      if (!raw) {
+        statusEl.innerText = 'Por favor, digite ou cole o texto do curso.';
+        return;
+      }
+
+      const linhas = raw.split('\n').map(l => l.trim()).filter(Boolean);
+      let titulo = 'Curso Grupo Eloizio';
+      let preco = '450,00';
+      let horas = '60h';
+      let instrutor = 'Eloizio Silva';
+      let resumo = 'Curso completo 100% online.';
+
+      linhas.forEach(line => {
+        const lower = line.toLowerCase();
+        if (lower.startsWith('título:') || lower.startsWith('titulo:') || lower.startsWith('curso:')) {
+          titulo = line.replace(/^[^:]+:\s*/, '').trim();
+        } else if (lower.startsWith('preço:') || lower.startsWith('preco:') || lower.startsWith('valor:')) {
+          preco = line.replace(/^[^:]+:\s*/, '').trim();
+        } else if (lower.startsWith('carga horária:') || lower.startsWith('carga horaria:') || lower.startsWith('horas:')) {
+          horas = line.replace(/^[^:]+:\s*/, '').trim() + 'h';
+        } else if (lower.startsWith('instrutor:') || lower.startsWith('docente:')) {
+          instrutor = line.replace(/^[^:]+:\s*/, '').trim();
+        } else if (lower.startsWith('resumo:')) {
+          resumo = line.replace(/^[^:]+:\s*/, '').trim();
+        }
+      });
+
+      statusEl.innerHTML = `✔ Curso <strong>"${titulo}"</strong> interpretado com sucesso!`;
+      previewEl.classList.remove('hidden');
+      previewEl.innerHTML = `
+        <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-3">
+          <div class="flex items-start justify-between gap-2">
+            <div>
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-black uppercase bg-indigo-100 text-indigo-900">Especialização Online</span>
+              <h4 class="font-black text-sm text-slate-900 mt-1">${titulo}</h4>
+            </div>
+            <span class="px-2.5 py-1 bg-emerald-50 text-emerald-800 border border-emerald-200 rounded-lg font-black text-xs shrink-0">R$ ${preco}</span>
+          </div>
+          <p class="text-xs text-slate-600 line-clamp-2">${resumo}</p>
+          <div class="flex items-center justify-between text-[11px] text-slate-500 pt-2 border-t border-slate-200">
+            <span>⏱ ${horas}</span>
+            <span>👤 ${instrutor}</span>
+            <span class="text-emerald-600 font-bold">✓ Pronto para Publicação</span>
+          </div>
+        </div>
+      `;
     }
 
     async function recarregarModulos() {
@@ -202,7 +383,7 @@
         // Carrega os módulos default
         const modulos = [
           { id: 'mod_core', slug: 'core_system', name: 'Núcleo Central & Segurança Multi-Módulos', version: '2.5.0', enabled: true, isCore: true, desc: 'RBAC, controle de sessão, criptografia SHA-256 e orquestração.' },
-          { id: 'mod_camilla_ai', slug: 'camilla_faria_ai_assistant', name: 'Atendente Inteligente Camilla Faria', version: '3.1.0', enabled: true, isCore: false, desc: 'Assistente executiva com IA multimodal, diagnóstico de fotos e vendas.' },
+          { id: 'mod_sofia_ai', slug: 'sofia_vanguard_ai_assistant', name: 'Sofia Vanguard — Expert em Cursos & Marketing', version: '3.1.0', enabled: true, isCore: false, desc: 'Expert Vanguard em Cursos, Psicologia de Marketing Educacional e diagnóstico multimodal.' },
           { id: 'mod_mercadopago', slug: 'mercadopago_gateway', name: 'Mercado Pago Checkout & PIX', version: '2.4.0', enabled: true, isCore: false, desc: 'Gateway oficial de recebimento com conciliação contábil automática.' },
           { id: 'mod_maquinas', slug: 'maquinas_costura_mecanica', name: 'Oficina de Máquinas de Costura (São Gonçalo)', version: '1.5.0', enabled: true, isCore: false, desc: 'Compra, venda, conserto, reforma de máquinas e peças.' },
           { id: 'mod_contabilidade', slug: 'contabilidade_assessoria_online', name: 'Contabilidade e Assessoria 100% Online', version: '1.8.0', enabled: true, isCore: false, desc: 'MEI, CNPJ, DASN e assessoria digital ágil sem burocracia.' },
@@ -277,7 +458,7 @@
         const cats = [
           { title: '1. Login & Autenticação', score: data.categories.authentication.score, checks: data.categories.authentication.checks },
           { title: '2. Financeiro & Mercado Pago', score: data.categories.financial.score, checks: data.categories.financial.checks },
-          { title: '3. IA Camilla Faria', score: data.categories.ai_guardrails.score, checks: data.categories.ai_guardrails.checks },
+          { title: '3. IA Sofia Vanguard', score: data.categories.ai_guardrails.score, checks: data.categories.ai_guardrails.checks },
           { title: '4. Proteção de Dados & MEC', score: data.categories.data_protection.score, checks: data.categories.data_protection.checks },
         ];
 

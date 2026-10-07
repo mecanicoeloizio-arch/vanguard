@@ -21,6 +21,8 @@ import {
   SecurityAuditReport,
 } from '../types';
 
+export const DEFAULT_MASTER_PASSWORD = 'ELOIZIO@MASTER2026';
+
 export const INITIAL_USERS: User[] = [
   {
     id: 'user_ceo_eloizio',
@@ -33,21 +35,21 @@ export const INITIAL_USERS: User[] = [
     department: 'Diretoria Geral & Grupo Eloizio',
     phone: '(21) 98764-8727',
     status: 'active',
-    password: '',
+    password: DEFAULT_MASTER_PASSWORD,
     encryptedDataHash: '9a8b7c6d5e4f3a2b1c0d9e8f7a6b5c4d3e2f1a0b5c4d3e2f1a0b9a8b7c6d5e4f',
   },
   {
-    id: 'user_admin_camilla',
-    name: 'Camilla Faria',
-    email: 'camilla@grupoeloizio.com.br',
+    id: 'user_admin_sofia',
+    name: 'Sofia Vanguard',
+    email: 'sofia@grupoeloizio.com.br',
     role: 'admin',
-    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=250',
+    avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=250',
     cpf: '219.***.***-60',
-    registrationNumber: 'GER-2026-0002',
-    department: 'Gerência Geral & Atendimento Inteligente',
+    registrationNumber: 'VANGUARD-2026-0002',
+    department: 'Expert Vanguard em Cursos & Estratégia Educacional',
     phone: '(21) 99613-4073',
     status: 'active',
-    password: '',
+    password: DEFAULT_MASTER_PASSWORD,
     encryptedDataHash: '8b7c6d5e4f3a2b1c0d9e8f7a6b5c4d3e2f1a0b5c4d3e2f1a0b9a8b7c6d5e4f9a',
   },
   {
@@ -61,7 +63,7 @@ export const INITIAL_USERS: User[] = [
     department: 'Diretoria Geral & Grupo Eloizio',
     phone: '(21) 98764-8727',
     status: 'active',
-    password: '',
+    password: DEFAULT_MASTER_PASSWORD,
     encryptedDataHash: '9a8b7c6d5e4f3a2b1c0d9e8f7a6b5c4d3e2f1a0b5c4d3e2f1a0b9a8b7c6d5e4f',
   },
   {
@@ -74,7 +76,7 @@ export const INITIAL_USERS: User[] = [
     department: 'Coordenação Acadêmica de Cursos Livres',
     phone: '(21) 99613-4073',
     status: 'active',
-    password: '',
+    password: DEFAULT_MASTER_PASSWORD,
     encryptedDataHash: '7f83b1657ff1fc53b92dc18148a1d65dfc2d4b1fa3d677284addd200126d9069',
   },
   {
@@ -88,7 +90,7 @@ export const INITIAL_USERS: User[] = [
     courseId: 'course_1',
     phone: '(21) 99999-8888',
     status: 'active',
-    password: '',
+    password: DEFAULT_MASTER_PASSWORD,
     encryptedDataHash: 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855',
   },
 ];
@@ -768,15 +770,15 @@ export const DEFAULT_MERCADOPAGO_CONFIG: MercadoPagoConfig = {
 };
 
 export const DEFAULT_SOFIA_SETTINGS: SofiaSettings = {
-  name: 'Camilla Faria',
-  title: 'Gerente Geral do Grupo Eloizio & Atendente Inteligente',
+  name: 'Sofia Vanguard',
+  title: 'Expert Vanguard em Cursos & Estrategista de Marketing',
   personality: 'comercial',
   romanticToneLevel: 'moderada',
-  activeCoupon: 'CAMILLA15',
+  activeCoupon: 'SOFIA15',
   discountPercentage: 15,
   whatsappNumber: '21996134073',
-  welcomeMessage: '☕ Olá! Eu sou a Camilla Faria, Gerente Geral do Grupo Eloizio. Depois do meu primeiro café matinal já dei boot total e estou a todo vapor! Como posso ajudar você hoje? Cuidamos de Contabilidade e Assessoria 100% Online, Cursos Livres com Certificação Oficial e nossa Oficina de Máquinas de Costura & Mecânica em São Gonçalo - RJ!',
-  enablePoeticQuotes: true,
+  welcomeMessage: '✨ Olá! Eu sou a Sofia, a Expert Vanguard do Grupo Eloizio. Estou aqui para entender seus objetivos de carreira e te guiar rumo à melhor formação prática com certificação oficial MEC. Qual área você deseja transformar hoje?',
+  enablePoeticQuotes: false,
   enableDirectCheckoutAction: true,
 };
 
@@ -801,18 +803,18 @@ export const DEFAULT_INTEGRATION_KEYS: IntegrationKeyRecord[] = [
   },
   {
     id: 'int_wpp_1',
-    name: 'WhatsApp Business API (Camilla Faria & Grupo Eloizio)',
+    name: 'WhatsApp Business API (Sofia Vanguard & Grupo Eloizio)',
     category: 'communication',
     service: 'whatsapp_official',
     primaryToken: 'wpp_live_tok_99182374619283746591',
     secondaryKey: '21996134073',
-    secretKey: 'whsec_wpp_camilla_secret_2026',
+    secretKey: 'whsec_wpp_sofia_secret_2026',
     endpointUrl: 'https://api.whatsapp.com/v18.0/messages',
     environment: 'production',
     status: 'active',
     lastPingAt: '2026-10-02 15:42',
     autoSync: true,
-    notes: 'Linha oficial Grupo Eloizio (21 996134073) com atendimento inteligente de Camilla Faria e suporte do CEO Eloizio (21 987648727).',
+    notes: 'Linha oficial Grupo Eloizio (21 996134073) com atendimento inteligente de Sofia Vanguard e suporte do CEO Eloizio (21 987648727).',
     createdAt: '2026-09-29 10:00',
     updatedAt: '2026-10-02 15:42',
     webhookEvents: ['messages.received', 'messages.delivered', 'lead.captured'],
@@ -950,7 +952,7 @@ export const DEFAULT_INTEGRATION_LOGS: IntegrationAuditLog[] = [
     service: 'whatsapp_official',
     action: 'health_check',
     status: 'success',
-    payloadSummary: 'Instância Camilla Faria (21 996134073) conectada com sucesso ao gateway.',
+    payloadSummary: 'Instância Sofia Vanguard (21 996134073) conectada com sucesso ao gateway.',
     latencyMs: 89,
     ipAddress: '177.18.29.102',
   },
@@ -1036,10 +1038,10 @@ export const DEFAULT_SYSTEM_MODULES: SystemModule[] = [
     features: ['Certificado com Frente e Verso', 'QR Code de validação pública', 'Hash SHA-256 ICP-Edu'],
   },
   {
-    id: 'mod_camilla_ai',
-    slug: 'camilla_faria_ai_assistant',
-    name: 'Atendente Inteligente Camilla Faria (Grupo Eloizio)',
-    description: 'Assistente executiva, gerente geral e especialista com IA multimodal para suporte e vendas.',
+    id: 'mod_sofia_ai',
+    slug: 'sofia_vanguard_ai_assistant',
+    name: 'Sofia Vanguard — Expert em Cursos & Psicologia de Marketing',
+    description: 'Expert Vanguard em Cursos, Carreiras, Psicologia de Marketing Educacional e diagnóstico multimodal.',
     version: '3.1.0',
     category: 'communication',
     enabled: true,
@@ -1049,8 +1051,8 @@ export const DEFAULT_SYSTEM_MODULES: SystemModule[] = [
     updatedAt: '2026-10-05 14:30',
     status: 'healthy',
     author: 'Grupo Eloizio AI Lab',
-    changelog: ['Persona oficial Camilla Faria ativada', 'Integração com WhatsApp oficial 21 996134073'],
-    features: ['Acolhimento dinâmico e direto', 'Conhecimento enciclopédico dos cursos', 'Pré-orçamentos de conserto'],
+    changelog: ['Identidade 100% Sofia Vanguard (Camilla desconectada)', 'Psicologia de marketing educacional e domínio total dos cursos'],
+    features: ['Domínio completo de todos os cursos', 'Psicologia de marketing e conversão', 'Diagnóstico técnico de máquinas'],
   },
   {
     id: 'mod_contabilidade',
