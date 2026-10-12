@@ -67,7 +67,12 @@ export const Footer: React.FC = () => {
         </div>
 
         <div className="pt-8 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-slate-500">
-          <p>© 2026 Grupo Eloizio — Cursos 100% Online, Assessoria Contábil & Oficina Mecânica. Todos os direitos reservados.</p>
+          <div className="space-y-1 text-center sm:text-left">
+            <p>© 2026 Grupo Eloizio — Cursos 100% Online, Assessoria Contábil & Oficina Mecânica. Todos os direitos reservados.</p>
+            <p className="text-emerald-400/90 font-medium text-[11px]">
+              "EloContábil é apoio administrativo, não substitui seu contador responsável." (Subdomínio: elocontabil.grupoeloizio.com.br)
+            </p>
+          </div>
           <div className="flex items-center gap-4">
             <span className="hover:text-slate-400 cursor-pointer">Termos de Uso</span>
             <span>•</span>

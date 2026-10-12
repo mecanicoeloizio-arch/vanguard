@@ -27,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao'])) {
             $categoria = 'Tecnologia';
             $preco = 490.00;
             $horas = 60;
-            $instrutor = 'Eloizio Silva (CEO)';
+            $instrutor = 'Eloizio Assunção (CEO)';
             $resumo = 'Curso cadastrado rapidamente via importação de texto simples.';
 
             $linhas = explode("\n", $texto);
@@ -78,8 +78,54 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao'])) {
 
             array_unshift($cursos, $novoCurso);
             salvarCursosData($cursos);
-            $msgSucesso = "Curso <strong>" . htmlspecialchars($titulo) . "</strong> cadastrado com sucesso e publicado na vitrine pública!";
+            $msgSucesso = "Curso <strong>" . htmlspecialchars($titulo) . "</strong> cadastrado via texto e publicado na vitrine pública!";
         }
+    } elseif ($_POST['acao'] === 'cadastrar_curso_formulario') {
+        $titulo = trim($_POST['titulo'] ?? 'Novo Curso');
+        $categoria = trim($_POST['categoria'] ?? 'Negócios');
+        $precoStr = preg_replace('/[^0-9.,]/', '', $_POST['preco'] ?? '350.00');
+        $preco = (float)str_replace(',', '.', $precoStr) ?: 350.00;
+        $horas = (int)($_POST['horas'] ?? 60);
+        $instrutor = trim($_POST['instrutor'] ?? 'Eloizio Assunção (CEO)');
+        $nivel = trim($_POST['nivel'] ?? 'Iniciante');
+        $resumo = trim($_POST['resumo'] ?? 'Capacitação prática 100% online.');
+        $descricao = trim($_POST['descricao'] ?? 'Treinamento completo com certificado e metodologia do Grupo Eloizio.');
+
+        $novoCurso = [
+            'id' => 'course_' . time(),
+            'title' => $titulo,
+            'shortDescription' => $resumo,
+            'fullDescription' => $descricao,
+            'category' => $categoria,
+            'price' => $preco,
+            'workloadHours' => $horas,
+            'level' => $nivel,
+            'instructorName' => $instrutor,
+            'instructorTitle' => 'Especialista Técnico do Grupo Eloizio',
+            'thumbnail' => 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&q=80&w=800',
+            'featured' => true,
+            'enrolledStudentsCount' => 0,
+            'rating' => 5.0,
+            'tags' => [$categoria, 'Certificado MEC', 'Online'],
+            'syllabus' => [
+                [
+                    'title' => 'Módulo 1: Introdução e Fundamentos Práticos',
+                    'lessons' => [
+                        ['title' => '1. Boas-vindas e Estrutura do Curso', 'duration' => '30 min', 'completed' => false, 'videoUrl' => 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4']
+                    ]
+                ]
+            ]
+        ];
+
+        array_unshift($cursos, $novoCurso);
+        salvarCursosData($cursos);
+        $msgSucesso = "Curso <strong>" . htmlspecialchars($titulo) . "</strong> cadastrado via formulário e publicado na vitrine pública!";
+    } elseif ($_POST['acao'] === 'emitir_documento_secretaria') {
+        $tipoDoc = $_POST['tipoDocumento'] ?? 'declaracao';
+        $alunoNome = trim($_POST['alunoNome'] ?? 'Lucas Silva Prado');
+        $cod = 'DOC-' . strtoupper(substr($tipoDoc, 0, 3)) . '-' . date('Y') . '-' . rand(1000, 9999);
+        $hash = hash('sha256', $cod . $alunoNome . time());
+        $msgSucesso = "Documento acadêmico emitido com fé pública! Código: <strong>$cod</strong> | Hash SHA-256 gerado e arquivado no Livro de Registro.";
     }
 }
 ?>
@@ -92,7 +138,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao'])) {
         <span>Diretoria Geral & Gestão Integrada</span>
       </div>
       <h1 class="text-xl sm:text-3xl font-black text-white">Painel Executivo — Grupo Eloizio</h1>
-      <p class="text-xs text-indigo-200">Liderança: Eloizio Silva (CEO) & Sofia Vanguard (Expert em Cursos)</p>
+      <p class="text-xs text-indigo-200">Liderança: Eloizio Assunção (CEO) & Sofia Vanguard (Expert em Cursos)</p>
       <div class="mt-2 text-[11px] font-mono text-amber-300 font-bold">
         🔑 Senha Master Ativa: ELOIZIO@MASTER2026
       </div>
@@ -127,24 +173,39 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao'])) {
 
   <!-- Abas de Gestão -->
   <div class="flex items-center gap-2 bg-white p-1.5 rounded-2xl border border-slate-200 overflow-x-auto no-scrollbar shadow-xs">
-    <button onclick="trocarAbaAdmin('cursos')" id="tabAdmCursos" class="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-indigo-600 text-white transition whitespace-nowrap">
-      📚 Gestão de Cursos & Importação via Texto
+    <button onclick="trocarAbaAdmin('cursos')" id="tabAdmCursos" class="px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-indigo-600 text-white transition whitespace-nowrap">
+      📚 Cursos & Texto
     </button>
-    <button onclick="trocarAbaAdmin('matriculas')" id="tabAdmMatriculas" class="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold text-slate-600 hover:text-slate-900 transition whitespace-nowrap">
-      🎓 Matrículas & Alunos (<?= count($alunos) ?>)
+    <button onclick="trocarAbaAdmin('formulario')" id="tabAdmFormulario" class="px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-bold text-slate-600 hover:text-slate-900 transition whitespace-nowrap">
+      ➕ Cadastrar via Formulário
     </button>
-    <button onclick="trocarAbaAdmin('propostas')" id="tabAdmPropostas" class="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold text-slate-600 hover:text-slate-900 transition whitespace-nowrap">
-      💼 Propostas de Cursos & Alunos (<?= count($propostas) ?>)
+    <button onclick="trocarAbaAdmin('secretaria')" id="tabAdmSecretaria" class="px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-bold text-slate-600 hover:text-slate-900 transition whitespace-nowrap">
+      🏛️ Secretaria & Registros
     </button>
-    <button onclick="trocarAbaAdmin('financeiro')" id="tabAdmFinanceiro" class="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold text-slate-600 hover:text-slate-900 transition whitespace-nowrap">
-      💳 Conciliação Mercado Pago
+    <button onclick="trocarAbaAdmin('coordenacao')" id="tabAdmCoordenacao" class="px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-bold text-slate-600 hover:text-slate-900 transition whitespace-nowrap">
+      🎓 Coordenação & MEC
     </button>
-    <button onclick="trocarAbaAdmin('seguranca')" id="tabAdmSeguranca" class="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold text-slate-600 hover:text-slate-900 transition whitespace-nowrap">
-      🛡️ Auditoria & Senha Master
+    <button onclick="trocarAbaAdmin('matriculas')" id="tabAdmMatriculas" class="px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-bold text-slate-600 hover:text-slate-900 transition whitespace-nowrap">
+      👥 Matrículas (<?= count($alunos) ?>)
     </button>
-    <button onclick="trocarAbaAdmin('terminal')" id="tabAdmTerminal" class="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold text-slate-600 hover:text-slate-900 transition whitespace-nowrap">
+    <button onclick="trocarAbaAdmin('propostas')" id="tabAdmPropostas" class="px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-bold text-slate-600 hover:text-slate-900 transition whitespace-nowrap">
+      💼 Propostas (<?= count($propostas) ?>)
+    </button>
+    <button onclick="trocarAbaAdmin('financeiro')" id="tabAdmFinanceiro" class="px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-bold text-slate-600 hover:text-slate-900 transition whitespace-nowrap">
+      💳 Mercado Pago
+    </button>
+    <button onclick="trocarAbaAdmin('seguranca')" id="tabAdmSeguranca" class="px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-bold text-slate-600 hover:text-slate-900 transition whitespace-nowrap">
+      🛡️ Auditoria
+    </button>
+    <button onclick="trocarAbaAdmin('terminal')" id="tabAdmTerminal" class="px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-bold text-slate-600 hover:text-slate-900 transition whitespace-nowrap">
       💻 Terminal CLI
     </button>
+    <a href="/mail/admin.php" target="_blank" class="px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-bold text-indigo-700 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 transition whitespace-nowrap flex items-center gap-1.5">
+      ✉️ Servidor de E-mail (PHPMailer)
+    </a>
+    <a href="/elowa/admin.php" target="_blank" class="px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-bold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 transition whitespace-nowrap flex items-center gap-1.5">
+      💬 Servidor WhatsApp (EloWa Baileys)
+    </a>
   </div>
 
   <!-- ABA 1: GESTÃO DE CURSOS & IMPORTAÇÃO VIA TEXTO -->
@@ -193,6 +254,315 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao'])) {
             </div>
           </div>
         <?php endforeach; ?>
+      </div>
+    </div>
+  </div>
+
+  <!-- ABA: CADASTRO DE CURSO POR FORMULÁRIO COMPLETO -->
+  <div id="secaoAdmFormulario" class="bg-white rounded-2xl sm:rounded-3xl border border-slate-200 p-5 sm:p-8 shadow-xs space-y-6 hidden">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200">
+      <div>
+        <h3 class="text-lg font-black text-slate-900">Cadastro Detalhado de Curso (Formulário)</h3>
+        <p class="text-xs text-slate-500">Insira as informações completas, carga horária MEC, instrutor titular e ementa.</p>
+      </div>
+      <button onclick="abrirModalImportTexto()" class="px-4 py-2 bg-emerald-50 text-emerald-800 border border-emerald-300 font-bold text-xs rounded-xl hover:bg-emerald-100 cursor-pointer">
+        ⚡ Prefere colar em texto? Clique aqui
+      </button>
+    </div>
+
+    <form method="POST" action="admin.php" class="space-y-4">
+      <input type="hidden" name="acao" value="cadastrar_curso_formulario">
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Título do Curso *</label>
+          <input type="text" name="titulo" required placeholder="Ex: Regulagem e Manutenção de Máquinas Overloque" class="w-full p-3 rounded-xl border border-slate-300 bg-slate-50 text-xs font-bold focus:bg-white focus:outline-hidden">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Categoria Acadêmica *</label>
+          <select name="categoria" class="w-full p-3 rounded-xl border border-slate-300 bg-slate-50 text-xs font-bold focus:bg-white focus:outline-hidden">
+            <option value="Negócios">Negócios & Gestão</option>
+            <option value="Tecnologia">Tecnologia & Software</option>
+            <option value="Engenharia">Engenharia & Mecânica</option>
+            <option value="Design">Design & Criatividade</option>
+            <option value="Educação">Educação & Metodologia</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div>
+          <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Preço (R$) *</label>
+          <input type="text" name="preco" required value="450,00" class="w-full p-3 rounded-xl border border-slate-300 bg-slate-50 text-xs font-bold focus:bg-white focus:outline-hidden">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Carga Horária (Horas MEC) *</label>
+          <input type="number" name="horas" required value="80" class="w-full p-3 rounded-xl border border-slate-300 bg-slate-50 text-xs font-bold focus:bg-white focus:outline-hidden">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Nível de Dificuldade</label>
+          <select name="nivel" class="w-full p-3 rounded-xl border border-slate-300 bg-slate-50 text-xs font-bold focus:bg-white focus:outline-hidden">
+            <option value="Iniciante">Iniciante</option>
+            <option value="Intermediário" selected>Intermediário</option>
+            <option value="Avançado">Avançado</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Instrutor / Titular *</label>
+          <input type="text" name="instrutor" required value="Eloizio Assunção (CEO)" class="w-full p-3 rounded-xl border border-slate-300 bg-slate-50 text-xs font-bold focus:bg-white focus:outline-hidden">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Resumo Curto (Para a Vitrine) *</label>
+          <input type="text" name="resumo" required placeholder="Ex: Aprenda do zero regulagem de lançadeiras e ponto perfeito." class="w-full p-3 rounded-xl border border-slate-300 bg-slate-50 text-xs font-medium focus:bg-white focus:outline-hidden">
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Descrição Completa e Ementa do Curso</label>
+        <textarea name="descricao" rows="4" class="w-full p-3 rounded-xl border border-slate-300 bg-slate-50 text-xs focus:bg-white focus:outline-hidden" placeholder="Descreva os objetivos, público-alvo, módulos e metodologia de ensino..."></textarea>
+      </div>
+
+      <div class="flex justify-end gap-2 pt-3 border-t border-slate-200">
+        <button type="reset" class="px-5 py-2.5 border border-slate-300 text-slate-700 font-bold text-xs rounded-xl hover:bg-slate-50 cursor-pointer">
+          Limpar Campos
+        </button>
+        <button type="submit" class="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-black text-xs rounded-xl shadow-md cursor-pointer transition">
+          💾 Salvar e Publicar Curso na Vitrine &rarr;
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- ABA: SECRETARIA ACADÊMICA & DOCUMENTOS DIGITAIS OFICIAIS -->
+  <div id="secaoAdmSecretaria" class="space-y-6 hidden">
+    <!-- Header Secretaria -->
+    <div class="bg-linear-to-r from-blue-950 via-indigo-950 to-slate-900 text-white p-6 sm:p-8 rounded-2xl sm:rounded-3xl border border-blue-800/40 shadow-xl space-y-4">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div class="flex items-center gap-3">
+          <div class="w-12 h-12 rounded-2xl bg-blue-500/20 text-blue-300 border border-blue-400/30 flex items-center justify-center font-black text-2xl">
+            🏛️
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                Fé Pública & Livro de Registros MEC
+              </span>
+              <span class="text-xs text-blue-300 font-mono">Livro 04 • Registro Digital ICP-Edu</span>
+            </div>
+            <h2 class="text-xl sm:text-2xl font-black text-white mt-1">
+              Secretaria Acadêmica & Central de Documentos Digitais
+            </h2>
+          </div>
+        </div>
+      </div>
+      <p class="text-xs sm:text-sm text-blue-200 leading-relaxed max-w-4xl">
+        Emissão de documentos acadêmicos oficiais com autenticação digital por hash SHA-256, carimbo de tempo no horário de Brasília e registro no Livro Oficial de Diplomas conforme a LDB 9.394/96 Art. 42.
+      </p>
+    </div>
+
+    <!-- Emissão Rápida de Documentos -->
+    <div class="bg-white rounded-2xl sm:rounded-3xl border border-slate-200 p-5 sm:p-8 shadow-xs space-y-6">
+      <h3 class="text-base font-black text-slate-900 pb-3 border-b border-slate-200">
+        Emissão Instantânea de Documentos Acadêmicos
+      </h3>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+        <div class="p-4 rounded-2xl border border-slate-200 bg-slate-50 space-y-2">
+          <span class="text-xl">📜</span>
+          <h4 class="font-bold text-sm text-slate-900">Declaração de Matrícula</h4>
+          <p class="text-[11px] text-slate-500">Comprova vínculo estudantil ativo no ano letivo 2026.</p>
+          <a href="validar_certificado.php?codigo=DEC-MAT-2026-OK" class="block text-center py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl shadow-xs transition">
+            Emitir & Autenticar
+          </a>
+        </div>
+
+        <div class="p-4 rounded-2xl border border-slate-200 bg-slate-50 space-y-2">
+          <span class="text-xl">🎓</span>
+          <h4 class="font-bold text-sm text-slate-900">Declaração de Conclusão</h4>
+          <p class="text-[11px] text-slate-500">Atesta término de carga horária e aprovação 100%.</p>
+          <a href="validar_certificado.php?codigo=DEC-CONCL-2026-OK" class="block text-center py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow-xs transition">
+            Emitir & Autenticar
+          </a>
+        </div>
+
+        <div class="p-4 rounded-2xl border border-slate-200 bg-slate-50 space-y-2">
+          <span class="text-xl">📑</span>
+          <h4 class="font-bold text-sm text-slate-900">Histórico Escolar Oficial</h4>
+          <p class="text-[11px] text-slate-500">Discriminação de disciplinas, notas, frequência e ementa.</p>
+          <a href="validar_certificado.php?codigo=HIST-OFICIAL-2026-OK" class="block text-center py-2 bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs rounded-xl shadow-xs transition">
+            Emitir & Autenticar
+          </a>
+        </div>
+
+        <div class="p-4 rounded-2xl border border-slate-200 bg-slate-50 space-y-2">
+          <span class="text-xl">🪪</span>
+          <h4 class="font-bold text-sm text-slate-900">Carteirinha DNE</h4>
+          <p class="text-[11px] text-slate-500">Documento Nacional do Estudante (Lei nº 12.933/13).</p>
+          <a href="validar_certificado.php?codigo=DNE-CARTEIRINHA-2026" class="block text-center py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl shadow-xs transition">
+            Emitir & Autenticar
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Livro Oficial de Registros MEC -->
+    <div class="bg-white rounded-2xl sm:rounded-3xl border border-slate-200 p-5 sm:p-8 shadow-xs space-y-4">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-slate-200">
+        <div>
+          <h3 class="text-base font-black text-slate-900">Livro Oficial de Registro de Diplomas e Certificados MEC</h3>
+          <p class="text-xs text-slate-500">Auditoria perpétua de registros acadêmicos com chancelas e hashes criptográficos:</p>
+        </div>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-xs min-w-[700px]">
+          <thead class="bg-slate-50 text-slate-600 font-bold uppercase text-[10px] border-b border-slate-200">
+            <tr>
+              <th class="py-3 px-3">Registro MEC</th>
+              <th class="py-3 px-2">Livro / Folha</th>
+              <th class="py-3 px-3">Aluno Registrado</th>
+              <th class="py-3 px-3">Curso & Horas</th>
+              <th class="py-3 px-3">Hash SHA-256</th>
+              <th class="py-3 px-3 text-center">Data / Resp.</th>
+              <th class="py-3 px-3 text-right">Ação</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100 font-mono text-[11px]">
+            <tr class="hover:bg-slate-50">
+              <td class="py-3 px-3 font-bold text-indigo-900">REG-MEC-2026-00412</td>
+              <td class="py-3 px-2 text-slate-600">Livro 04 • Folha 89</td>
+              <td class="py-3 px-3 font-sans font-bold text-slate-900">Lucas Silva Prado</td>
+              <td class="py-3 px-3 font-sans text-slate-700">Engenharia de Software (360h)</td>
+              <td class="py-3 px-3 text-[10px] text-emerald-700 font-mono">DNE-2026-VAL-OK</td>
+              <td class="py-3 px-3 text-center text-slate-500 font-sans">15/01/2026 • Roseli Castro</td>
+              <td class="py-3 px-3 text-right font-sans">
+                <a href="validar_certificado.php?codigo=DNE-2026-VAL-OK" class="px-2.5 py-1 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold rounded-lg border border-indigo-200">
+                  Verificar
+                </a>
+              </td>
+            </tr>
+            <tr class="hover:bg-slate-50">
+              <td class="py-3 px-3 font-bold text-indigo-900">REG-MEC-2025-00891</td>
+              <td class="py-3 px-2 text-slate-600">Livro 03 • Folha 42</td>
+              <td class="py-3 px-3 font-sans font-bold text-slate-900">Camila Vasconcelos</td>
+              <td class="py-3 px-3 font-sans text-slate-700">Gestão de Negócios (280h)</td>
+              <td class="py-3 px-3 text-[10px] text-emerald-700 font-mono">DEC-CONCL-2026-OK</td>
+              <td class="py-3 px-3 text-center text-slate-500 font-sans">28/11/2025 • Roseli Castro</td>
+              <td class="py-3 px-3 text-right font-sans">
+                <a href="validar_certificado.php?codigo=DEC-CONCL-2026-OK" class="px-2.5 py-1 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold rounded-lg border border-indigo-200">
+                  Verificar
+                </a>
+              </td>
+            </tr>
+            <tr class="hover:bg-slate-50">
+              <td class="py-3 px-3 font-bold text-indigo-900">REG-MEC-2026-00994</td>
+              <td class="py-3 px-2 text-slate-600">Livro 05 • Folha 12</td>
+              <td class="py-3 px-3 font-sans font-bold text-slate-900">Carlos Eduardo Santos</td>
+              <td class="py-3 px-3 font-sans text-slate-700">Mecânica de Máquinas (120h)</td>
+              <td class="py-3 px-3 text-[10px] text-emerald-700 font-mono">ELOIZIO-2026-CERT-OK</td>
+              <td class="py-3 px-3 text-center text-slate-500 font-sans">29/09/2026 • Eloizio Assunção</td>
+              <td class="py-3 px-3 text-right font-sans">
+                <a href="validar_certificado.php?codigo=ELOIZIO-2026-CERT-OK" class="px-2.5 py-1 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold rounded-lg border border-indigo-200">
+                  Verificar
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ABA: COORDENAÇÃO PEDAGÓGICA & MATRIZ CURRICULAR MEC -->
+  <div id="secaoAdmCoordenacao" class="space-y-6 hidden">
+    <!-- Header Coordenação -->
+    <div class="bg-linear-to-r from-emerald-950 via-teal-950 to-slate-900 text-white p-6 sm:p-8 rounded-2xl sm:rounded-3xl border border-emerald-800/40 shadow-xl space-y-4">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div class="flex items-center gap-3">
+          <div class="w-12 h-12 rounded-2xl bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 flex items-center justify-center font-black text-2xl">
+            🎓
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                Supervisão Pedagógica MEC
+              </span>
+              <span class="text-xs text-emerald-300 font-mono">LDB 9.394/96 Art. 42</span>
+            </div>
+            <h2 class="text-xl sm:text-2xl font-black text-white mt-1">
+              Painel da Coordenação Pedagógica & Matriz Curricular
+            </h2>
+          </div>
+        </div>
+        <button onclick="alert('Parecer Pedagógico Geral emitido e homologado pela Coordenação!')" class="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-black shadow-lg cursor-pointer">
+          Emitir Parecer Pedagógico
+        </button>
+      </div>
+      <p class="text-xs sm:text-sm text-emerald-200 leading-relaxed max-w-4xl">
+        Acompanhamento de planos de aula, fechamento de diários docentes, homologação prévia de notas e validação da conformidade curricular antes da emissão definitiva dos certificados pela Secretaria.
+      </p>
+    </div>
+
+    <!-- Supervisão Docente -->
+    <div class="bg-white rounded-2xl sm:rounded-3xl border border-slate-200 p-5 sm:p-8 shadow-xs space-y-4">
+      <h3 class="text-base font-black text-slate-900 pb-3 border-b border-slate-200">
+        Supervisão do Corpo Docente Titular & Carga Horária
+      </h3>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="p-4 rounded-2xl border border-slate-200 bg-slate-50 space-y-2">
+          <div class="flex items-center gap-2.5">
+            <div class="w-9 h-9 rounded-xl bg-indigo-600 text-white flex items-center justify-center font-bold text-xs">MF</div>
+            <div>
+              <strong class="text-slate-900 text-xs block">Profa. Dra. Mariana Fernandes</strong>
+              <span class="text-[10px] text-slate-500">Doutora em Computação (USP)</span>
+            </div>
+          </div>
+          <div class="text-[11px] text-slate-600 space-y-0.5 pt-1">
+            <div>• Curso: <strong>Engenharia de Software (360h)</strong></div>
+            <div>• Diários: <strong class="text-emerald-700">100% Homologados</strong></div>
+          </div>
+          <button onclick="alert('Diário docente homologado com sucesso!')" class="w-full py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold rounded-lg text-xs border border-indigo-200 cursor-pointer">
+            Homologar Diário
+          </button>
+        </div>
+
+        <div class="p-4 rounded-2xl border border-slate-200 bg-slate-50 space-y-2">
+          <div class="flex items-center gap-2.5">
+            <div class="w-9 h-9 rounded-xl bg-amber-600 text-white flex items-center justify-center font-bold text-xs">ES</div>
+            <div>
+              <strong class="text-slate-900 text-xs block">Prof. Eloizio Assunção</strong>
+              <span class="text-[10px] text-slate-500">Mestre Mecânico & CEO</span>
+            </div>
+          </div>
+          <div class="text-[11px] text-slate-600 space-y-0.5 pt-1">
+            <div>• Curso: <strong>Mecânica de Máquinas (120h)</strong></div>
+            <div>• Diários: <strong class="text-emerald-700">100% Homologados</strong></div>
+          </div>
+          <button onclick="alert('Diário prático de mecânica homologado com sucesso!')" class="w-full py-1.5 bg-amber-50 hover:bg-amber-100 text-amber-800 font-bold rounded-lg text-xs border border-amber-200 cursor-pointer">
+            Homologar Diário
+          </button>
+        </div>
+
+        <div class="p-4 rounded-2xl border border-slate-200 bg-slate-50 space-y-2">
+          <div class="flex items-center gap-2.5">
+            <div class="w-9 h-9 rounded-xl bg-purple-600 text-white flex items-center justify-center font-bold text-xs">SV</div>
+            <div>
+              <strong class="text-slate-900 text-xs block">Profa. Sofia Vanguard</strong>
+              <span class="text-[10px] text-slate-500">Expert em Cursos & Gestão MEI</span>
+            </div>
+          </div>
+          <div class="text-[11px] text-slate-600 space-y-0.5 pt-1">
+            <div>• Curso: <strong>Contabilidade Prática para MEI (60h)</strong></div>
+            <div>• Diários: <strong class="text-emerald-700">100% Homologados</strong></div>
+          </div>
+          <button onclick="alert('Diário de gestão da Profa. Sofia homologado!')" class="w-full py-1.5 bg-purple-50 hover:bg-purple-100 text-purple-700 font-bold rounded-lg text-xs border border-purple-200 cursor-pointer">
+            Homologar Diário
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -486,7 +856,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao'])) {
     <div class="space-y-2">
       <h4 class="font-bold text-slate-900 text-xs uppercase tracking-wider">Logs de Acesso & Operações Recentes:</h4>
       <div class="bg-slate-950 text-slate-300 p-4 rounded-2xl font-mono text-xs space-y-1 overflow-x-auto">
-        <div>[<?= date('Y-m-d H:i:s') ?>] [AUTH_SUCCESS] Login efetuado com perfil de Administrador Geral (Eloizio Silva).</div>
+        <div>[<?= date('Y-m-d H:i:s') ?>] [AUTH_SUCCESS] Login efetuado com perfil de Administrador Geral (Eloizio Assunção).</div>
         <div>[<?= date('Y-m-d H:i:s') ?>] [MASTER_AUTH] Verificação da Senha Master ELOIZIO@MASTER2026 validada com sucesso.</div>
         <div>[<?= date('Y-m-d H:i:s') ?>] [INTEGRITY_CHECK] Repositório de dados dados.php íntegro. 0 vulnerabilidades detectadas.</div>
       </div>
@@ -553,7 +923,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao'])) {
 
 <script>
   function trocarAbaAdmin(aba) {
-    const abas = ['cursos', 'matriculas', 'propostas', 'financeiro', 'seguranca', 'terminal'];
+    const abas = ['cursos', 'formulario', 'secretaria', 'coordenacao', 'matriculas', 'propostas', 'financeiro', 'seguranca', 'terminal'];
     abas.forEach(a => {
       const sec = document.getElementById('secaoAdm' + a.charAt(0).toUpperCase() + a.slice(1));
       const tab = document.getElementById('tabAdm' + a.charAt(0).toUpperCase() + a.slice(1));
@@ -580,7 +950,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao'])) {
 
   function carregarModeloTextoAdmin(num) {
     if (num === 1) {
-      document.getElementById('textoAdminCurso').value = `Título: Manutenção Preventiva de Máquinas de Costura Industriais\nCategoria: Engenharia\nPreço: 490.00\nCarga Horária: 80\nInstrutor: Eloizio Silva (CEO)\nResumo: Treinamento prático focado em regulagem de ponto, sincronismo de lançadeira e lubrificação técnica.`;
+      document.getElementById('textoAdminCurso').value = `Título: Manutenção Preventiva de Máquinas de Costura Industriais\nCategoria: Engenharia\nPreço: 490.00\nCarga Horária: 80\nInstrutor: Eloizio Assunção (CEO)\nResumo: Treinamento prático focado em regulagem de ponto, sincronismo de lançadeira e lubrificação técnica.`;
     } else if (num === 2) {
       document.getElementById('textoAdminCurso').value = `Título: Gestão de Caixa e Emissão de Notas Fiscais para MEI\nCategoria: Negócios\nPreço: 350.00\nCarga Horária: 60\nInstrutor: Sofia Vanguard\nResumo: Capacitação rápida para desburocratizar a rotina fiscal e conciliar pagamentos no Mercado Pago.`;
     } else {

@@ -49,7 +49,7 @@ export const SimulationAuditSuite: React.FC = () => {
   const targetCourse = courses.find((c) => c.id === selectedCourseId) || courses[0];
 
   const candidateNames = [
-    'Eloizio Mecânico Silva',
+    'Carlos Eduardo Santos',
     'Beatriz Albuquerque Costa',
     'Rodrigo Mendes Cavalcanti',
     'Juliana Siqueira Prado',

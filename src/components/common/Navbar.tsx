@@ -20,6 +20,14 @@ import {
   LogOut,
   Lock,
   ShieldCheck,
+  Briefcase,
+  UserPlus,
+  Mail,
+  FileSignature,
+  Calculator,
+  Globe,
+  Wrench,
+  Sliders,
 } from 'lucide-react';
 import { NotificationPopover } from './NotificationPopover';
 
@@ -34,6 +42,7 @@ export const Navbar: React.FC = () => {
     setShowHelpDesk,
     setShowAuthModal,
     setAuthTargetTab,
+    setShowEnrollmentModal,
     logout,
   } = useApp();
 
@@ -50,7 +59,11 @@ export const Navbar: React.FC = () => {
   };
 
   const navItems = [
+    { id: 'portal', label: 'Portal Grupo Eloizio', icon: Globe },
+    { id: 'central_config', label: 'Central Master (Supervisor)', icon: Sliders },
     { id: 'showcase', label: 'Vitrine de Cursos', icon: BookOpen },
+    { id: 'elomak', label: 'EloMak (Oficina & OS)', icon: Wrench },
+    { id: 'cooperative', label: 'Cooperativa & Vagas', icon: Briefcase },
     { id: 'student', label: 'Área do Aluno', icon: GraduationCap, restricted: true },
     { id: 'teacher', label: 'Área do Professor', icon: UserCheck, restricted: true },
     { id: 'admin', label: 'Direção & Gestão', icon: Building2, restricted: true },
@@ -58,6 +71,10 @@ export const Navbar: React.FC = () => {
     { id: 'chat', label: 'Chat Interno', icon: MessageSquare },
     { id: 'calendar', label: 'Calendário & Biblioteca', icon: Calendar },
     { id: 'manuals', label: 'Manuais & Docs', icon: FileText },
+    { id: 'webmail', label: 'Webmail (@grupoeloizio)', icon: Mail },
+    { id: 'elowa', label: 'EloWa (WhatsApp 21 99613-4073)', icon: MessageSquare },
+    { id: 'elosign', label: 'EloSign (Assinatura Digital)', icon: FileSignature },
+    { id: 'elocontabil', label: 'EloContábil (Apoio RH & Doc)', icon: Calculator },
   ];
 
   const handleNavClick = (tabId: string) => {
@@ -175,6 +192,16 @@ export const Navbar: React.FC = () => {
               title="Central de Ajuda & Suporte"
             >
               <HelpCircle className="w-5 h-5" />
+            </button>
+
+            {/* Matrícula Online CTA */}
+            <button
+              onClick={() => setShowEnrollmentModal(true)}
+              className="flex items-center gap-1.5 px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black shadow-md shadow-emerald-500/20 cursor-pointer transition-all whitespace-nowrap"
+            >
+              <UserPlus className="w-3.5 h-3.5 shrink-0" />
+              <span className="hidden sm:inline">Matrícula Online</span>
+              <span className="sm:hidden">Matrícula</span>
             </button>
 
             {/* Authentication Button or User Role Dropdown */}
@@ -309,6 +336,17 @@ export const Navbar: React.FC = () => {
       {mobileMenuOpen && (
         <div className="xl:hidden border-t border-slate-200 bg-white/98 backdrop-blur-lg px-4 pt-3 pb-6 space-y-3 max-h-[calc(100vh-4rem)] overflow-y-auto shadow-2xl animate-in slide-in-from-top-3">
           {/* User Status Bar in Mobile Menu */}
+          <button
+            onClick={() => {
+              setShowEnrollmentModal(true);
+              setMobileMenuOpen(false);
+            }}
+            className="w-full flex items-center justify-center gap-2 p-3 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-black text-sm shadow-md cursor-pointer transition"
+          >
+            <UserPlus className="w-4 h-4" />
+            <span>Matrícula Online com Foto & Documentos</span>
+          </button>
+
           {currentUser ? (
             <div className="p-3 bg-slate-50 rounded-2xl border border-slate-200 flex items-center justify-between">
               <div className="flex items-center gap-3 min-w-0">

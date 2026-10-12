@@ -27,6 +27,23 @@ import {
   SystemModule,
   CommandExecutionResult,
   SecurityAuditReport,
+  CooperativeMember,
+  StoredExamRecord,
+  CourseUpdateRecord,
+  ValidatedInternshipRecord,
+  JobVacancy,
+  JobApplication,
+  FullEnrollmentData,
+  MailboxAccount,
+  EmailMessage,
+  EmailAttachment,
+  WhatsAppInstance,
+  WhatsAppMessage,
+  WhatsAppMediaAttachment,
+  CentralProjectBrandConfig,
+  CentralDatabaseConfig,
+  MasterTokensConfig,
+  BirthdayRecord,
 } from '../types';
 import {
   INITIAL_USERS,
@@ -45,6 +62,13 @@ import {
   INITIAL_LIBRARY,
   INITIAL_ACADEMIC_EVENTS,
   INITIAL_LEADS,
+  INITIAL_COOPERATIVE_MEMBERS,
+  INITIAL_JOB_VACANCIES,
+  INITIAL_ENROLLMENTS,
+  INITIAL_MAILBOXES,
+  INITIAL_EMAIL_MESSAGES,
+  INITIAL_WHATSAPP_INSTANCES,
+  INITIAL_WHATSAPP_MESSAGES,
   DEFAULT_MERCADOPAGO_CONFIG,
   DEFAULT_SOFIA_SETTINGS,
   DEFAULT_INTEGRATION_KEYS,
@@ -53,6 +77,10 @@ import {
   DEFAULT_SYSTEM_MODULES,
   DEFAULT_SECURITY_REPORT,
   DEFAULT_MASTER_PASSWORD,
+  DEFAULT_CENTRAL_BRANDS,
+  DEFAULT_CENTRAL_DATABASE,
+  DEFAULT_MASTER_TOKENS,
+  DEFAULT_BIRTHDAYS,
   computeSHA256Hash,
 } from '../services/storage';
 
@@ -89,7 +117,7 @@ interface AppContextType {
   submitExam: (submission: Omit<StudentSubmission, 'id' | 'submittedAt'>) => void;
   gradeSubmission: (id: string, score: number, feedback: string) => void;
   documentRequests: DocumentRequest[];
-  requestDocument: (type: DocumentType, title: string, fee: number) => DocumentRequest;
+  requestDocument: (type: DocumentType, title: string, fee: number, isSecondIssue?: boolean) => DocumentRequest;
   processDocumentPayment: (requestId: string, method: 'pix' | 'credit_card' | 'boleto') => Promise<void>;
   transactions: FinancialTransaction[];
   addTransaction: (tx: Omit<FinancialTransaction, 'id'>) => void;
@@ -152,6 +180,51 @@ interface AppContextType {
   executeAdminCommand: (cmd: string) => Promise<CommandExecutionResult>;
   commandHistory: CommandExecutionResult[];
   clearCommandHistory: () => void;
+  cooperativeMembers: CooperativeMember[];
+  addCooperativeMember: (member: Omit<CooperativeMember, 'id'>) => void;
+  updateCooperativeMember: (id: string, updates: Partial<CooperativeMember>) => void;
+  addStoredExamToMember: (memberId: string, exam: StoredExamRecord) => void;
+  addCourseUpdateToMember: (memberId: string, update: CourseUpdateRecord) => void;
+  jobVacancies: JobVacancy[];
+  addJobVacancy: (vacancy: Omit<JobVacancy, 'id' | 'createdAt' | 'applicantsCount'>) => void;
+  jobApplications: JobApplication[];
+  applyForJob: (vacancyId: string, memberId: string, note?: string) => void;
+  updateJobApplicationStatus: (appId: string, status: JobApplication['status']) => void;
+  validateInternshipForApplication: (applicationId: string, hoursAwarded: number, supervisor: string, evaluation?: string) => void;
+  addValidatedInternshipToMember: (memberId: string, internship: Omit<ValidatedInternshipRecord, 'id'>) => void;
+  enrollments: FullEnrollmentData[];
+  submitFullEnrollment: (data: Omit<FullEnrollmentData, 'id' | 'createdAt' | 'registrationNumber' | 'status'>) => Promise<FullEnrollmentData>;
+  showEnrollmentModal: boolean;
+  setShowEnrollmentModal: (open: boolean) => void;
+  selectedCourseForEnrollment: Course | null;
+  setSelectedCourseForEnrollment: (c: Course | null) => void;
+  mailboxes: MailboxAccount[];
+  emailMessages: EmailMessage[];
+  activeMailbox: string;
+  setActiveMailbox: (email: string) => void;
+  createMailbox: (account: Omit<MailboxAccount, 'id' | 'createdAt'> & { password?: string }) => void;
+  sendEmailMessage: (data: { fromEmail: string; fromName: string; to: string[]; subject: string; bodyHtml: string; attachments?: EmailAttachment[] }) => void;
+  forwardEmailMessage: (originalId: string, to: string[], fromEmail: string, notes?: string) => void;
+  deleteEmailMessage: (msgId: string, permanent?: boolean) => void;
+  markEmailAsRead: (msgId: string) => void;
+  updateMailSubscription: (email: string, status: 'active' | 'suspended' | 'pending_payment', plan?: string) => void;
+  whatsappInstances: WhatsAppInstance[];
+  whatsappMessages: WhatsAppMessage[];
+  activeWhatsappInstanceId: string;
+  setActiveWhatsappInstanceId: (id: string) => void;
+  createWhatsappInstance: (data: { name: string; phone: string; role: 'student' | 'subscriber'; plan: string }) => void;
+  sendWhatsappMessage: (data: { instanceId: string; chatPhone: string; chatName: string; type: 'text' | 'audio' | 'video' | 'pdf' | 'image'; text: string; media?: WhatsAppMediaAttachment | null }) => void;
+  forwardWhatsappMessage: (messageId: string, targetPhones: string[], instanceId: string) => void;
+  updateWhatsappSubscription: (instanceId: string, active: boolean, plan?: string) => void;
+  centralBrands: CentralProjectBrandConfig[];
+  updateCentralBrand: (id: string, partial: Partial<CentralProjectBrandConfig>) => void;
+  masterTokens: MasterTokensConfig;
+  updateMasterTokens: (tokens: Partial<MasterTokensConfig>) => void;
+  centralDatabase: CentralDatabaseConfig;
+  updateCentralDatabase: (db: Partial<CentralDatabaseConfig>) => void;
+  birthdays: BirthdayRecord[];
+  triggerBirthdayGreeting: (id: string) => void;
+  addBirthdayRecord: (record: Omit<BirthdayRecord, 'id'>) => void;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -297,6 +370,654 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     const saved = localStorage.getItem(`${LOCAL_STORAGE_KEY}_events`);
     return saved ? JSON.parse(saved) : INITIAL_ACADEMIC_EVENTS;
   });
+
+  const [cooperativeMembers, setCooperativeMembers] = useState<CooperativeMember[]>(() => {
+    const saved = localStorage.getItem(`${LOCAL_STORAGE_KEY}_coop_members`);
+    return saved ? JSON.parse(saved) : INITIAL_COOPERATIVE_MEMBERS;
+  });
+
+  const [jobVacancies, setJobVacancies] = useState<JobVacancy[]>(() => {
+    const saved = localStorage.getItem(`${LOCAL_STORAGE_KEY}_job_vacancies`);
+    return saved ? JSON.parse(saved) : INITIAL_JOB_VACANCIES;
+  });
+
+  const [jobApplications, setJobApplications] = useState<JobApplication[]>(() => {
+    const saved = localStorage.getItem(`${LOCAL_STORAGE_KEY}_job_apps`);
+    return saved ? JSON.parse(saved) : [];
+  });
+
+  const [enrollments, setEnrollments] = useState<FullEnrollmentData[]>(() => {
+    const saved = localStorage.getItem(`${LOCAL_STORAGE_KEY}_enrollments`);
+    return saved ? JSON.parse(saved) : INITIAL_ENROLLMENTS;
+  });
+
+  const [showEnrollmentModal, setShowEnrollmentModal] = useState<boolean>(false);
+  const [selectedCourseForEnrollment, setSelectedCourseForEnrollment] = useState<Course | null>(null);
+
+  useEffect(() => {
+    localStorage.setItem(`${LOCAL_STORAGE_KEY}_coop_members`, JSON.stringify(cooperativeMembers));
+  }, [cooperativeMembers]);
+
+  useEffect(() => {
+    localStorage.setItem(`${LOCAL_STORAGE_KEY}_job_vacancies`, JSON.stringify(jobVacancies));
+  }, [jobVacancies]);
+
+  useEffect(() => {
+    localStorage.setItem(`${LOCAL_STORAGE_KEY}_job_apps`, JSON.stringify(jobApplications));
+  }, [jobApplications]);
+
+  useEffect(() => {
+    localStorage.setItem(`${LOCAL_STORAGE_KEY}_enrollments`, JSON.stringify(enrollments));
+  }, [enrollments]);
+
+  // ==========================================
+  // SERVIDOR DE E-MAIL & WEBMAIL (webmail.grupoeloizio.com.br)
+  // ==========================================
+  const [mailboxes, setMailboxes] = useState<MailboxAccount[]>(() => {
+    const saved = localStorage.getItem(`${LOCAL_STORAGE_KEY}_mailboxes`);
+    return saved ? JSON.parse(saved) : INITIAL_MAILBOXES;
+  });
+
+  const [emailMessages, setEmailMessages] = useState<EmailMessage[]>(() => {
+    const saved = localStorage.getItem(`${LOCAL_STORAGE_KEY}_email_msgs`);
+    return saved ? JSON.parse(saved) : INITIAL_EMAIL_MESSAGES;
+  });
+
+  const [activeMailbox, setActiveMailbox] = useState<string>('camilla@grupoeloizio.com.br');
+
+  useEffect(() => {
+    localStorage.setItem(`${LOCAL_STORAGE_KEY}_mailboxes`, JSON.stringify(mailboxes));
+  }, [mailboxes]);
+
+  useEffect(() => {
+    localStorage.setItem(`${LOCAL_STORAGE_KEY}_email_msgs`, JSON.stringify(emailMessages));
+  }, [emailMessages]);
+
+  const createMailbox = (account: Omit<MailboxAccount, 'id' | 'createdAt'> & { password?: string }) => {
+    const newBox: MailboxAccount = {
+      ...account,
+      id: `box_${Date.now()}_${Math.floor(Math.random() * 1000)}`,
+      createdAt: new Date().toISOString(),
+    };
+    setMailboxes((prev) => [...prev, newBox]);
+    sendPushNotification({
+      title: '📧 Nova Conta de E-mail Criada!',
+      message: `A conta ${newBox.email} foi gerada no servidor webmail.grupoeloizio.com.br com ${newBox.quotaMb} MB de cota.`,
+      targetRole: 'admin',
+      category: 'system',
+    });
+  };
+
+  const sendEmailMessage = (data: {
+    fromEmail: string;
+    fromName: string;
+    to: string[];
+    subject: string;
+    bodyHtml: string;
+    attachments?: EmailAttachment[];
+  }) => {
+    const msgId = `msg_${Date.now()}_${Math.floor(Math.random() * 1000)}`;
+    const sentMsg: EmailMessage = {
+      id: msgId,
+      mailbox: data.fromEmail,
+      folder: 'sent',
+      fromName: data.fromName,
+      fromEmail: data.fromEmail,
+      to: data.to,
+      subject: data.subject,
+      date: 'Hoje às ' + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      timestamp: Date.now(),
+      read: true,
+      starred: false,
+      bodyHtml: data.bodyHtml,
+      attachments: data.attachments || [],
+    };
+
+    const newMsgs = [sentMsg];
+
+    // Deliver to internal recipient boxes
+    data.to.forEach((rcpt) => {
+      const lowerRcpt = rcpt.toLowerCase().trim();
+      const match = mailboxes.find((b) => b.email.toLowerCase() === lowerRcpt);
+      if (match) {
+        newMsgs.push({
+          ...sentMsg,
+          id: `in_${Date.now()}_${Math.floor(Math.random() * 1000)}`,
+          mailbox: match.email,
+          folder: 'inbox',
+          read: false,
+        });
+      }
+    });
+
+    setEmailMessages((prev) => [...newMsgs, ...prev]);
+
+    sendPushNotification({
+      title: '✉️ E-mail Enviado via PHPMailer!',
+      message: `Mensagem "${data.subject}" enviada para ${data.to.join(', ')} com sucesso!`,
+      targetRole: 'all',
+      category: 'system',
+    });
+  };
+
+  const forwardEmailMessage = (originalId: string, to: string[], fromEmail: string, notes?: string) => {
+    const orig = emailMessages.find((m) => m.id === originalId);
+    if (!orig) return;
+
+    sendEmailMessage({
+      fromEmail,
+      fromName: 'Camilla Faria (Gerente Geral)',
+      to,
+      subject: orig.subject.startsWith('Fwd:') ? orig.subject : `Fwd: ${orig.subject}`,
+      bodyHtml: `<div>${notes ? `<p>${notes}</p><hr/>` : ''}<p style="color:#64748b;font-size:12px;">---------- Mensagem Encaminhada ----------<br>De: ${orig.fromName} &lt;${orig.fromEmail}&gt;<br>Data: ${orig.date}<br>Assunto: ${orig.subject}</p>${orig.bodyHtml}</div>`,
+      attachments: orig.attachments,
+    });
+  };
+
+  const deleteEmailMessage = (msgId: string, permanent?: boolean) => {
+    setEmailMessages((prev) => {
+      if (permanent) {
+        return prev.filter((m) => m.id !== msgId);
+      }
+      return prev.map((m) => (m.id === msgId ? { ...m, folder: 'trash' } : m));
+    });
+  };
+
+  const markEmailAsRead = (msgId: string) => {
+    setEmailMessages((prev) =>
+      prev.map((m) => (m.id === msgId ? { ...m, read: true } : m))
+    );
+  };
+
+  const updateMailSubscription = (
+    email: string,
+    status: 'active' | 'suspended' | 'pending_payment',
+    plan?: string
+  ) => {
+    setMailboxes((prev) =>
+      prev.map((b) =>
+        b.email.toLowerCase() === email.toLowerCase()
+          ? {
+              ...b,
+              status,
+              plan: (plan as any) || b.plan,
+              subscriptionPaymentStatus: status === 'active' ? 'paid_mercadopago' : 'pending_mercadopago',
+            }
+          : b
+      )
+    );
+  };
+
+  // ==========================================
+  // ELOWA WHATSAPP MULTI-DEVICE SERVER STATE
+  // ==========================================
+  const [whatsappInstances, setWhatsappInstances] = useState<WhatsAppInstance[]>(() => {
+    const saved = localStorage.getItem(`${LOCAL_STORAGE_KEY}_wa_instances`);
+    return saved ? JSON.parse(saved) : INITIAL_WHATSAPP_INSTANCES;
+  });
+
+  const [whatsappMessages, setWhatsappMessages] = useState<WhatsAppMessage[]>(() => {
+    const saved = localStorage.getItem(`${LOCAL_STORAGE_KEY}_wa_messages`);
+    return saved ? JSON.parse(saved) : INITIAL_WHATSAPP_MESSAGES;
+  });
+
+  const [activeWhatsappInstanceId, setActiveWhatsappInstanceId] = useState<string>('inst_camilla_oficial');
+
+  useEffect(() => {
+    localStorage.setItem(`${LOCAL_STORAGE_KEY}_wa_instances`, JSON.stringify(whatsappInstances));
+  }, [whatsappInstances]);
+
+  useEffect(() => {
+    localStorage.setItem(`${LOCAL_STORAGE_KEY}_wa_messages`, JSON.stringify(whatsappMessages));
+  }, [whatsappMessages]);
+
+  const createWhatsappInstance = (data: {
+    name: string;
+    phone: string;
+    role: 'student' | 'subscriber';
+    plan: string;
+  }) => {
+    const cleanPhone = data.phone.replace(/\D/g, '');
+    const newInst: WhatsAppInstance = {
+      id: `inst_${Date.now()}`,
+      name: data.name,
+      phone: cleanPhone,
+      phoneDisplay: `+55 (${cleanPhone.slice(2, 4)}) ${cleanPhone.slice(4, 9)}-${cleanPhone.slice(9)}`,
+      role: data.role,
+      isMaster: false,
+      status: 'connected',
+      battery: 100,
+      plan: data.plan as any,
+      isStudentFree: data.role === 'student',
+      subscriptionActive: true,
+      pairingCode: `ELOW-${cleanPhone.slice(-4)}`,
+      createdAt: new Date().toISOString(),
+      lastActive: 'Agora mesmo',
+      totalSent: 0,
+      totalReceived: 0,
+    };
+
+    setWhatsappInstances((prev) => [...prev, newInst]);
+    sendPushNotification({
+      title: '📱 Nova Conexão WhatsApp Criada!',
+      message: `A instância ${newInst.name} (${newInst.phoneDisplay}) foi conectada com sucesso ao servidor EloWa Baileys.`,
+      targetRole: 'admin',
+      category: 'system',
+    });
+  };
+
+  const sendWhatsappMessage = (data: {
+    instanceId: string;
+    chatPhone: string;
+    chatName: string;
+    type: 'text' | 'audio' | 'video' | 'pdf' | 'image';
+    text: string;
+    media?: WhatsAppMediaAttachment | null;
+  }) => {
+    const newMsg: WhatsAppMessage = {
+      id: `msg_wa_${Date.now()}_${Math.floor(Math.random() * 1000)}`,
+      instanceId: data.instanceId,
+      chatPhone: data.chatPhone.replace(/\D/g, ''),
+      chatName: data.chatName,
+      fromMe: true,
+      type: data.type,
+      text: data.text,
+      timestamp: 'Hoje às ' + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      status: 'delivered',
+      media: data.media || null,
+    };
+
+    setWhatsappMessages((prev) => [newMsg, ...prev]);
+
+    // Update instance stats
+    setWhatsappInstances((prev) =>
+      prev.map((inst) =>
+        inst.id === data.instanceId
+          ? {
+              ...inst,
+              totalSent: (inst.totalSent || 0) + 1,
+              lastActive: 'Agora mesmo',
+            }
+          : inst
+      )
+    );
+  };
+
+  const forwardWhatsappMessage = (
+    messageId: string,
+    targetPhones: string[],
+    instanceId: string
+  ) => {
+    const orig = whatsappMessages.find((m) => m.id === messageId);
+    if (!orig) return;
+
+    const newMsgs: WhatsAppMessage[] = targetPhones.map((phone) => {
+      const clean = phone.replace(/\D/g, '');
+      return {
+        id: `msg_wa_fwd_${Date.now()}_${Math.floor(Math.random() * 1000)}`,
+        instanceId,
+        chatPhone: clean,
+        chatName: `Contato ${clean}`,
+        fromMe: true,
+        type: orig.type,
+        text: `${orig.text} ↪ [Encaminhada via EloWa]`,
+        timestamp: 'Hoje às ' + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        status: 'delivered',
+        media: orig.media || null,
+      };
+    });
+
+    setWhatsappMessages((prev) => [...newMsgs, ...prev]);
+  };
+
+  const updateWhatsappSubscription = (
+    instanceId: string,
+    active: boolean,
+    plan?: string
+  ) => {
+    setWhatsappInstances((prev) =>
+      prev.map((inst) =>
+        inst.id === instanceId
+          ? {
+              ...inst,
+              subscriptionActive: active,
+              plan: (plan as any) || inst.plan,
+              mercadoPagoPaymentId: active ? `MP-PIX-${Date.now().toString().slice(-6)}` : undefined,
+            }
+          : inst
+      )
+    );
+  };
+
+  // ==========================================
+  // CENTRAL MASTER & BRANDING & SUPERVISOR GERAL
+  // ==========================================
+  const [centralBrands, setCentralBrands] = useState<CentralProjectBrandConfig[]>(() => {
+    const saved = localStorage.getItem(`${LOCAL_STORAGE_KEY}_central_brands`);
+    return saved ? JSON.parse(saved) : DEFAULT_CENTRAL_BRANDS;
+  });
+
+  const [masterTokens, setMasterTokens] = useState<MasterTokensConfig>(() => {
+    const saved = localStorage.getItem(`${LOCAL_STORAGE_KEY}_master_tokens`);
+    return saved ? JSON.parse(saved) : DEFAULT_MASTER_TOKENS;
+  });
+
+  const [centralDatabase, setCentralDatabase] = useState<CentralDatabaseConfig>(() => {
+    const saved = localStorage.getItem(`${LOCAL_STORAGE_KEY}_central_db`);
+    return saved ? JSON.parse(saved) : DEFAULT_CENTRAL_DATABASE;
+  });
+
+  const [birthdays, setBirthdays] = useState<BirthdayRecord[]>(() => {
+    const saved = localStorage.getItem(`${LOCAL_STORAGE_KEY}_birthdays`);
+    return saved ? JSON.parse(saved) : DEFAULT_BIRTHDAYS;
+  });
+
+  useEffect(() => {
+    localStorage.setItem(`${LOCAL_STORAGE_KEY}_central_brands`, JSON.stringify(centralBrands));
+  }, [centralBrands]);
+
+  useEffect(() => {
+    localStorage.setItem(`${LOCAL_STORAGE_KEY}_master_tokens`, JSON.stringify(masterTokens));
+  }, [masterTokens]);
+
+  useEffect(() => {
+    localStorage.setItem(`${LOCAL_STORAGE_KEY}_central_db`, JSON.stringify(centralDatabase));
+  }, [centralDatabase]);
+
+  useEffect(() => {
+    localStorage.setItem(`${LOCAL_STORAGE_KEY}_birthdays`, JSON.stringify(birthdays));
+  }, [birthdays]);
+
+  const updateCentralBrand = (id: string, partial: Partial<CentralProjectBrandConfig>) => {
+    setCentralBrands((prev) =>
+      prev.map((b) => (b.id === id ? { ...b, ...partial } : b))
+    );
+  };
+
+  const updateMasterTokens = (tokens: Partial<MasterTokensConfig>) => {
+    setMasterTokens((prev) => ({
+      ...prev,
+      ...tokens,
+      lastUpdated: new Date().toISOString(),
+    }));
+  };
+
+  const updateCentralDatabase = (db: Partial<CentralDatabaseConfig>) => {
+    setCentralDatabase((prev) => ({
+      ...prev,
+      ...db,
+    }));
+  };
+
+  const triggerBirthdayGreeting = (id: string) => {
+    setBirthdays((prev) =>
+      prev.map((b) =>
+        b.id === id
+          ? {
+              ...b,
+              congratulatedToday: true,
+              congratulatedAt: `Hoje às ${new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}`,
+            }
+          : b
+      )
+    );
+  };
+
+  const addBirthdayRecord = (record: Omit<BirthdayRecord, 'id'>) => {
+    const newRecord: BirthdayRecord = {
+      ...record,
+      id: `bth_${Date.now()}`,
+    };
+    setBirthdays((prev) => [newRecord, ...prev]);
+  };
+
+
+  const addCooperativeMember = (member: Omit<CooperativeMember, 'id'>) => {
+    const newMember: CooperativeMember = {
+      ...member,
+      id: `coop_${Date.now()}`,
+    };
+    setCooperativeMembers((prev) => [newMember, ...prev]);
+  };
+
+  const updateCooperativeMember = (id: string, updates: Partial<CooperativeMember>) => {
+    setCooperativeMembers((prev) =>
+      prev.map((m) => (m.id === id ? { ...m, ...updates } : m))
+    );
+  };
+
+  const addStoredExamToMember = (memberId: string, exam: StoredExamRecord) => {
+    setCooperativeMembers((prev) =>
+      prev.map((m) => {
+        if (m.id === memberId) {
+          const updatedExams = [exam, ...m.storedExams];
+          const newAvg = updatedExams.reduce((acc, curr) => acc + (curr.score / curr.maxPoints) * 10, 0) / updatedExams.length;
+          return {
+            ...m,
+            storedExams: updatedExams,
+            overallAverage: Math.round(newAvg * 10) / 10,
+            topPerformerBadge: newAvg >= 9.0,
+          };
+        }
+        return m;
+      })
+    );
+    sendPushNotification({
+      title: 'Nova Prova Registrada!',
+      message: `A avaliação "${exam.title}" com nota ${exam.score}/${exam.maxPoints} foi arquivada com sucesso no histórico da cooperativa.`,
+      targetRole: 'student',
+      category: 'academic',
+    });
+  };
+
+  const addCourseUpdateToMember = (memberId: string, update: CourseUpdateRecord) => {
+    setCooperativeMembers((prev) =>
+      prev.map((m) => {
+        if (m.id === memberId) {
+          return {
+            ...m,
+            courseUpdates: [update, ...m.courseUpdates],
+          };
+        }
+        return m;
+      })
+    );
+    sendPushNotification({
+      title: 'Selo de Atualização Registrado!',
+      message: `O curso de reciclagem "${update.title}" (${update.hours}h) foi vinculado ao seu perfil de cooperado.`,
+      targetRole: 'student',
+      category: 'academic',
+    });
+  };
+
+  const addJobVacancy = (vacancy: Omit<JobVacancy, 'id' | 'createdAt' | 'applicantsCount'>) => {
+    const newVacancy: JobVacancy = {
+      ...vacancy,
+      id: `job_${Date.now()}`,
+      createdAt: new Date().toISOString().split('T')[0],
+      applicantsCount: 0,
+    };
+    setJobVacancies((prev) => [newVacancy, ...prev]);
+    sendPushNotification({
+      title: 'Nova Vaga na Cooperativa!',
+      message: `A empresa ${vacancy.companyName} publicou a vaga: ${vacancy.title}.`,
+      targetRole: 'student',
+      category: 'academic',
+    });
+  };
+
+  const applyForJob = (vacancyId: string, memberId: string, note?: string) => {
+    const vacancy = jobVacancies.find((v) => v.id === vacancyId);
+    const member = cooperativeMembers.find((m) => m.id === memberId);
+    if (!vacancy || !member) return;
+
+    const isInternship = vacancy.type === 'estagio' || Boolean(vacancy.isOptionalInternship);
+    const newApp: JobApplication = {
+      id: `app_${Date.now()}`,
+      vacancyId,
+      vacancyTitle: vacancy.title,
+      memberId,
+      memberName: member.name,
+      appliedAt: new Date().toLocaleDateString('pt-BR'),
+      status: 'em_analise',
+      coverNote: note,
+      isInternship,
+      internshipHours: isInternship ? (vacancy.internshipHours || 120) : undefined,
+      companySupervisor: vacancy.supervisorName,
+    };
+
+    setJobApplications((prev) => [newApp, ...prev]);
+    setJobVacancies((prev) =>
+      prev.map((v) => (v.id === vacancyId ? { ...v, applicantsCount: v.applicantsCount + 1 } : v))
+    );
+
+    sendPushNotification({
+      title: isInternship ? 'Inscrição de Estágio Opcional Registrada!' : 'Candidatura Enviada!',
+      message: isInternship
+        ? `Você se inscreveu para o estágio opcional "${vacancy.title}" (${vacancy.internshipHours || 120}h) na empresa ${vacancy.companyName}. As horas serão contadas para seu certificado e currículo após a validação.`
+        : `Você se candidatou com sucesso para "${vacancy.title}" na empresa ${vacancy.companyName}.`,
+      targetRole: 'student',
+      category: 'academic',
+    });
+  };
+
+  const updateJobApplicationStatus = (appId: string, status: JobApplication['status']) => {
+    setJobApplications((prev) =>
+      prev.map((a) => (a.id === appId ? { ...a, status } : a))
+    );
+  };
+
+  const addValidatedInternshipToMember = (
+    memberId: string,
+    internship: Omit<ValidatedInternshipRecord, 'id'>
+  ) => {
+    const recordId = `est_${Date.now()}_${Math.floor(Math.random() * 1000)}`;
+    const fullRecord: ValidatedInternshipRecord = {
+      ...internship,
+      id: recordId,
+    };
+
+    setCooperativeMembers((prev) =>
+      prev.map((m) => {
+        if (m.id === memberId) {
+          const currentList = m.validatedInternships || [];
+          const updatedList = [fullRecord, ...currentList];
+          const newTotal = updatedList.reduce((acc, curr) => acc + (curr.hoursValidated || 0), 0);
+          return {
+            ...m,
+            validatedInternships: updatedList,
+            totalInternshipHours: newTotal,
+          };
+        }
+        return m;
+      })
+    );
+
+    sendPushNotification({
+      title: '🎓 Horas de Estágio Validadas!',
+      message: `Foram creditadas ${internship.hoursValidated}h de estágio supervisionado na empresa ${internship.companyName}. Incorporadas ao seu currículo e certificado oficial!`,
+      targetRole: 'student',
+      category: 'academic',
+    });
+  };
+
+  const validateInternshipForApplication = (
+    applicationId: string,
+    hoursAwarded: number,
+    supervisor: string,
+    evaluation?: string
+  ) => {
+    const app = jobApplications.find((a) => a.id === applicationId);
+    if (!app) return;
+
+    const vacancy = jobVacancies.find((v) => v.id === app.vacancyId);
+    const validationCode = `EST-2026-${Math.floor(100000 + Math.random() * 900000)}`;
+    const nowStr = new Date().toLocaleDateString('pt-BR');
+
+    // 1. Atualizar status da aplicação
+    setJobApplications((prev) =>
+      prev.map((a) =>
+        a.id === applicationId
+          ? {
+              ...a,
+              status: 'estagio_concluido',
+              validationCode,
+              validatedAt: nowStr,
+              validationHoursAwarded: hoursAwarded,
+              companySupervisor: supervisor,
+              supervisorEvaluation: evaluation || 'Estágio prático cumprido com pontualidade, excelente aproveitamento e zelo profissional.',
+            }
+          : a
+      )
+    );
+
+    // 2. Creditar horas no perfil do cooperado
+    addValidatedInternshipToMember(app.memberId, {
+      vacancyId: app.vacancyId,
+      companyName: vacancy?.companyName || 'Empresa Concedente',
+      title: app.vacancyTitle,
+      hoursValidated: hoursAwarded,
+      completionDate: nowStr,
+      supervisor: supervisor,
+      validationCode: validationCode,
+      certificateMention: `Estágio Opcional Supervisionado - ${app.vacancyTitle} (${hoursAwarded}h) sob a Lei 11.788/2008`,
+      status: 'validado',
+    });
+
+    // 3. Atualizar certificados emitidos para o aluno acrescentando as horas de estágio
+    setDocumentRequests((prev) =>
+      prev.map((doc) => {
+        if (doc.documentType === 'certificado') {
+          return {
+            ...doc,
+            internshipHoursValidated: (doc.internshipHoursValidated || 0) + hoursAwarded,
+            internshipDetails: `Comprovado cumprimento de ${hoursAwarded}h de estágio supervisionado na empresa ${vacancy?.companyName || 'conveniada'}. Código de Validação: ${validationCode}.`,
+          };
+        }
+        return doc;
+      })
+    );
+  };
+
+  const submitFullEnrollment = async (
+    data: Omit<FullEnrollmentData, 'id' | 'createdAt' | 'registrationNumber' | 'status'>
+  ): Promise<FullEnrollmentData> => {
+    const regNum = `MAT-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`;
+    const newEnrollment: FullEnrollmentData = {
+      ...data,
+      id: `enr_${Date.now()}`,
+      registrationNumber: regNum,
+      status: 'ativa',
+      createdAt: new Date().toISOString().split('T')[0],
+    };
+
+    setEnrollments((prev) => [newEnrollment, ...prev]);
+
+    // Also register or update user in users array if student
+    const existingUser = users.find((u) => u.email.toLowerCase() === data.email.toLowerCase());
+    if (!existingUser) {
+      registerUser({
+        name: data.fullName,
+        email: data.email,
+        role: 'student',
+        avatar: data.documents.photoBase64 || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=250',
+        registrationNumber: regNum,
+        courseId: data.courseId,
+        cpf: data.cpf,
+        phone: data.phone,
+        status: 'active',
+      });
+    }
+
+    sendPushNotification({
+      title: 'Matrícula Confirmada com Sucesso!',
+      message: `Parabéns ${data.fullName.split(' ')[0]}! Sua matrícula no curso ${data.courseTitle} foi efetivada com o número ${regNum}.`,
+      targetRole: 'student',
+      category: 'system',
+    });
+
+    return newEnrollment;
+  };
 
   const [mercadoPagoConfig, setMercadoPagoConfig] = useState<MercadoPagoConfig>(() => {
     const saved = localStorage.getItem(`${LOCAL_STORAGE_KEY}_mp_config`);
@@ -1038,7 +1759,7 @@ Comandos disponíveis:
         ) {
           matchedUser = users.find((u) => u.id === 'user_ceo_eloizio') || {
             id: 'user_ceo_eloizio',
-            name: 'Eloizio Silva (CEO)',
+            name: 'Eloizio Assunção (CEO)',
             email: cleanEmail || 'mecanicoeloizio@gmail.com',
             role: 'admin',
             avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=250',
@@ -1071,7 +1792,7 @@ Comandos disponíveis:
           // Default to Master Administrator Eloizio
           matchedUser = users.find((u) => u.id === 'user_ceo_eloizio') || {
             id: 'user_ceo_eloizio',
-            name: 'Eloizio Silva (CEO Master)',
+            name: 'Eloizio Assunção (CEO Master)',
             email: cleanEmail,
             role: 'admin',
             avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=250',
@@ -1115,7 +1836,7 @@ Comandos disponíveis:
       if (!ceoUser) {
         ceoUser = {
           id: 'user_ceo_eloizio',
-          name: 'Eloizio Silva (CEO)',
+          name: 'Eloizio Assunção (CEO)',
           email: cleanEmail,
           role: 'admin',
           avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=250',
@@ -1440,7 +2161,17 @@ Comandos disponíveis:
   };
 
   // Document Request and Mercado Pago Payment Flow
-  const requestDocument = (type: DocumentType, title: string, fee: number): DocumentRequest => {
+  const requestDocument = (
+    type: DocumentType,
+    title: string,
+    fee: number,
+    isSecondIssue = false
+  ): DocumentRequest => {
+    const isFree = fee === 0;
+    const validationHash = isFree
+      ? `ICP-FREE-${type.toUpperCase().slice(0, 4)}-${Math.random().toString(36).substring(2, 8).toUpperCase()}-${Date.now().toString().slice(-4)}`
+      : undefined;
+
     const newReq: DocumentRequest = {
       id: `doc_req_${Date.now()}`,
       studentId: currentUser?.id || 'visitor',
@@ -1448,10 +2179,25 @@ Comandos disponíveis:
       documentType: type,
       title,
       feeAmount: fee,
-      paymentStatus: 'pending',
+      paymentStatus: isFree ? 'paid' : 'pending',
       requestedAt: new Date().toISOString(),
+      issuedAt: isFree ? new Date().toISOString() : undefined,
+      validationHash,
+      mercadoPagoPaymentId: isFree ? 'ISENTO-GRATUITO-SECRETARIA' : undefined,
+      isFirstIssueFree: isFree,
+      isSecondIssue,
     };
     setDocumentRequests((prev) => [newReq, ...prev]);
+
+    if (isFree) {
+      sendPushNotification({
+        title: 'Documento Liberado Gratuitamente!',
+        message: `${title} emitida com sucesso e liberada imediatamente na Secretaria Virtual.`,
+        targetRole: 'student',
+        category: 'academic',
+      });
+    }
+
     return newReq;
   };
 
@@ -1789,6 +2535,51 @@ Comandos disponíveis:
         executeAdminCommand,
         commandHistory,
         clearCommandHistory,
+        cooperativeMembers,
+        addCooperativeMember,
+        updateCooperativeMember,
+        addStoredExamToMember,
+        addCourseUpdateToMember,
+        jobVacancies,
+        addJobVacancy,
+        jobApplications,
+        applyForJob,
+        updateJobApplicationStatus,
+        validateInternshipForApplication,
+        addValidatedInternshipToMember,
+        enrollments,
+        submitFullEnrollment,
+        showEnrollmentModal,
+        setShowEnrollmentModal,
+        selectedCourseForEnrollment,
+        setSelectedCourseForEnrollment,
+        mailboxes,
+        emailMessages,
+        activeMailbox,
+        setActiveMailbox,
+        createMailbox,
+        sendEmailMessage,
+        forwardEmailMessage,
+        deleteEmailMessage,
+        markEmailAsRead,
+        updateMailSubscription,
+        whatsappInstances,
+        whatsappMessages,
+        activeWhatsappInstanceId,
+        setActiveWhatsappInstanceId,
+        createWhatsappInstance,
+        sendWhatsappMessage,
+        forwardWhatsappMessage,
+        updateWhatsappSubscription,
+        centralBrands,
+        updateCentralBrand,
+        masterTokens,
+        updateMasterTokens,
+        centralDatabase,
+        updateCentralDatabase,
+        birthdays,
+        triggerBirthdayGreeting,
+        addBirthdayRecord,
         masterPassword: DEFAULT_MASTER_PASSWORD,
         login,
         loginAsDemo,

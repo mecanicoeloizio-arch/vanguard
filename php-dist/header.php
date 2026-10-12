@@ -22,6 +22,8 @@ $currentPage = basename($_SERVER['PHP_SELF']);
   <title><?= $pageTitle ?? 'Grupo Eloizio - Cursos Online & Gestão Integrada' ?></title>
   <meta name="description" content="Grupo Eloizio: Cursos Livres com Certificação Oficial MEC, Contabilidade Digital e Oficina Mecânica de Máquinas de Costura em São Gonçalo - RJ.">
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script>window.jQuery || document.write('<script src="jquery.min.js"><\/script>')</script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
@@ -68,6 +70,9 @@ $currentPage = basename($_SERVER['PHP_SELF']);
         <a href="index.php" class="px-3 py-2 rounded-xl transition <?= ($currentPage === 'index.php') ? 'bg-indigo-50 text-indigo-700 border border-indigo-200' : 'hover:bg-slate-100 hover:text-slate-900' ?>">
           🎓 Vitrine de Cursos
         </a>
+        <a href="cooperativa.php" class="px-3 py-2 rounded-xl transition <?= ($currentPage === 'cooperativa.php') ? 'bg-indigo-50 text-indigo-700 border border-indigo-200' : 'hover:bg-slate-100 hover:text-slate-900' ?>">
+          🤝 Cooperativa & Vagas
+        </a>
         <a href="aluno.php" class="px-3 py-2 rounded-xl transition <?= ($currentPage === 'aluno.php') ? 'bg-indigo-50 text-indigo-700 border border-indigo-200' : 'hover:bg-slate-100 hover:text-slate-900' ?>">
           📚 Área do Aluno
         </a>
@@ -84,13 +89,22 @@ $currentPage = basename($_SERVER['PHP_SELF']);
           📜 Validar Certificado
         </a>
         <a href="calendario.php" class="px-3 py-2 rounded-xl transition <?= ($currentPage === 'calendario.php') ? 'bg-indigo-50 text-indigo-700 border border-indigo-200' : 'hover:bg-slate-100 hover:text-slate-900' ?>">
-          📅 Calendário & Biblioteca
+          📅 Calendário
         </a>
         <a href="chat.php" class="px-3 py-2 rounded-xl transition <?= ($currentPage === 'chat.php') ? 'bg-indigo-50 text-indigo-700 border border-indigo-200' : 'hover:bg-slate-100 hover:text-slate-900' ?>">
           💬 Chat
         </a>
         <a href="manuais.php" class="px-3 py-2 rounded-xl transition <?= ($currentPage === 'manuais.php') ? 'bg-indigo-50 text-indigo-700 border border-indigo-200' : 'hover:bg-slate-100 hover:text-slate-900' ?>">
           📖 Manuais
+        </a>
+        <a href="/mail/" target="_blank" class="px-3 py-2 rounded-xl transition hover:bg-indigo-50 text-indigo-700 bg-indigo-50/50 border border-indigo-200/60 flex items-center gap-1 font-extrabold">
+          ✉️ Webmail Oficial
+        </a>
+        <a href="/elowa/" target="_blank" class="px-3 py-2 rounded-xl transition hover:bg-emerald-50 text-emerald-700 bg-emerald-50/50 border border-emerald-200/60 flex items-center gap-1 font-extrabold">
+          💬 WhatsApp EloWa
+        </a>
+        <a href="matricula.php" class="px-3 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold transition shadow-xs whitespace-nowrap">
+          ✍️ Matrícula
         </a>
       </div>
 
@@ -120,6 +134,8 @@ $currentPage = basename($_SERVER['PHP_SELF']);
     <!-- Mobile Drawer Menu -->
     <div id="mobileDrawer" class="hidden xl:hidden bg-white border-t border-slate-200 px-4 py-3 space-y-1 animate-in fade-in">
       <a href="index.php" class="block px-3 py-2 rounded-xl text-xs font-bold text-slate-700 hover:bg-slate-100">🎓 Vitrine de Cursos</a>
+      <a href="cooperativa.php" class="block px-3 py-2 rounded-xl text-xs font-bold text-slate-700 hover:bg-slate-100">🤝 Cooperativa & Vagas</a>
+      <a href="matricula.php" class="block px-3 py-2 rounded-xl text-xs font-bold text-emerald-700 hover:bg-emerald-50">✍️ Matrícula Online</a>
       <a href="aluno.php" class="block px-3 py-2 rounded-xl text-xs font-bold text-slate-700 hover:bg-slate-100">📚 Área do Aluno</a>
       <a href="professor.php" class="block px-3 py-2 rounded-xl text-xs font-bold text-slate-700 hover:bg-slate-100">👨‍🏫 Área do Professor</a>
       <a href="admin.php" class="block px-3 py-2 rounded-xl text-xs font-bold text-slate-700 hover:bg-slate-100">⚙️ Direção & Gestão (Admin)</a>
@@ -128,6 +144,8 @@ $currentPage = basename($_SERVER['PHP_SELF']);
       <a href="calendario.php" class="block px-3 py-2 rounded-xl text-xs font-bold text-slate-700 hover:bg-slate-100">📅 Calendário & Biblioteca</a>
       <a href="chat.php" class="block px-3 py-2 rounded-xl text-xs font-bold text-slate-700 hover:bg-slate-100">💬 Chat Interno</a>
       <a href="manuais.php" class="block px-3 py-2 rounded-xl text-xs font-bold text-slate-700 hover:bg-slate-100">📖 Manuais do Sistema</a>
+      <a href="/mail/" target="_blank" class="block px-3 py-2 rounded-xl text-xs font-black text-indigo-700 bg-indigo-50 border border-indigo-200">✉️ Webmail Oficial (webmail.grupoeloizio.com.br)</a>
+      <a href="/elowa/" target="_blank" class="block px-3 py-2 rounded-xl text-xs font-black text-emerald-700 bg-emerald-50 border border-emerald-200">💬 WhatsApp EloWa (elowa.grupoeloizio.com.br)</a>
     </div>
   </nav>
 

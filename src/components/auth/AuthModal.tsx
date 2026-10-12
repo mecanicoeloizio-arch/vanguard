@@ -184,7 +184,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onSuccess }) => {
   const officialProfiles = [
     {
       id: 'ceo',
-      name: 'Eloizio Silva (CEO Master)',
+      name: 'Eloizio Assunção (CEO Master)',
       role: 'admin',
       roleLabel: 'Diretoria Geral & Mecânica',
       email: 'mecanicoeloizio@gmail.com',

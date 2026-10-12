@@ -28,7 +28,7 @@ Categoria: Negócios
 Nível: Iniciante
 Preço: 480
 Carga Horária: 80
-Instrutor: Eloizio Silva
+Instrutor: Eloizio Assunção
 Resumo: Treinamento completo e prático para aprender a consertar, regular ponto, lubrificar e fazer manutenção de máquinas reta, overloque e galoneira.
 Descrição: Curso 100% online desenvolvido especialmente para novos técnicos, costureiras e oficinas mecânicas em São Gonçalo e todo o Brasil. Você aprenderá anatomia das máquinas, ajuste de sincronismo de lançadeira, troca de peças, diagnóstico de falhas em motores direct-drive e convencionais, regulagem de tensão de linha e manutenção preventiva completa.
 Módulos:
@@ -57,7 +57,7 @@ Categoria: Tecnologia
 Nível: Intermediário
 Preço: 590
 Carga Horária: 100
-Instrutor: Eloizio Silva
+Instrutor: Eloizio Assunção
 Resumo: Domine o funcionamento de máquinas automáticas, eletrônicas e programáveis para confecções e polos de moda.
 Descrição: Especialização técnica voltada para operadores e mecânicos de chão de fábrica. Técnicas avançadas de corte de linha automático, sensores ópticos, regulagem de calcador pneumático e otimização de velocidade para produção contínua.
 Módulos:
@@ -100,7 +100,7 @@ export const CourseTextImportModal: React.FC<CourseTextImportModalProps> = ({
           workloadHours: Number(item.workloadHours || item.cargaHoraria || item.horas || 60),
           level: (item.level || item.nivel || 'Iniciante') as any,
           instructorId: item.instructorId || 'user_ceo_eloizio',
-          instructorName: item.instructorName || item.instrutor || 'Eloizio Silva',
+          instructorName: item.instructorName || item.instrutor || 'Eloizio Assunção',
           instructorTitle: item.instructorTitle || 'Especialista Técnico do Grupo Eloizio',
           thumbnail: item.thumbnail || getDefaultThumbnail(item.title || ''),
           featured: true,
@@ -128,7 +128,7 @@ export const CourseTextImportModal: React.FC<CourseTextImportModalProps> = ({
       let level: any = 'Iniciante';
       let price = 350;
       let workloadHours = 60;
-      let instructorName = 'Eloizio Silva';
+      let instructorName = 'Eloizio Assunção';
       let shortDescription = '';
       let fullDescription = '';
       let thumbnailUrl = '';
@@ -379,7 +379,7 @@ Categoria: Negócios
 Nível: Iniciante
 Preço: 450
 Carga Horária: 80
-Instrutor: Eloizio Silva
+Instrutor: Eloizio Assunção
 Resumo: [Breve descrição em 1 ou 2 frases]
 Descrição: [Descrição detalhada dos objetivos do curso]
 Módulos:
@@ -460,7 +460,7 @@ Módulos:
                   <div>
                     <strong className="block text-slate-900 mb-1">Estrutura de Aulas:</strong>
                     <ul className="space-y-0.5 text-slate-600 list-disc list-inside">
-                      <li>Instrutor: [Eloizio Silva / Sofia Vanguard]</li>
+                      <li>Instrutor: [Eloizio Assunção / Sofia Vanguard]</li>
                       <li>Resumo: [Frase de impacto para o card]</li>
                       <li>Módulos: - Módulo 1 (4 aulas)</li>
                     </ul>

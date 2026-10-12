@@ -25,6 +25,11 @@ import {
   Check,
   AlertTriangle,
   Upload,
+  Briefcase,
+  UserCheck,
+  X,
+  Building2,
+  CheckCircle2,
 } from 'lucide-react';
 
 export const StudentPortal: React.FC = () => {
@@ -54,12 +59,27 @@ const StudentPortalContent: React.FC<{ currentUser: any }> = ({ currentUser }) =
     toggleLessonCompleted,
     completeAllCourseLessons,
     issueOfficialCertificate,
+    cooperativeMembers,
+    jobVacancies,
+    jobApplications,
+    applyForJob,
+    setActiveNavTab,
+    transactions,
   } = useApp();
 
-  const [activeTab, setActiveTab] = useState<'lessons' | 'grades' | 'attendance' | 'exams' | 'documents' | 'schedule'>('lessons');
+  const [activeTab, setActiveTab] = useState<'lessons' | 'grades' | 'attendance' | 'exams' | 'internships' | 'documents' | 'schedule'>('lessons');
+  const [selectedInternshipForTermo, setSelectedInternshipForTermo] = useState<any | null>(null);
+  const [applyingVacancyId, setApplyingVacancyId] = useState<string | null>(null);
+  const [internshipApplyNote, setInternshipApplyNote] = useState('');
 
   // Student's active enrolled course
   const studentCourse = courses.find((c) => c.id === (currentUser.courseId || 'course_1')) || courses[0];
+
+  // Student's Cooperative Profile & Internship Records
+  const myCoopProfile =
+    cooperativeMembers.find((m) => m.userId === currentUser.id) ||
+    cooperativeMembers.find((m) => m.name?.toLowerCase() === currentUser.name?.toLowerCase()) ||
+    cooperativeMembers[0];
 
   // Lessons Player state
   const allLessons: Lesson[] = studentCourse.syllabus.flatMap((m) => m.lessons);
@@ -142,9 +162,9 @@ const StudentPortalContent: React.FC<{ currentUser: any }> = ({ currentUser }) =
   // Document fee catalog
   const documentCatalog = [
     { type: 'carteirinha' as const, title: 'Carteirinha Estudantil Digital Oficial (Padrão DNE)', fee: 25.0, icon: QrCode, desc: 'Válida nacionalmente para meia-entrada e transporte com QR Code criptografado.' },
-    { type: 'certificado' as const, title: 'Certificado de Conclusão com Chave ICP-Edu', fee: 45.0, icon: Award, desc: 'Certificado oficial com autenticação digital de conformidade MEC.' },
-    { type: 'historico' as const, title: 'Histórico Escolar Oficial com Carimbo Digital', fee: 15.0, icon: FileText, desc: 'Relação completa de notas, frequências e ementas para pós-graduação e transferências.' },
-    { type: 'declaracao' as const, title: 'Declaração de Matrícula para Estágio', fee: 10.0, icon: FileCheck, desc: 'Declaração com verificação de autenticidade para convênios e empresas.' },
+    { type: 'certificado' as const, title: 'Certificado de Curso Livre Profissionalizante (ICP-Edu & MEC)', fee: 45.0, icon: Award, desc: 'Certificado oficial de qualificação profissionalizante (LDB nº 9.394/96 Art. 42 e Decreto nº 5.154/04).' },
+    { type: 'historico' as const, title: 'Histórico Escolar Oficial com Carimbo Digital', fee: 15.0, icon: FileText, desc: 'Relação completa de notas, frequências e ementas para comprovação profissional, concursos e mercado de trabalho.' },
+    { type: 'declaracao' as const, title: 'Declaração de Matrícula para Estágio & Convênios', fee: 10.0, icon: FileCheck, desc: 'Declaração com verificação de autenticidade para convênios e empresas.' },
   ];
 
   const handleStartExam = (exam: Exam) => {
@@ -203,10 +223,30 @@ const StudentPortalContent: React.FC<{ currentUser: any }> = ({ currentUser }) =
     setActiveExam(null);
   };
 
-  const handleRequestDocument = (type: any, title: string, fee: number) => {
-    const req = requestDocument(type, title, fee);
-    setActiveDocumentForPayment(req);
-    setOpenPaymentModal(true);
+  // Status financeiro do aluno para gratuidade de certificados
+  const studentTuitionTxs = transactions.filter(
+    (t) => t.studentId === currentUser.id && t.type === 'tuition'
+  );
+  const hasTuitionDebt = studentTuitionTxs.some(
+    (t) => t.status === 'pending' || t.status === 'overdue'
+  );
+  const isTuitionQuites = !hasTuitionDebt;
+
+  const hasIssued1stCarteirinha = documentRequests.some(
+    (d) => d.studentId === currentUser.id && d.documentType === 'carteirinha'
+  );
+  const hasIssued1stCertificado = documentRequests.some(
+    (d) => d.studentId === currentUser.id && d.documentType === 'certificado'
+  );
+
+  const handleRequestDocument = (type: any, title: string, fee: number, isSecondIssue = false) => {
+    const req = requestDocument(type, title, fee, isSecondIssue);
+    if (fee > 0) {
+      setActiveDocumentForPayment(req);
+      setOpenPaymentModal(true);
+    } else {
+      setViewingDocument(req);
+    }
   };
 
   // Overall attendance calculation
@@ -269,6 +309,60 @@ const StudentPortalContent: React.FC<{ currentUser: any }> = ({ currentUser }) =
         </div>
       </div>
 
+      {/* Vanguard Student Official Webmail Banner */}
+      <div className="bg-linear-to-r from-slate-900 via-indigo-950 to-purple-950 border border-indigo-400/30 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-white shadow-lg">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-indigo-600/40 border border-indigo-400/30 flex items-center justify-center text-xl shrink-0">
+            ✉️
+          </div>
+          <div>
+            <div className="flex items-center gap-2 flex-wrap">
+              <span className="font-extrabold text-sm sm:text-base text-white">E-mail Institucional Oficial Gratuito</span>
+              <span className="px-2 py-0.5 rounded-full text-[10px] font-black bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 uppercase">
+                ✓ Aluno Vanguard 100% Grátis
+              </span>
+            </div>
+            <p className="text-xs text-indigo-200 mt-0.5 font-mono">
+              {currentUser.email || 'lucas.silva@aluno.eduvanguard.com.br'} • Subdomínio: webmail.grupoeloizio.com.br (PHPMailer 6.9+)
+            </p>
+          </div>
+        </div>
+        <button
+          onClick={() => setActiveNavTab('webmail')}
+          className="w-full sm:w-auto px-4 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs font-bold transition flex items-center justify-center gap-2 cursor-pointer shadow-md shadow-indigo-600/30"
+        >
+          <span>Abrir Meu Webmail</span>
+          <ChevronRight className="w-4 h-4" />
+        </button>
+      </div>
+
+      {/* Vanguard Student Official EloWa WhatsApp Banner */}
+      <div className="bg-linear-to-r from-slate-950 via-emerald-950 to-slate-900 border border-emerald-500/30 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-white shadow-lg">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-emerald-600/40 border border-emerald-400/30 flex items-center justify-center text-xl shrink-0">
+            💬
+          </div>
+          <div>
+            <div className="flex items-center gap-2 flex-wrap">
+              <span className="font-extrabold text-sm sm:text-base text-white">Canal WhatsApp Oficial EloWa</span>
+              <span className="px-2 py-0.5 rounded-full text-[10px] font-black bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 uppercase">
+                ✓ Aluno Vanguard 100% Grátis
+              </span>
+            </div>
+            <p className="text-xs text-emerald-200 mt-0.5 font-mono">
+              Suporte & Dúvidas com Camilla Faria: (21) 99613-4073 • Subdomínio: elowa.grupoeloizio.com.br
+            </p>
+          </div>
+        </div>
+        <button
+          onClick={() => setActiveNavTab('elowa')}
+          className="w-full sm:w-auto px-4 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold transition flex items-center justify-center gap-2 cursor-pointer shadow-md shadow-emerald-600/30"
+        >
+          <span>Abrir WhatsApp EloWa</span>
+          <ChevronRight className="w-4 h-4" />
+        </button>
+      </div>
+
       {/* Student Navigation Tabs */}
       <div className="flex items-center gap-2 overflow-x-auto pb-2 border-b border-slate-200 no-scrollbar">
         {[
@@ -276,6 +370,7 @@ const StudentPortalContent: React.FC<{ currentUser: any }> = ({ currentUser }) =
           { id: 'grades', label: 'Boletim & Notas', icon: Award },
           { id: 'attendance', label: 'Presença em Tempo Real', icon: CheckCircle },
           { id: 'exams', label: 'Provas, Quizzes & Trabalhos', icon: BookOpen },
+          { id: 'internships', label: 'Estágios Opcionais & Horas Validadas', icon: Briefcase },
           { id: 'documents', label: 'Secretaria & Documentos (Mercado Pago)', icon: FileText },
           { id: 'schedule', label: 'Grade Horária & Mudanças', icon: Calendar },
         ].map((tab) => {
@@ -910,68 +1005,606 @@ const StudentPortalContent: React.FC<{ currentUser: any }> = ({ currentUser }) =
         </div>
       )}
 
+      {/* TAB: ESTÁGIOS OPCIONAIS & HORAS VALIDADAS */}
+      {activeTab === 'internships' && (() => {
+        const myCoopProfile =
+          cooperativeMembers.find((m) => m.userId === currentUser.id) ||
+          cooperativeMembers.find((m) => m.name.toLowerCase() === currentUser.name.toLowerCase()) ||
+          cooperativeMembers[0];
+        const myValidatedInternships = myCoopProfile?.validatedInternships || [];
+        const totalInternshipHours = myCoopProfile?.totalInternshipHours || 0;
+        const availableInternships = jobVacancies.filter(
+          (v) => v.type === 'estagio' || Boolean(v.isOptionalInternship)
+        );
+
+        return (
+          <div className="space-y-8">
+            {/* Header Banner */}
+            <div className="bg-linear-to-r from-amber-600 via-yellow-600 to-indigo-900 text-white rounded-3xl p-6 sm:p-8 shadow-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-6 border-2 border-amber-300/40">
+              <div className="space-y-2 max-w-2xl">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase bg-slate-950 text-amber-300 border border-amber-400">
+                    Lei Federal nº 11.788/2008 (Estágio)
+                  </span>
+                  <span className="text-xs font-bold text-amber-100">
+                    Validação Curricular & Agregação ao Certificado
+                  </span>
+                </div>
+                <h2 className="text-2xl font-black">Estágios Opcionais & Horas Práticas</h2>
+                <p className="text-xs text-amber-100 leading-relaxed">
+                  Adquira experiência real em oficinas e empresas conveniadas ao Grupo Eloizio. As horas de estágio são supervisionadas, homologadas digitalmente e somadas à carga horária do seu Certificado Oficial e Currículo da Cooperativa!
+                </p>
+              </div>
+
+              <div className="flex flex-col sm:flex-row items-center gap-3 w-full md:w-auto shrink-0">
+                <button
+                  type="button"
+                  onClick={() => setActiveNavTab('cooperative')}
+                  className="w-full sm:w-auto px-5 py-3 bg-slate-950 hover:bg-slate-900 text-amber-300 rounded-xl text-xs font-black shadow-lg cursor-pointer transition flex items-center justify-center gap-2"
+                >
+                  <Briefcase className="w-4 h-4 text-amber-400" />
+                  <span>Acessar Cooperativa de Talentos &rarr;</span>
+                </button>
+              </div>
+            </div>
+
+            {/* Quadro de Métricas Curriculares */}
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+              <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs space-y-1">
+                <span className="text-[10px] font-bold uppercase text-slate-400 block">Carga Base do Curso</span>
+                <strong className="text-2xl font-black text-slate-900">{studentCourse.workloadHours || 360}h</strong>
+                <span className="text-[11px] text-slate-500 block">Teoria & Prática Regular</span>
+              </div>
+
+              <div className="bg-amber-50 p-5 rounded-2xl border border-amber-300 shadow-xs space-y-1">
+                <span className="text-[10px] font-bold uppercase text-amber-800 block">Horas de Estágio Validadas</span>
+                <strong className="text-2xl font-black text-amber-900">+{totalInternshipHours}h</strong>
+                <span className="text-[11px] text-amber-800 font-bold block">Homologadas em Empresa</span>
+              </div>
+
+              <div className="bg-indigo-50 p-5 rounded-2xl border border-indigo-200 shadow-xs space-y-1">
+                <span className="text-[10px] font-bold uppercase text-indigo-700 block">Carga Total no Certificado</span>
+                <strong className="text-2xl font-black text-indigo-900">
+                  {(studentCourse.workloadHours || 360) + totalInternshipHours} Horas
+                </strong>
+                <span className="text-[11px] text-indigo-600 font-bold block">Valor Curricular Turbinado</span>
+              </div>
+
+              <div className="bg-emerald-50 p-5 rounded-2xl border border-emerald-200 shadow-xs space-y-1">
+                <span className="text-[10px] font-bold uppercase text-emerald-800 block">Status de Prática</span>
+                <div className="flex items-center gap-1.5 text-emerald-900 font-black text-sm">
+                  <CheckCircle className="w-4 h-4 text-emerald-600" />
+                  <span>{totalInternshipHours > 0 ? 'Experiência Comprovada' : 'Aguardando Inscrição'}</span>
+                </div>
+                <span className="text-[11px] text-emerald-700 block">Termo Registrado em Cartório Digital</span>
+              </div>
+            </div>
+
+            {/* Seção 1: Meus Estágios Concluídos & Homologados */}
+            <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-xs space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-slate-200">
+                <div>
+                  <h3 className="font-extrabold text-slate-900 text-base flex items-center gap-2">
+                    <Award className="w-5 h-5 text-amber-600" />
+                    Meus Estágios Supervisionados Validados & Registrados
+                  </h3>
+                  <p className="text-xs text-slate-500 mt-0.5">
+                    Horas cumpridas e formalizadas com termo digital de homologação assinado pelo supervisor da empresa.
+                  </p>
+                </div>
+                <span className="px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 text-xs font-black">
+                  {myValidatedInternships.length} Estágios Concluídos
+                </span>
+              </div>
+
+              {myValidatedInternships.length === 0 ? (
+                <div className="p-8 text-center text-slate-500 bg-slate-50 rounded-2xl border border-slate-200 space-y-2">
+                  <Briefcase className="w-10 h-10 text-slate-300 mx-auto" />
+                  <p className="text-sm font-bold text-slate-700">Você ainda não tem horas de estágio registradas.</p>
+                  <p className="text-xs text-slate-500 max-w-md mx-auto leading-relaxed">
+                    Escolha uma das oportunidades de estágio supervisionado abaixo e inscreva-se. Assim que concluir suas atividades, a empresa homologará suas horas práticas!
+                  </p>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {myValidatedInternships.map((internship, idx) => (
+                    <div
+                      key={idx}
+                      className="p-4 sm:p-5 bg-linear-to-r from-amber-50/50 to-white rounded-2xl border border-amber-300/80 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-2xs"
+                    >
+                      <div className="space-y-1">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <strong className="text-slate-900 text-sm font-black">{internship.title}</strong>
+                          <span className="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-xs font-black font-mono">
+                            +{internship.hoursValidated}h Homologadas
+                          </span>
+                        </div>
+                        <div className="text-xs text-slate-600 flex items-center gap-3 flex-wrap">
+                          <span>Empresa Concedente: <strong>{internship.companyName}</strong></span>
+                          <span>Orientador: <strong>{internship.supervisor}</strong></span>
+                          <span>Conclusão: <strong>{internship.completionDate}</strong></span>
+                          <span className="font-mono text-indigo-700 font-bold">Chave: {internship.validationCode}</span>
+                        </div>
+                        <p className="text-xs text-slate-500 italic mt-1">
+                          {internship.certificateMention}
+                        </p>
+                      </div>
+
+                      <div className="flex items-center gap-2 shrink-0">
+                        <button
+                          type="button"
+                          onClick={() => setSelectedInternshipForTermo(internship)}
+                          className="px-4 py-2 bg-slate-950 hover:bg-slate-900 text-amber-300 rounded-xl text-xs font-black flex items-center gap-1.5 cursor-pointer shadow-xs transition"
+                        >
+                          <FileCheck className="w-4 h-4 text-amber-400" />
+                          <span>Ver Termo Oficial (PDF)</span>
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Seção 2: Mural de Vagas de Estágio Opcional Abertas */}
+            <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-xs space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-slate-200">
+                <div>
+                  <h3 className="font-extrabold text-slate-900 text-base flex items-center gap-2">
+                    <Sparkles className="w-5 h-5 text-amber-500" />
+                    Oportunidades de Estágio Supervisionado Abertas para Você
+                  </h3>
+                  <p className="text-xs text-slate-500 mt-0.5">
+                    Inscreva-se com 1 clique. A empresa parceira receberá seu histórico de aulas, frequência e notas do LMS.
+                  </p>
+                </div>
+                <span className="px-3 py-1 rounded-full bg-indigo-100 text-indigo-800 text-xs font-black">
+                  {availableInternships.length} Vagas Disponíveis
+                </span>
+              </div>
+
+              <div className="space-y-4">
+                {availableInternships.map((vacancy) => {
+                  const alreadyApplied = jobApplications.some(
+                    (a) => a.vacancyId === vacancy.id && (a.memberId === myCoopProfile?.id || a.memberName === currentUser.name)
+                  );
+                  return (
+                    <div
+                      key={vacancy.id}
+                      className="p-5 sm:p-6 bg-slate-50/80 rounded-2xl border border-slate-200 hover:border-amber-300 transition space-y-3"
+                    >
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                        <div className="space-y-1">
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase bg-amber-500 text-slate-950">
+                              Estágio Supervisionado
+                            </span>
+                            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase bg-emerald-100 text-emerald-800 border border-emerald-300">
+                              +{vacancy.internshipHours || 120}h Contam no Certificado
+                            </span>
+                            <span className="text-xs text-slate-400">Modalidade: {vacancy.modality || 'Presencial'}</span>
+                          </div>
+
+                          <h4 className="text-base sm:text-lg font-black text-slate-900">{vacancy.title}</h4>
+
+                          <div className="text-xs text-slate-600 flex items-center gap-3 flex-wrap">
+                            <span className="font-bold text-slate-800">{vacancy.companyName}</span>
+                            <span>• {vacancy.location}</span>
+                            <span className="font-extrabold text-emerald-700">• {vacancy.salaryRange}</span>
+                            {vacancy.supervisorName && (
+                              <span className="font-semibold text-indigo-700">• Orientador: {vacancy.supervisorName}</span>
+                            )}
+                          </div>
+                        </div>
+
+                        <div className="shrink-0">
+                          {alreadyApplied ? (
+                            <span className="px-4 py-2 bg-emerald-100 text-emerald-800 border border-emerald-300 rounded-xl text-xs font-bold flex items-center gap-1.5">
+                              <CheckCircle className="w-4 h-4 text-emerald-600" />
+                              <span>Inscrição Realizada</span>
+                            </span>
+                          ) : (
+                            <button
+                              type="button"
+                              onClick={() => setApplyingVacancyId(vacancy.id)}
+                              className="px-5 py-2.5 bg-amber-500 hover:bg-amber-600 text-slate-950 rounded-xl text-xs font-black shadow-xs cursor-pointer transition flex items-center gap-1.5"
+                            >
+                              <Send className="w-3.5 h-3.5" />
+                              <span>Inscrever-se neste Estágio (+{vacancy.internshipHours || 120}h) &rarr;</span>
+                            </button>
+                          )}
+                        </div>
+                      </div>
+
+                      <p className="text-xs text-slate-600 leading-relaxed">
+                        {vacancy.description}
+                      </p>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs pt-2 border-t border-slate-200/60">
+                        <div>
+                          <strong className="text-slate-800 block text-[11px] uppercase font-bold">Atividades & Requisitos:</strong>
+                          <ul className="list-disc list-inside text-slate-500 text-[11px] space-y-0.5">
+                            {vacancy.requirements.map((r, i) => (
+                              <li key={i}>{r}</li>
+                            ))}
+                          </ul>
+                        </div>
+                        <div>
+                          <strong className="text-slate-800 block text-[11px] uppercase font-bold">Benefícios & Validação:</strong>
+                          <ul className="list-disc list-inside text-slate-500 text-[11px] space-y-0.5">
+                            {vacancy.benefits.map((b, i) => (
+                              <li key={i}>{b}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        );
+      })()}
+
       {/* TAB 5: SECRETARIA VIRTUAL & DOCUMENTOS (MERCADO PAGO) */}
       {activeTab === 'documents' && (
         <div className="space-y-8">
-          {/* Header Banner */}
-          <div className="bg-linear-to-r from-sky-600 via-blue-700 to-indigo-800 text-white rounded-3xl p-6 sm:p-8 shadow-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+          {/* Header Banner com Diretrizes Oficiais */}
+          <div className="bg-linear-to-r from-sky-700 via-blue-800 to-indigo-900 text-white rounded-3xl p-6 sm:p-8 shadow-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
             <div className="space-y-2">
-              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase bg-white/20 text-white border border-white/30 backdrop-blur-xs">
-                Secretaria Virtual & Gateway Mercado Pago
-              </span>
-              <h2 className="text-2xl font-black">Emissão de Documentos Oficiais</h2>
-              <p className="text-xs text-sky-100 max-w-xl leading-relaxed">
-                Solicite sua carteirinha de estudante padrão DNE, certificado de conclusão ou histórico com validação digital. Taxas processadas de forma segura e instantânea pelo Mercado Pago.
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase bg-white/20 text-white border border-white/30 backdrop-blur-xs">
+                  Secretaria Virtual Oficial & Gateway Mercado Pago
+                </span>
+                <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase border ${
+                  isTuitionQuites
+                    ? 'bg-emerald-500/20 text-emerald-200 border-emerald-400/40'
+                    : 'bg-amber-500/20 text-amber-200 border-amber-400/40'
+                }`}>
+                  {isTuitionQuites ? '✓ Mensalidades em Dia (Quites)' : '⚠️ Mensalidade Pendente'}
+                </span>
+              </div>
+              <h2 className="text-2xl font-black">Emissão & Expedição de Documentos Oficiais</h2>
+              <p className="text-xs text-sky-100 max-w-2xl leading-relaxed">
+                Regras Acadêmicas Oficiais: <strong>1ª via da Carteirinha Estudantil DNE</strong> e <strong>Certificado de Conclusão com mensalidades em dia/quites</strong> são liberados gratuitamente. <strong>Documentos escolares e 2ª via de qualquer documento</strong> são liberados após confirmação de pagamento de valores definidos pela secretaria. O <strong>crachá funcional da cooperativa</strong> tem anuidade de renovação, sendo gratuito/isento para alunos concluintes de cursos.
               </p>
             </div>
-            <div className="p-3 bg-white/10 rounded-2xl border border-white/20 text-center">
+            <div className="p-3.5 bg-white/10 rounded-2xl border border-white/20 text-center shrink-0">
               <span className="text-[10px] uppercase font-bold text-sky-200 block">Status Gateway</span>
-              <span className="text-xs font-black text-white flex items-center gap-1.5">
+              <span className="text-xs font-black text-white flex items-center justify-center gap-1.5 mt-0.5">
                 <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
                 Mercado Pago Conectado
               </span>
             </div>
           </div>
 
-          {/* Catalog of Available Documents */}
-          <div>
-            <h3 className="text-base font-black text-slate-900 mb-4">
-              Documentos Disponíveis para Emissão Imediata
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-              {documentCatalog.map((doc) => {
-                const Icon = doc.icon;
-                return (
-                  <div
-                    key={doc.type}
-                    className="bg-white rounded-2xl p-5 border border-slate-200 shadow-xs hover:border-sky-300 transition-all flex flex-col justify-between space-y-4"
-                  >
-                    <div className="space-y-2">
-                      <div className="w-10 h-10 rounded-xl bg-sky-50 text-sky-600 flex items-center justify-center font-bold">
-                        <Icon className="w-5 h-5" />
-                      </div>
-                      <h4 className="font-extrabold text-slate-900 text-sm">{doc.title}</h4>
-                      <p className="text-xs text-slate-500 leading-relaxed">{doc.desc}</p>
-                    </div>
+          {/* Destaque das Políticas Oficiais da Secretaria */}
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-3.5">
+            <div className="bg-emerald-50 border border-emerald-200 rounded-2xl p-4 space-y-1">
+              <span className="text-[10px] uppercase font-black text-emerald-700 block">1ª Via Gratuita</span>
+              <h4 className="text-xs font-black text-emerald-950">Carteirinha Estudantil DNE</h4>
+              <p className="text-[11px] text-emerald-800 leading-tight">
+                Gratuita para todo aluno matriculado ativo no Grupo Eloizio com QR Code nacional.
+              </p>
+            </div>
+            <div className="bg-sky-50 border border-sky-200 rounded-2xl p-4 space-y-1">
+              <span className="text-[10px] uppercase font-black text-sky-700 block">1ª Via com Mensalidade em Dia</span>
+              <h4 className="text-xs font-black text-sky-950">Certificado de Conclusão</h4>
+              <p className="text-[11px] text-sky-800 leading-tight">
+                Gratuito e liberado com fé pública MEC para alunos quites e sem mensalidades em atraso.
+              </p>
+            </div>
+            <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 space-y-1">
+              <span className="text-[10px] uppercase font-black text-amber-700 block">Liberados Após Pagamento</span>
+              <h4 className="text-xs font-black text-amber-950">Documentos Escolares & 2ª Via</h4>
+              <p className="text-[11px] text-amber-800 leading-tight">
+                Histórico, declarações e 2ª via liberados após confirmação das taxas definidas pela secretaria.
+              </p>
+            </div>
+            <div className="bg-purple-50 border border-purple-200 rounded-2xl p-4 space-y-1">
+              <span className="text-[10px] uppercase font-black text-purple-700 block">Isenção para Concluintes</span>
+              <h4 className="text-xs font-black text-purple-950">Crachá Funcional Cooperativa</h4>
+              <p className="text-[11px] text-purple-800 leading-tight">
+                Anuidade de renovação cobrada (R$ 45/ano); isenção total para alunos concluintes de cursos.
+              </p>
+            </div>
+          </div>
 
-                    <div className="pt-3 border-t border-slate-100 space-y-2">
-                      <div className="flex items-baseline justify-between">
-                        <span className="text-[10px] uppercase text-slate-400 font-bold">Taxa Administrativa</span>
-                        <span className="text-base font-black text-slate-900">
-                          {doc.fee.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
-                        </span>
-                      </div>
+          {/* Painel 1: Documentos com Direito a Gratuidade (1ª Via) */}
+          <div className="space-y-4">
+            <h3 className="text-base font-black text-slate-900 flex items-center gap-2">
+              <span className="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+              Documentos com Regra de Gratuidade (1ª Via)
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* Carteirinha Estudantil DNE */}
+              <div className="bg-white rounded-2xl p-5 border-2 border-emerald-200 shadow-sm space-y-4 flex flex-col justify-between">
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <div className="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold">
+                      <QrCode className="w-5 h-5" />
+                    </div>
+                    <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase bg-emerald-100 text-emerald-800">
+                      1ª Via Gratuita
+                    </span>
+                  </div>
+                  <h4 className="font-extrabold text-slate-900 text-sm">Carteirinha Estudantil Digital Oficial (Padrão DNE)</h4>
+                  <p className="text-xs text-slate-500 leading-relaxed">
+                    Válida em todo o território nacional para meia-entrada em cinemas, teatros, shows e transporte estudantil com QR Code criptografado.
+                  </p>
+                </div>
+
+                <div className="pt-3 border-t border-slate-100 space-y-2">
+                  <div className="flex items-baseline justify-between text-xs">
+                    <span className="text-slate-500">1ª Via para Matriculado:</span>
+                    <strong className="text-emerald-700 font-black text-sm">GRATUITA (R$ 0,00)</strong>
+                  </div>
+                  <div className="flex items-baseline justify-between text-xs text-slate-400">
+                    <span>2ª Via (Perda/Reemissão):</span>
+                    <span className="font-bold">R$ 20,00 (Taxa Secretaria)</span>
+                  </div>
+
+                  {!hasIssued1stCarteirinha ? (
+                    <button
+                      onClick={() => handleRequestDocument('carteirinha', 'Carteirinha Estudantil Digital (1ª Via Gratuita)', 0, false)}
+                      className="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-black shadow-xs cursor-pointer transition flex items-center justify-center gap-1.5"
+                    >
+                      <Check className="w-3.5 h-3.5" />
+                      Emitir 1ª Via Gratuita Agora
+                    </button>
+                  ) : (
+                    <div className="grid grid-cols-2 gap-2">
                       <button
-                        onClick={() => handleRequestDocument(doc.type, doc.title, doc.fee)}
-                        className="w-full py-2.5 bg-[#009EE3] hover:bg-[#0089c7] text-white rounded-xl text-xs font-black shadow-xs cursor-pointer transition-colors flex items-center justify-center gap-1.5"
+                        onClick={() => {
+                          const existing = documentRequests.find(d => d.studentId === currentUser.id && d.documentType === 'carteirinha');
+                          if (existing) setViewingDocument(existing);
+                        }}
+                        className="py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold shadow-xs cursor-pointer transition flex items-center justify-center gap-1"
+                      >
+                        <Printer className="w-3.5 h-3.5" />
+                        Ver 1ª Via
+                      </button>
+                      <button
+                        onClick={() => handleRequestDocument('segunda_via_carteirinha', 'Carteirinha Estudantil (2ª Via - Taxa Secretaria)', 20.0, true)}
+                        className="py-2.5 bg-slate-800 hover:bg-slate-900 text-white rounded-xl text-xs font-bold shadow-xs cursor-pointer transition flex items-center justify-center gap-1"
                       >
                         <CreditCard className="w-3.5 h-3.5" />
-                        Pagar com Mercado Pago
+                        Pedir 2ª Via (R$ 20)
                       </button>
                     </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Certificado de Conclusão */}
+              <div className="bg-white rounded-2xl p-5 border-2 border-indigo-200 shadow-sm space-y-4 flex flex-col justify-between">
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <div className="w-10 h-10 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center font-bold">
+                      <Award className="w-5 h-5" />
+                    </div>
+                    <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase ${
+                      isTuitionQuites ? 'bg-indigo-100 text-indigo-800' : 'bg-amber-100 text-amber-800'
+                    }`}>
+                      {isTuitionQuites ? 'Gratuito com Mensalidades em Dia' : 'Requer Quitação'}
+                    </span>
                   </div>
-                );
-              })}
+                  <h4 className="font-extrabold text-slate-900 text-sm">Certificado de Conclusão Oficial (Lei nº 9.394/96)</h4>
+                  <p className="text-xs text-slate-500 leading-relaxed">
+                    Certificado oficial registrado no Livro Geral com chave ICP-Edu, validação pública por QR Code e amparo federal da Lei de Diretrizes e Bases da Educação.
+                  </p>
+                </div>
+
+                <div className="pt-3 border-t border-slate-100 space-y-2">
+                  <div className="flex items-baseline justify-between text-xs">
+                    <span className="text-slate-500">1ª Via (Mensalidade Quites):</span>
+                    <strong className="text-indigo-700 font-black text-sm">
+                      {isTuitionQuites ? 'GRATUITO (R$ 0,00)' : 'Mensalidades Pendentes'}
+                    </strong>
+                  </div>
+                  <div className="flex items-baseline justify-between text-xs text-slate-400">
+                    <span>2ª Via (Reemissão):</span>
+                    <span className="font-bold">R$ 45,00 (Taxa Secretaria)</span>
+                  </div>
+
+                  {!hasIssued1stCertificado ? (
+                    isTuitionQuites ? (
+                      <button
+                        onClick={() => handleRequestDocument('certificado', `Certificado de Conclusão: ${studentCourse.title} (1ª Via Quites)`, 0, false)}
+                        className="w-full py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-black shadow-xs cursor-pointer transition flex items-center justify-center gap-1.5"
+                      >
+                        <Award className="w-3.5 h-3.5" />
+                        Emitir 1ª Via Gratuita (Quites)
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() => {
+                          alert('Direcionando para o Gateway Oficial Mercado Pago: Efetue o pagamento da mensalidade pendente via PIX com compensação imediata para liberar gratuitamente seu certificado!');
+                        }}
+                        className="w-full py-2.5 bg-amber-600 hover:bg-amber-700 text-white rounded-xl text-xs font-black shadow-xs cursor-pointer transition flex items-center justify-center gap-1.5"
+                      >
+                        <AlertCircle className="w-3.5 h-3.5" />
+                        Quitar Mensalidades no Mercado Pago para Liberar
+                      </button>
+                    )
+                  ) : (
+                    <div className="grid grid-cols-2 gap-2">
+                      <button
+                        onClick={() => {
+                          const existing = documentRequests.find(d => d.studentId === currentUser.id && d.documentType === 'certificado');
+                          if (existing) setViewingDocument(existing);
+                        }}
+                        className="py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold shadow-xs cursor-pointer transition flex items-center justify-center gap-1"
+                      >
+                        <Printer className="w-3.5 h-3.5" />
+                        Ver 1ª Via
+                      </button>
+                      <button
+                        onClick={() => handleRequestDocument('segunda_via_certificado', `Certificado: ${studentCourse.title} (2ª Via - Taxa Secretaria)`, 45.0, true)}
+                        className="py-2.5 bg-slate-800 hover:bg-slate-900 text-white rounded-xl text-xs font-bold shadow-xs cursor-pointer transition flex items-center justify-center gap-1"
+                      >
+                        <CreditCard className="w-3.5 h-3.5" />
+                        Pedir 2ª Via (R$ 45)
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Painel 2: Documentos Escolares (Valores Definidos pela Secretaria) */}
+          <div className="space-y-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <h3 className="text-base font-black text-slate-900 flex items-center gap-2">
+                <span className="w-2.5 h-2.5 rounded-full bg-blue-600"></span>
+                Documentos Escolares (Liberados Após Confirmação de Pagamento)
+              </h3>
+              <span className="text-xs text-slate-500">
+                Taxas oficiais definidas pela Secretaria Acadêmica • Processamento Mercado Pago
+              </span>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {/* Histórico Escolar Oficial */}
+              <div className="bg-white rounded-2xl p-5 border border-slate-200 shadow-xs hover:border-blue-300 transition-all flex flex-col justify-between space-y-4">
+                <div className="space-y-2">
+                  <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold">
+                    <FileText className="w-5 h-5" />
+                  </div>
+                  <h4 className="font-extrabold text-slate-900 text-sm">Histórico Escolar Oficial com Notas & Frequência</h4>
+                  <p className="text-xs text-slate-500 leading-relaxed">
+                    Relação completa de notas, módulos concluídos, carga horária e ementa curricular para transferências, concursos ou comprovação profissional.
+                  </p>
+                </div>
+
+                <div className="pt-3 border-t border-slate-100 space-y-2">
+                  <div className="flex items-baseline justify-between text-xs">
+                    <span className="text-slate-400 font-bold uppercase text-[10px]">Taxa Definida Secretaria:</span>
+                    <span className="text-base font-black text-slate-900">R$ 25,00</span>
+                  </div>
+                  <button
+                    onClick={() => handleRequestDocument('historico', 'Histórico Escolar Oficial com Notas', 25.0, false)}
+                    className="w-full py-2.5 bg-[#009EE3] hover:bg-[#0089c7] text-white rounded-xl text-xs font-black shadow-xs cursor-pointer transition flex items-center justify-center gap-1.5"
+                  >
+                    <CreditCard className="w-3.5 h-3.5" />
+                    Pagar Taxa & Liberar (R$ 25,00)
+                  </button>
+                  <button
+                    onClick={() => handleRequestDocument('segunda_via_historico', 'Histórico Escolar (2ª Via Oficial)', 25.0, true)}
+                    className="w-full py-1.5 text-[11px] text-slate-600 hover:text-slate-900 font-bold cursor-pointer transition text-center"
+                  >
+                    Solicitar 2ª Via do Histórico (R$ 25,00)
+                  </button>
+                </div>
+              </div>
+
+              {/* Declaração de Matrícula Regular / Estágio */}
+              <div className="bg-white rounded-2xl p-5 border border-slate-200 shadow-xs hover:border-blue-300 transition-all flex flex-col justify-between space-y-4">
+                <div className="space-y-2">
+                  <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold">
+                    <FileCheck className="w-5 h-5" />
+                  </div>
+                  <h4 className="font-extrabold text-slate-900 text-sm">Declaração de Matrícula Regular / Convênios de Estágio</h4>
+                  <p className="text-xs text-slate-500 leading-relaxed">
+                    Comprova vínculo acadêmico ativo com carimbo digital, chave SHA-256 e validade imediata para empresas concedentes de estágio e órgãos públicos.
+                  </p>
+                </div>
+
+                <div className="pt-3 border-t border-slate-100 space-y-2">
+                  <div className="flex items-baseline justify-between text-xs">
+                    <span className="text-slate-400 font-bold uppercase text-[10px]">Taxa Definida Secretaria:</span>
+                    <span className="text-base font-black text-slate-900">R$ 15,00</span>
+                  </div>
+                  <button
+                    onClick={() => handleRequestDocument('declaracao', 'Declaração de Matrícula Regular para Estágio', 15.0, false)}
+                    className="w-full py-2.5 bg-[#009EE3] hover:bg-[#0089c7] text-white rounded-xl text-xs font-black shadow-xs cursor-pointer transition flex items-center justify-center gap-1.5"
+                  >
+                    <CreditCard className="w-3.5 h-3.5" />
+                    Pagar Taxa & Liberar (R$ 15,00)
+                  </button>
+                  <button
+                    onClick={() => handleRequestDocument('segunda_via_declaracao', 'Declaração de Matrícula (2ª Via Oficial)', 15.0, true)}
+                    className="w-full py-1.5 text-[11px] text-slate-600 hover:text-slate-900 font-bold cursor-pointer transition text-center"
+                  >
+                    Solicitar 2ª Via da Declaração (R$ 15,00)
+                  </button>
+                </div>
+              </div>
+
+              {/* Ementa Curricular Completa */}
+              <div className="bg-white rounded-2xl p-5 border border-slate-200 shadow-xs hover:border-blue-300 transition-all flex flex-col justify-between space-y-4">
+                <div className="space-y-2">
+                  <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold">
+                    <BookOpen className="w-5 h-5" />
+                  </div>
+                  <h4 className="font-extrabold text-slate-900 text-sm">Ementa Curricular Autenticada para Aproveitamento</h4>
+                  <p className="text-xs text-slate-500 leading-relaxed">
+                    Detalhamento modular completo com bibliografia, objetivos pedagógicos e competências técnicas para dispensa de disciplinas e convalidação.
+                  </p>
+                </div>
+
+                <div className="pt-3 border-t border-slate-100 space-y-2">
+                  <div className="flex items-baseline justify-between text-xs">
+                    <span className="text-slate-400 font-bold uppercase text-[10px]">Taxa Definida Secretaria:</span>
+                    <span className="text-base font-black text-slate-900">R$ 30,00</span>
+                  </div>
+                  <button
+                    onClick={() => handleRequestDocument('ementa', 'Ementa Curricular Autenticada', 30.0, false)}
+                    className="w-full py-2.5 bg-[#009EE3] hover:bg-[#0089c7] text-white rounded-xl text-xs font-black shadow-xs cursor-pointer transition flex items-center justify-center gap-1.5"
+                  >
+                    <CreditCard className="w-3.5 h-3.5" />
+                    Pagar Taxa & Liberar (R$ 30,00)
+                  </button>
+                  <button
+                    onClick={() => handleRequestDocument('ementa', 'Ementa Curricular (2ª Via Oficial)', 30.0, true)}
+                    className="w-full py-1.5 text-[11px] text-slate-600 hover:text-slate-900 font-bold cursor-pointer transition text-center"
+                  >
+                    Solicitar 2ª Via da Ementa (R$ 30,00)
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Painel 3: Crachá Funcional da Cooperativa & Registro Profissional */}
+          <div className="bg-linear-to-br from-slate-900 to-indigo-950 text-white rounded-3xl p-6 sm:p-8 border border-indigo-500/30 shadow-xl space-y-5">
+            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+              <div className="space-y-1">
+                <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase bg-indigo-500/30 text-indigo-300 border border-indigo-400/40">
+                  Cooperativa de Talentos & Banco de Oportunidades
+                </span>
+                <h3 className="text-xl font-black text-white">
+                  Crachá Funcional da Cooperativa & Credencial Profissional
+                </h3>
+                <p className="text-xs text-indigo-200 max-w-2xl leading-relaxed">
+                  O crachá funcional identifica o técnico cooperado junto a empresas parceiras, ateliês e indústrias. Cobrado na anuidade para renovação regular (R$ 45/ano), <strong>NÃO É COBRADO de alunos concluintes de cursos do Grupo Eloizio (100% ISENTO)</strong>!
+                </p>
+              </div>
+
+              <div className="p-3 bg-white/10 rounded-2xl border border-white/20 text-center shrink-0">
+                <span className="text-[10px] font-bold text-indigo-300 uppercase block">Regra para Concluintes:</span>
+                <strong className="text-sm font-black text-emerald-300 block">ISENÇÃO DE ANUIDADE (R$ 0,00)</strong>
+                <span className="text-[10px] text-slate-300">Não-concluintes: R$ 45/ano</span>
+              </div>
+            </div>
+
+            <div className="pt-4 border-t border-indigo-800/60 flex flex-col sm:flex-row items-center justify-between gap-4">
+              <div className="text-xs text-indigo-200 flex items-center gap-2">
+                <ShieldCheck className="w-5 h-5 text-emerald-400 shrink-0" />
+                <span>
+                  Credencial com QR Code de autenticidade, foto 3x4 oficial e número de matrícula técnica no Grupo Eloizio.
+                </span>
+              </div>
+              <button
+                onClick={() => {
+                  setActiveNavTab('cooperative');
+                }}
+                className="w-full sm:w-auto px-6 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-black text-xs rounded-xl shadow-md cursor-pointer transition"
+              >
+                Acessar Área do Crachá na Cooperativa &rarr;
+              </button>
             </div>
           </div>
 
@@ -1103,6 +1736,239 @@ const StudentPortalContent: React.FC<{ currentUser: any }> = ({ currentUser }) =
           grades={grades}
           onClose={() => setViewingDocument(null)}
         />
+      )}
+
+      {/* Modal de Inscrição em Estágio Supervisionado Opcional */}
+      {applyingVacancyId && (() => {
+        const applyingVacancy = jobVacancies.find((v) => v.id === applyingVacancyId);
+        if (!applyingVacancy) return null;
+        const internHours = applyingVacancy.internshipHours || 120;
+        return (
+          <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
+            <div className="bg-white rounded-3xl shadow-2xl w-full max-w-lg flex flex-col overflow-hidden animate-in zoom-in-95 border border-slate-200">
+              <div className="p-5 bg-linear-to-r from-amber-600 to-indigo-900 text-white flex items-center justify-between">
+                <div className="flex items-center gap-2.5">
+                  <Briefcase className="w-5 h-5 text-amber-300" />
+                  <div>
+                    <h3 className="font-black text-sm sm:text-base">Inscrição no Estágio Opcional</h3>
+                    <p className="text-[11px] text-amber-100">Validação Curricular & Certificado Oficial</p>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setApplyingVacancyId(null);
+                    setInternshipApplyNote('');
+                  }}
+                  className="p-1.5 text-white/80 hover:text-white rounded-lg transition"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              <div className="p-6 space-y-4 text-xs">
+                <div className="p-4 bg-amber-50 rounded-2xl border border-amber-200 space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] font-black uppercase text-amber-800">Vaga Selecionada</span>
+                    <span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold text-[10px]">
+                      +{internHours}h no Certificado
+                    </span>
+                  </div>
+                  <h4 className="font-extrabold text-sm text-slate-900">{applyingVacancy.title}</h4>
+                  <div className="text-slate-600 space-y-0.5">
+                    <p>Empresa: <strong className="text-slate-900">{applyingVacancy.companyName}</strong></p>
+                    <p>Local / Modalidade: <strong>{applyingVacancy.location} ({applyingVacancy.modality || 'Presencial'})</strong></p>
+                    <p>Bolsa / Auxílio: <strong className="text-emerald-700">{applyingVacancy.salaryRange}</strong></p>
+                    {applyingVacancy.supervisorName && (
+                      <p>Orientador Técnico: <strong>{applyingVacancy.supervisorName}</strong></p>
+                    )}
+                  </div>
+                </div>
+
+                <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 text-slate-600 space-y-1">
+                  <strong className="text-slate-900 block font-bold">Dados que serão anexados à empresa parceira:</strong>
+                  <ul className="list-disc list-inside space-y-0.5 text-[11px]">
+                    <li>Registro Acadêmico: {currentUser.registrationNumber} ({currentUser.name})</li>
+                    <li>Curso Ativo: {studentCourse.title}</li>
+                    <li>Frequência em tempo real ({attendancePercentage}%) e Média Geral</li>
+                    <li>Dossiê da Cooperativa de Talentos e Provas Avaliadas</li>
+                  </ul>
+                </div>
+
+                <div className="space-y-1.5">
+                  <label className="font-bold text-slate-800 block">
+                    Mensagem de Apresentação / Disponibilidade de Horário (Opcional):
+                  </label>
+                  <textarea
+                    rows={3}
+                    value={internshipApplyNote}
+                    onChange={(e) => setInternshipApplyNote(e.target.value)}
+                    placeholder="Ex: Tenho disponibilidade no período da tarde, resido próximo ao local e gostaria muito de praticar as rotinas aprendidas nas aulas..."
+                    className="w-full p-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-amber-500 text-xs text-slate-800 resize-none outline-hidden"
+                  />
+                </div>
+
+                <div className="flex items-center gap-2 pt-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setApplyingVacancyId(null);
+                      setInternshipApplyNote('');
+                    }}
+                    className="flex-1 py-2.5 px-3 rounded-xl border border-slate-200 text-slate-700 font-bold hover:bg-slate-50 transition"
+                  >
+                    Cancelar
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (myCoopProfile) {
+                        applyForJob(applyingVacancy.id, myCoopProfile.id, internshipApplyNote || 'Inscrição via Portal do Aluno');
+                        setApplyingVacancyId(null);
+                        setInternshipApplyNote('');
+                        alert(`Inscrição confirmada com sucesso no estágio de ${applyingVacancy.title}! O RH da empresa parceira foi notificado.`);
+                      }
+                    }}
+                    className="flex-1 py-2.5 px-3 rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-950 font-black shadow-md transition flex items-center justify-center gap-1.5 cursor-pointer"
+                  >
+                    <Send className="w-3.5 h-3.5" />
+                    <span>Confirmar Inscrição (+{internHours}h)</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+      })()}
+
+      {/* Modal de Termo Oficial de Validação de Estágio (PDF / Impressão) */}
+      {selectedInternshipForTermo && (
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
+          <div className="bg-white rounded-3xl shadow-2xl w-full max-w-2xl max-h-[92vh] flex flex-col overflow-hidden animate-in zoom-in-95 border border-slate-200">
+            {/* Top Control Bar */}
+            <div className="no-print p-4 bg-slate-950 text-white flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <ShieldCheck className="w-5 h-5 text-amber-400" />
+                <div>
+                  <h4 className="font-bold text-sm">Termo Oficial de Homologação de Estágio Supervisionado</h4>
+                  <span className="text-[10px] text-slate-400 font-mono">
+                    Chave: {selectedInternshipForTermo.validationCode}
+                  </span>
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => window.print()}
+                  className="px-3 py-1.5 bg-amber-400 hover:bg-amber-500 text-slate-950 font-black text-xs rounded-xl flex items-center gap-1 cursor-pointer transition shadow-xs"
+                >
+                  <Printer className="w-3.5 h-3.5" />
+                  <span>Imprimir / Salvar PDF</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setSelectedInternshipForTermo(null)}
+                  className="p-1.5 text-slate-400 hover:text-white rounded-lg transition"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+            </div>
+
+            {/* Printable Body */}
+            <div className="p-6 sm:p-8 overflow-y-auto space-y-6 text-slate-800 bg-linear-to-b from-slate-50 to-white">
+              {/* Document Header */}
+              <div className="text-center pb-4 border-b-2 border-slate-900/80 space-y-1">
+                <span className="text-[10px] font-black tracking-widest uppercase text-slate-500">
+                  REPÚBLICA FEDERATIVA DO BRASIL • GRUPO ELOIZIO EDUCAÇÃO & FORMAÇÃO PROFISSIONAL
+                </span>
+                <h2 className="text-lg sm:text-xl font-black text-slate-950 uppercase">
+                  Termo de Homologação & Validação de Estágio Supervisionado Opcional
+                </h2>
+                <span className="text-[11px] font-bold text-indigo-900 block">
+                  Em conformidade com a Lei Federal nº 11.788/2008 e Lei de Diretrizes e Bases da Educação nº 9.394/1996 (Art. 42)
+                </span>
+              </div>
+
+              {/* Text Body */}
+              <div className="text-xs sm:text-sm text-slate-700 leading-relaxed text-justify space-y-3">
+                <p>
+                  Certificamos para todos os fins acadêmicos, curriculares e comprobatórios que o(a) aluno(a){' '}
+                  <strong className="text-slate-950 font-bold uppercase">{currentUser.name}</strong>, portador(a) do Registro Acadêmico nº{' '}
+                  <strong className="font-mono text-slate-950">{currentUser.registrationNumber}</strong>, regularmente matriculado(a) no curso de{' '}
+                  <strong className="text-slate-950 font-bold">{studentCourse.title}</strong>, realizou com aproveitamento exemplar o programa de{' '}
+                  <strong>Estágio Supervisionado Opcional de Prática Técnica</strong>.
+                </p>
+
+                <div className="p-4 bg-white rounded-2xl border border-slate-300 text-xs space-y-2">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <div>
+                      <span className="text-slate-400 text-[10px] uppercase font-bold block">Programa / Atividade</span>
+                      <strong className="text-slate-900 text-sm">{selectedInternshipForTermo.title}</strong>
+                    </div>
+                    <div>
+                      <span className="text-slate-400 text-[10px] uppercase font-bold block">Empresa Concedente</span>
+                      <strong className="text-slate-900 text-sm">{selectedInternshipForTermo.companyName}</strong>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 pt-2 border-t border-slate-100">
+                    <div>
+                      <span className="text-slate-400 text-[10px] uppercase font-bold block">Carga Horária Validada</span>
+                      <span className="text-base font-black text-emerald-700">
+                        +{selectedInternshipForTermo.hoursValidated} Horas
+                      </span>
+                    </div>
+                    <div>
+                      <span className="text-slate-400 text-[10px] uppercase font-bold block">Data de Conclusão</span>
+                      <strong className="text-slate-900">{selectedInternshipForTermo.completionDate}</strong>
+                    </div>
+                    <div>
+                      <span className="text-slate-400 text-[10px] uppercase font-bold block">Orientador Responsável</span>
+                      <strong className="text-slate-900">{selectedInternshipForTermo.supervisor}</strong>
+                    </div>
+                  </div>
+                </div>
+
+                <p>
+                  As horas práticas registradas neste termo foram homologadas pela comissão avaliadora e somadas à carga horária total do seu{' '}
+                  <strong>Certificado de Conclusão Oficial</strong> e no dossiê de talentos da <strong>Cooperativa do Grupo Eloizio</strong>, conferindo ampla distinção curricular ao concluinte no mercado profissional.
+                </p>
+              </div>
+
+              {/* Assinaturas */}
+              <div className="grid grid-cols-2 gap-6 pt-6 border-t border-slate-300 text-center text-xs">
+                <div>
+                  <div className="font-serif italic text-sm text-slate-900">
+                    {selectedInternshipForTermo.supervisor}
+                  </div>
+                  <div className="border-t border-slate-400 mt-1 pt-1 text-[10px] font-semibold text-slate-600">
+                    Supervisor Técnico • Empresa Concedente
+                  </div>
+                </div>
+                <div>
+                  <div className="font-serif italic text-sm text-slate-900">
+                    Eloizio Assunção
+                  </div>
+                  <div className="border-t border-slate-400 mt-1 pt-1 text-[10px] font-semibold text-slate-600">
+                    Diretor Executivo • Grupo Eloizio
+                  </div>
+                </div>
+              </div>
+
+              {/* Rodapé de Autenticidade */}
+              <div className="p-3 bg-white rounded-xl border border-slate-200 flex items-center justify-between text-[10px] text-slate-500 font-mono">
+                <div>
+                  <span>Autenticação Digital: </span>
+                  <strong className="text-slate-900 font-bold">{selectedInternshipForTermo.validationCode}</strong>
+                </div>
+                <div className="text-emerald-700 font-bold">
+                  ✓ Válido em Todo o Território Nacional
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );

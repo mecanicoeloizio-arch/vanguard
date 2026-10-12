@@ -50,6 +50,54 @@ $aluno = getAlunoPadrao();
     </div>
   </div>
 
+  <!-- Banner do Servidor de E-mail Institucional Gratuito Vanguard -->
+  <div class="bg-linear-to-r from-slate-900 via-indigo-950 to-purple-950 border border-indigo-400/30 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-white shadow-lg">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-xl bg-indigo-600/40 border border-indigo-400/30 flex items-center justify-center text-xl shrink-0">
+        ✉️
+      </div>
+      <div>
+        <div class="flex items-center gap-2 flex-wrap">
+          <span class="font-extrabold text-sm sm:text-base text-white">E-mail Institucional Oficial Gratuito</span>
+          <span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 uppercase">
+            ✓ Aluno Vanguard 100% Grátis
+          </span>
+        </div>
+        <p class="text-xs text-indigo-200 mt-0.5 font-mono">
+          <?= htmlspecialchars($aluno['email'] ?? 'lucas.silva@aluno.eduvanguard.com.br') ?> • Subdomínio: webmail.grupoeloizio.com.br (PHPMailer 6.9+)
+        </p>
+      </div>
+    </div>
+    <a href="/mail/?box=<?= urlencode($aluno['email'] ?? 'lucas.silva@aluno.eduvanguard.com.br') ?>" target="_blank" class="w-full sm:w-auto px-4 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs font-bold transition flex items-center justify-center gap-2 shadow-md shadow-indigo-600/30">
+      <span>Abrir Meu Webmail</span>
+      <span>&rarr;</span>
+    </a>
+  </div>
+
+  <!-- Banner EloWa WhatsApp Oficial Aluno -->
+  <div class="bg-linear-to-r from-slate-950 via-emerald-950 to-slate-900 border border-emerald-500/30 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-white shadow-lg">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-xl bg-emerald-600/40 border border-emerald-400/30 flex items-center justify-center text-xl shrink-0">
+        💬
+      </div>
+      <div>
+        <div class="flex items-center gap-2 flex-wrap">
+          <span class="font-extrabold text-sm sm:text-base text-white">Canal de WhatsApp Oficial EloWa</span>
+          <span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 uppercase">
+            ✓ Aluno Vanguard 100% Grátis
+          </span>
+        </div>
+        <p class="text-xs text-emerald-200 mt-0.5 font-mono">
+          Suporte Direto com Camilla Faria: (21) 99613-4073 • Subdomínio: elowa.grupoeloizio.com.br
+        </p>
+      </div>
+    </div>
+    <a href="/elowa/?inst=inst_aluno_lucas" target="_blank" class="w-full sm:w-auto px-4 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold transition flex items-center justify-center gap-2 shadow-md shadow-emerald-600/30">
+      <span>Acessar WhatsApp EloWa</span>
+      <span>&rarr;</span>
+    </a>
+  </div>
+
   <!-- Barra de Abas do Aluno -->
   <div class="flex items-center gap-2 bg-white p-1.5 rounded-2xl border border-slate-200 overflow-x-auto no-scrollbar shadow-xs">
     <button onclick="trocarAbaAluno('aulas')" id="btnAbaAulas" class="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-indigo-600 text-white transition whitespace-nowrap">
@@ -343,42 +391,129 @@ $aluno = getAlunoPadrao();
     </div>
   </div>
 
-  <!-- ABA 4: CERTIFICADO & DOCUMENTOS -->
+  <!-- ABA 4: CERTIFICADO & DOCUMENTOS ESCOLARES -->
   <div id="secaoDocumentos" class="space-y-6 hidden">
     <div class="bg-white rounded-2xl sm:rounded-3xl border border-slate-200 p-5 sm:p-8 shadow-xs space-y-6">
-      <div>
-        <h3 class="text-xl font-black text-slate-900">Documentação Acadêmica & Certificação Oficial</h3>
-        <p class="text-xs text-slate-500 mt-0.5">Emita documentos assinados com hash SHA-256 e QR Code de autenticidade.</p>
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 pb-4">
+        <div>
+          <h3 class="text-xl font-black text-slate-900">Secretaria Virtual & Normas de Emissão de Documentos</h3>
+          <p class="text-xs text-slate-500 mt-0.5">Expedição com fé pública educacional, QR Code ICP e autenticação digital.</p>
+        </div>
+        <span class="px-3 py-1 rounded-full text-xs font-black uppercase bg-emerald-100 text-emerald-800 border border-emerald-200 self-start sm:self-auto">
+          ✓ Mensalidades em Dia (Quites)
+        </span>
+      </div>
+
+      <!-- Resumo das Políticas Acadêmicas -->
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-3 text-xs">
+        <div class="p-3.5 bg-emerald-50 border border-emerald-200 rounded-xl space-y-1">
+          <strong class="text-emerald-900 font-bold block">1ª Via da Carteirinha DNE:</strong>
+          <span class="text-emerald-700">100% Gratuita para matriculados ativos com QR Code nacional.</span>
+        </div>
+        <div class="p-3.5 bg-sky-50 border border-sky-200 rounded-xl space-y-1">
+          <strong class="text-sky-900 font-bold block">Certificado Oficial (1ª Via):</strong>
+          <span class="text-sky-700">Gratuito com mensalidades em dia e quites (LDB nº 9.394/96).</span>
+        </div>
+        <div class="p-3.5 bg-amber-50 border border-amber-200 rounded-xl space-y-1">
+          <strong class="text-amber-900 font-bold block">Documentos & 2ª Via:</strong>
+          <span class="text-amber-700">Liberados após confirmação das taxas definidas pela secretaria via Mercado Pago.</span>
+        </div>
+        <div class="p-3.5 bg-purple-50 border border-purple-200 rounded-xl space-y-1">
+          <strong class="text-purple-900 font-bold block">Crachá da Cooperativa:</strong>
+          <span class="text-purple-700">Anuidade na renovação; <strong>ISENTO (R$ 0,00)</strong> para alunos concluintes!</span>
+        </div>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <!-- Declaração de Matrícula -->
-        <div class="p-5 rounded-2xl border border-slate-200 bg-slate-50 space-y-3">
-          <div class="flex items-center justify-between">
-            <span class="font-bold text-sm text-slate-900">Declaração de Matrícula Regular</span>
-            <span class="text-xs text-emerald-600 font-bold">✓ Disponível</span>
+        <!-- Carteirinha Estudantil DNE (1ª Via Gratuita) -->
+        <div class="p-5 rounded-2xl border-2 border-emerald-200 bg-emerald-50/40 space-y-3 flex flex-col justify-between">
+          <div class="space-y-1.5">
+            <div class="flex items-center justify-between">
+              <span class="font-black text-sm text-slate-900">Carteirinha Estudantil Digital Oficial (DNE)</span>
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-black uppercase bg-emerald-200 text-emerald-900">1ª Via Gratuita</span>
+            </div>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              Padrão nacional DNE (Lei nº 12.933/2013) com QR Code criptografado para meia-entrada em eventos culturais, esportivos e transporte.
+            </p>
           </div>
-          <p class="text-xs text-slate-500 leading-relaxed">
-            Comprova o vínculo acadêmico ativo no curso <?= $aluno['course'] ?> para efeitos de estágio, trabalho ou passe estudantil.
-          </p>
-          <button onclick="alert('Declaração gerada com sucesso! Código: DEC-2026-9912')" class="px-4 py-2 bg-indigo-600 text-white font-bold text-xs rounded-xl hover:bg-indigo-700 transition">
-            📥 Baixar Declaração (PDF)
-          </button>
+          <div className="pt-2 border-t border-emerald-200/60 flex items-center justify-between">
+            <span class="text-xs text-emerald-900 font-bold">1ª Via: R$ 0,00 • 2ª Via: R$ 20,00</span>
+            <button onclick="abrirCarteirinhaDneModal()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-black text-xs rounded-xl transition cursor-pointer shadow-xs">
+              🪪 Visualizar 1ª Via Gratuita
+            </button>
+          </div>
         </div>
 
-        <!-- Certificado Oficial de Conclusão -->
-        <div class="p-5 rounded-2xl border border-emerald-200 bg-emerald-50/50 space-y-3">
-          <div class="flex items-center justify-between">
-            <span class="font-bold text-sm text-slate-900">Certificado Oficial com Registro</span>
-            <span class="px-2 py-0.5 rounded-full text-[10px] font-black uppercase bg-emerald-200 text-emerald-900">Válido MEC</span>
+        <!-- Certificado Oficial de Conclusão (1ª Via Gratuita com Mensalidade em Dia) -->
+        <div class="p-5 rounded-2xl border-2 border-indigo-200 bg-indigo-50/40 space-y-3 flex flex-col justify-between">
+          <div class="space-y-1.5">
+            <div class="flex items-center justify-between">
+              <span class="font-black text-sm text-slate-900">Certificado Oficial de Conclusão MEC</span>
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-black uppercase bg-indigo-200 text-indigo-900">Gratuito (Quites)</span>
+            </div>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              Emitido nos termos da Lei nº 9.394/96 com carga oficial, assinatura do CEO Eloizio Assunção e registro no Livro Geral de Diplomas.
+            </p>
           </div>
-          <p class="text-xs text-slate-600 leading-relaxed">
-            Certificado emitido nos termos da Lei nº 9.394/96 com 360 horas, assinado pelo CEO Eloizio Silva e pela Diretoria Pedagógica.
-          </p>
-          <button onclick="abrirCertificadoImpressao()" class="px-4 py-2 bg-emerald-600 text-white font-black text-xs rounded-xl hover:bg-emerald-700 transition shadow-xs">
-            📜 Visualizar & Imprimir Certificado
-          </button>
+          <div className="pt-2 border-t border-indigo-200/60 flex items-center justify-between">
+            <span class="text-xs text-indigo-900 font-bold">1ª Via: R$ 0,00 • 2ª Via: R$ 45,00</span>
+            <button onclick="abrirCertificadoImpressao()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-black text-xs rounded-xl transition cursor-pointer shadow-xs">
+              📜 Visualizar & Imprimir Certificado
+            </button>
+          </div>
         </div>
+
+        <!-- Histórico Escolar Oficial (Taxa de Secretaria) -->
+        <div class="p-5 rounded-2xl border border-slate-200 bg-slate-50 space-y-3 flex flex-col justify-between">
+          <div class="space-y-1.5">
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-sm text-slate-900">Histórico Escolar Oficial com Notas & Ementa</span>
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-black uppercase bg-blue-100 text-blue-800">Taxa R$ 25,00</span>
+            </div>
+            <p class="text-xs text-slate-500 leading-relaxed">
+              Discriminação de módulos, médias, frequência e carga horária para aproveitamento de estudos e transferências. Liberado após confirmação do pagamento.
+            </p>
+          </div>
+          <div class="pt-2 border-t border-slate-200 flex items-center justify-between">
+            <span class="text-xs text-slate-500">Taxa Secretaria: <strong>R$ 25,00</strong></span>
+            <button onclick="solicitarDocumentoSecretaria('Histórico Escolar Oficial', 25)" class="px-4 py-2 bg-[#009EE3] hover:bg-[#0089c7] text-white font-bold text-xs rounded-xl transition cursor-pointer shadow-xs">
+              💳 Pagar Taxa & Liberar
+            </button>
+          </div>
+        </div>
+
+        <!-- Declaração de Matrícula Regular / Estágio (Taxa de Secretaria) -->
+        <div class="p-5 rounded-2xl border border-slate-200 bg-slate-50 space-y-3 flex flex-col justify-between">
+          <div class="space-y-1.5">
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-sm text-slate-900">Declaração de Matrícula Regular / Estágio</span>
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-black uppercase bg-blue-100 text-blue-800">Taxa R$ 15,00</span>
+            </div>
+            <p class="text-xs text-slate-500 leading-relaxed">
+              Comprova vínculo acadêmico ativo com carimbo digital e chave de validação pública. Liberada após confirmação do pagamento de valores da secretaria.
+            </p>
+          </div>
+          <div class="pt-2 border-t border-slate-200 flex items-center justify-between">
+            <span class="text-xs text-slate-500">Taxa Secretaria: <strong>R$ 15,00</strong></span>
+            <button onclick="solicitarDocumentoSecretaria('Declaração de Matrícula Regular', 15)" class="px-4 py-2 bg-[#009EE3] hover:bg-[#0089c7] text-white font-bold text-xs rounded-xl transition cursor-pointer shadow-xs">
+              💳 Pagar Taxa & Liberar
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Banner Informativo: Crachá Funcional da Cooperativa -->
+      <div class="p-5 bg-linear-to-r from-slate-900 to-indigo-950 text-white rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div class="space-y-1">
+          <span class="text-[10px] uppercase font-black tracking-wider text-amber-300 block">Cooperativa de Talentos & Credenciamento</span>
+          <h4 class="text-sm sm:text-base font-black">Crachá Funcional da Cooperativa (Isenção Concluintes)</h4>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            Crachá funcional em PVC com QR Code para prestação de serviços. Cobrado na anuidade para renovação (R$ 45/ano); <strong>ISENTO (R$ 0,00) para alunos concluintes de cursos</strong>!
+          </p>
+        </div>
+        <a href="cooperativa.php" class="px-5 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-black text-xs rounded-xl shadow-md cursor-pointer transition whitespace-nowrap">
+          Acessar Cooperativa & Crachá &rarr;
+        </a>
       </div>
     </div>
   </div>
@@ -425,20 +560,20 @@ $aluno = getAlunoPadrao();
         GE
       </div>
       <h2 class="text-2xl sm:text-3xl font-black uppercase text-indigo-950 tracking-wider">Grupo Eloizio — República Federativa do Brasil</h2>
-      <span class="text-xs font-bold text-slate-500 tracking-widest uppercase block">Registro Oficial de Cursos Livres • Lei Federal nº 9.394/96</span>
+      <span class="text-xs font-bold text-slate-500 tracking-widest uppercase block">Registro Oficial de Cursos Profissionalizantes Livres • Lei Federal nº 9.394/96 Art. 42 & Decreto nº 5.154/2004 (MEC)</span>
     </div>
 
     <div class="py-6 border-y-2 border-indigo-900/30 space-y-4">
       <p class="text-sm text-slate-700">Certificamos com honras acadêmicas que</p>
       <h3 class="text-2xl sm:text-4xl font-black text-indigo-950 font-serif"><?= $aluno['name'] ?></h3>
       <p class="text-xs sm:text-sm text-slate-700 max-w-2xl mx-auto leading-relaxed">
-        concluiu com aproveitamento de excelência o curso livre de extensão e capacitação profissional em <strong><?= $aluno['course'] ?></strong>, com carga horária oficial de <strong>360 horas</strong>, obtendo média final <strong>9.4</strong>.
+        concluiu com aproveitamento de excelência o curso livre de qualificação profissionalizante em <strong><?= $aluno['course'] ?></strong>, com carga horária oficial de <strong>360 horas</strong>, obtendo média final <strong>9.4</strong>.
       </p>
     </div>
 
     <div class="grid grid-cols-2 gap-8 pt-4 text-xs">
       <div class="border-t border-slate-400 pt-2 text-center">
-        <strong class="block text-slate-900 font-bold">Eloizio Silva</strong>
+        <strong class="block text-slate-900 font-bold">Eloizio Assunção</strong>
         <span class="text-slate-500 text-[11px]">Fundador & Diretor Geral do Grupo Eloizio</span>
       </div>
       <div class="border-t border-slate-400 pt-2 text-center">
@@ -463,7 +598,85 @@ $aluno = getAlunoPadrao();
   </div>
 </div>
 
+<!-- Modal da Carteirinha Estudantil Digital Oficial DNE (1ª Via Gratuita) -->
+<div id="modalCarteirinhaDne" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-xs hidden items-center justify-center p-3 sm:p-6 overflow-y-auto">
+  <div class="bg-white rounded-3xl shadow-2xl max-w-md w-full p-6 border-4 border-emerald-500 my-auto text-center space-y-5 relative">
+    <button onclick="fecharCarteirinhaDneModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-900 text-2xl print:hidden cursor-pointer">&times;</button>
+
+    <div class="space-y-1">
+      <span class="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase bg-emerald-100 text-emerald-800">
+        1ª Via Gratuita • Padrão DNE Nacional
+      </span>
+      <h3 class="text-lg font-black text-slate-950 uppercase">Documento Nacional do Estudante (DNE)</h3>
+      <p class="text-[11px] text-slate-500">Amparo Legal: Lei Federal nº 12.933/2013 e Decreto nº 8.537/2015</p>
+    </div>
+
+    <!-- Cartão DNE em Formato Credencial -->
+    <div class="bg-linear-to-b from-slate-950 via-emerald-950 to-slate-900 text-white rounded-2xl p-5 border-2 border-emerald-400 shadow-lg text-left space-y-3">
+      <div class="flex items-start justify-between border-b border-emerald-500/40 pb-2">
+        <div>
+          <span class="text-[8px] font-black uppercase text-emerald-300 block">República Federativa do Brasil</span>
+          <strong class="text-xs font-black uppercase block text-white">Grupo Eloizio • Ensino Profissional</strong>
+          <span class="text-[9px] text-slate-300">Polo São Gonçalo - RJ</span>
+        </div>
+        <div class="w-8 h-8 rounded-lg bg-emerald-400 text-slate-950 font-black text-xs flex items-center justify-center font-mono">
+          DNE
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <img src="<?= $aluno['avatar'] ?>" alt="<?= $aluno['name'] ?>" class="w-16 h-20 rounded-xl object-cover border border-emerald-300 shrink-0">
+        <div class="space-y-0.5 text-xs">
+          <span class="text-[10px] text-emerald-300 block font-bold">ALUNO REGULAR MATRICULADO</span>
+          <strong class="text-sm font-black text-white block"><?= $aluno['name'] ?></strong>
+          <span class="text-[11px] text-slate-200 block"><?= $aluno['course'] ?></span>
+          <div class="text-[10px] text-slate-400 font-mono pt-1">
+            <span>RA: <strong><?= $aluno['registrationNumber'] ?></strong></span>
+            <span> • CPF: <?= $aluno['cpf'] ?></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-between border-t border-emerald-500/40 pt-2 text-[9px] font-mono">
+        <span class="text-emerald-300 font-bold">Autenticação: DNE-2026-VAL-OK</span>
+        <span class="text-slate-400">Validade: 31/03/2027</span>
+      </div>
+    </div>
+
+    <div class="flex items-center justify-between text-[10px] text-slate-500 font-mono bg-slate-50 p-2.5 rounded-xl border border-slate-200">
+      <span>Fé Pública: ICP-Brasil</span>
+      <span class="text-emerald-700 font-bold">✓ 1ª Via Gratuita Liberada</span>
+    </div>
+
+    <div class="print:hidden flex justify-center gap-2 pt-2">
+      <button onclick="window.print()" class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-black text-xs rounded-xl shadow-xs cursor-pointer">
+        🖨️ Imprimir Carteirinha
+      </button>
+      <button onclick="fecharCarteirinhaDneModal()" class="px-4 py-2.5 border border-slate-300 rounded-xl text-xs font-bold text-slate-700 hover:bg-slate-50 cursor-pointer">
+        Fechar
+      </button>
+    </div>
+  </div>
+</div>
+
 <script>
+  function abrirCarteirinhaDneModal() {
+    document.getElementById('modalCarteirinhaDne').classList.remove('hidden');
+    document.getElementById('modalCarteirinhaDne').classList.add('flex');
+  }
+
+  function fecharCarteirinhaDneModal() {
+    document.getElementById('modalCarteirinhaDne').classList.add('hidden');
+    document.getElementById('modalCarteirinhaDne').classList.remove('flex');
+  }
+
+  function solicitarDocumentoSecretaria(nomeDoc, taxa) {
+    const pagar = confirm(`O documento escolar "${nomeDoc}" será liberado após a confirmação do pagamento da taxa de R$ ${taxa.toFixed(2).replace('.', ',')} definida pela secretaria.\n\nDeseja gerar o PIX / Checkout no Mercado Pago agora?`);
+    if (pagar) {
+      alert(`Chave PIX Mercado Pago no valor de R$ ${taxa.toFixed(2).replace('.', ',')} gerada com sucesso!\n\nApós o pagamento, o documento será liberado imediatamente para download e impressão com carimbo digital.`);
+    }
+  }
+
   function trocarAbaAluno(aba) {
     const abas = ['aulas', 'boletim', 'simulador', 'provas', 'documentos', 'financeiro'];
     abas.forEach(a => {

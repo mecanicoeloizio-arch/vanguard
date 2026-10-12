@@ -79,7 +79,7 @@ function executeCommand(string $cmd): array
                     "  module:disable <slug>       Desativa um módulo não-essencial do sistema\n" .
                     "  module:update <slug>        Atualiza e recarrega um módulo do sistema\n" .
                     "  finance:reconcile           Reconcilia transações e audita saldos no Mercado Pago\n" .
-                    "  ai:test                     Testa o motor cognitivo e os guardrails da IA Camilla Faria\n" .
+                    "  ai:test                     Testa o motor cognitivo e os guardrails da IA Sofia Vanguard\n" .
                     "  backup:create               Gera snapshot de dados completo do sistema\n" .
                     "  db:migrate                  Aplica migrações de banco de dados\n" .
                     "  cache:clear                 Limpa buffers temporários e arquivos de log",
@@ -99,7 +99,7 @@ function executeCommand(string $cmd): array
                     "• Uso de Memória PHP: {$mem} MB\n" .
                     "• Módulos Instalados: {$totalCount} ({$activeCount} Ativos, " . ($totalCount - $activeCount) . " Inativos)\n" .
                     "• Gateway Mercado Pago: CONECTADO ({$mpStatus})\n" .
-                    "• Atendente Inteligente: Camilla Faria (WhatsApp " . GRUPO_ELOIZIO_WHATSAPP_CAMILLA . ")\n" .
+                    "• Atendente Inteligente: Sofia Vanguard (WhatsApp " . GRUPO_ELOIZIO_WHATSAPP_CAMILLA . ")\n" .
                     "• Proteção de Sessão: RBAC Estrito e Lockout de 30s após 5 falhas\n" .
                     "• Integridade do Sistema: 100% OPERACIONAL",
             ];
@@ -113,7 +113,7 @@ function executeCommand(string $cmd): array
                     "• Pontuação Geral: {$rep['overallScore']}/100 [STATUS: " . strtoupper($rep['status']) . "]\n" .
                     "• Autenticação & Login: {$rep['categories']['authentication']['score']}% (Lockout 5 tentativas, sanitização e RBAC)\n" .
                     "• Financeiro & Mercado Pago: {$rep['categories']['financial']['score']}% (HMAC Webhooks, chaves idempotentes e limites)\n" .
-                    "• Guardrails IA Camilla Faria: {$rep['categories']['ai_guardrails']['score']}% (Anti-Jailbreak, LGPD e blindagem de tokens)\n" .
+                    "• Guardrails IA Sofia Vanguard: {$rep['categories']['ai_guardrails']['score']}% (Anti-Jailbreak, LGPD e blindagem de tokens)\n" .
                     "• Proteção de Dados & MEC: {$rep['categories']['data_protection']['score']}% (Criptografia SHA-256 ICP-Edu e cofre de chaves)\n" .
                     "Resultado: Todos os nós seguros. Zero vulnerabilidades detectadas.",
             ];
@@ -198,13 +198,13 @@ function executeCommand(string $cmd): array
         case 'ai:test':
             return [
                 'status' => 'success',
-                'output' => "DIAGNÓSTICO DA IA CAMILLA FARIA (GRUPO ELOIZIO):\n" .
-                    "• Identidade: Camilla Faria (28 anos, Gerente Geral)\n" .
+                'output' => "DIAGNÓSTICO DA IA SOFIA VANGUARD (GRUPO ELOIZIO):\n" .
+                    "• Identidade: Sofia Vanguard (Expert em Cursos & Marketing Educacional)\n" .
                     "• WhatsApp Oficial: " . GRUPO_ELOIZIO_WHATSAPP_CAMILLA . "\n" .
-                    "• Pilares Mapeados: Cursos Livres, Contabilidade Online e Mecânica de Máquinas\n" .
+                    "• Pilares Mapeados: Cursos Livres, Certificação MEC, Contabilidade Online e Mecânica de Máquinas\n" .
                     "• Diagnóstico Multimídia: Ativo (câmera e fotos de peças e máquinas)\n" .
                     "• Anti-Jailbreak & LGPD: 100% ATIVOS\n" .
-                    "• Status: PRONTA E OPERACIONAL",
+                    "• Status: PRONTA E OPERACIONAL (Desconectada de Camilla)",
             ];
 
         case 'backup:create':
@@ -273,14 +273,14 @@ function loadModules(string $file): array
             'description' => 'Módulo raiz responsável pelo RBAC, controle de sessões, criptografia e orquestração.',
         ],
         [
-            'id' => 'mod_camilla_ai',
-            'slug' => 'camilla_faria_ai_assistant',
-            'name' => 'Atendente Inteligente Camilla Faria (Grupo Eloizio)',
+            'id' => 'mod_sofia_ai',
+            'slug' => 'sofia_vanguard_ai_assistant',
+            'name' => 'Sofia Vanguard — Expert em Cursos & Psicologia de Marketing',
             'version' => '3.1.0',
             'category' => 'communication',
             'enabled' => true,
             'isCore' => false,
-            'description' => 'Assistente executiva, gerente geral e especialista com IA multimodal para suporte e vendas.',
+            'description' => 'IA especialista em cursos, psicologia de marketing educacional, suporte comercial e diagnósticos técnicos.',
         ],
         [
             'id' => 'mod_mercadopago',

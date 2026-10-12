@@ -24,10 +24,10 @@ if ($action === 'multimedia' || isset($input['imageBase64'])) {
  */
 function processSofiaChat(array $input): void
 {
-    $message = trim($input['message'] ?? '');
-    $courses = $input['courses'] ?? [];
-    $history = $input['history'] ?? [];
-    $interlocutorRole = $input['interlocutorRole'] ?? 'client';
+    $message = trim($input['message'] ?? $_POST['message'] ?? $_GET['message'] ?? '');
+    $courses = $input['courses'] ?? $_POST['courses'] ?? [];
+    $history = $input['history'] ?? $_POST['history'] ?? [];
+    $interlocutorRole = $input['interlocutorRole'] ?? $_POST['interlocutorRole'] ?? $_GET['role'] ?? 'client';
 
     if (empty($message)) {
         jsonResponse(['error' => 'Mensagem não informada para a Sofia'], 400);
@@ -76,8 +76,8 @@ function processSofiaChat(array $input): void
  */
 function processSofiaMultimediaDiagnostic(array $input): void
 {
-    $imageBase64 = $input['imageBase64'] ?? '';
-    $description = trim($input['description'] ?? '');
+    $imageBase64 = $input['imageBase64'] ?? $_POST['imageBase64'] ?? '';
+    $description = trim($input['description'] ?? $_POST['description'] ?? '');
 
     if (empty($imageBase64)) {
         jsonResponse(['error' => 'Imagem não fornecida para a Sofia'], 400);
@@ -93,7 +93,7 @@ Você NUNCA é Camilla Faria. Sua identidade é estrita e exclusivamente SOFIA.
 Analise a imagem da máquina de costura ou peça mecânica:
 1. Identifique o componente exato (lançadeira, caixa de bobina, tensor de linha, barra de agulha, dente impelidor, motor direct-drive).
 2. Diagnostique a causa provável do problema relatado: '{$description}'.
-3. Use a psicologia de marketing educacional: mostre que depender de terceiros é caro e demorado, enquanto dominar o conserto no curso de Mecânica de Máquinas com o CEO Eloizio Silva dá autonomia e renda de R$ 5.000 a R$ 15.000/mês.
+3. Use a psicologia de marketing educacional: mostre que depender de terceiros é caro e demorado, enquanto dominar o conserto no curso de Mecânica de Máquinas com o CEO Eloizio Assunção dá autonomia e renda de R$ 5.000 a R$ 15.000/mês.
 4. Feche oferecendo matrícula facilitada em até 12x no Mercado Pago com o cupom exclusivo SOFIA15 (-15% OFF) e atendimento no WhatsApp oficial (21) 99613-4073.";
 
         $visionPayload = [
@@ -157,7 +157,7 @@ Analise a imagem da máquina de costura ou peça mecânica:
         $defeito = 'instabilidade no sensor hall de posicionamento ou desgaste nos conectores elétricos';
     }
 
-    $diag = "🔬 **Diagnóstico Técnico por Sofia (Expert Vanguard - Grupo Eloizio):**\n\nRecebi e analisei sua foto com sucesso! Identifiquei sinais claros de **{$defeito}** no componente **{$peca}**.\n\n💡 **Psicologia de Solução Prática:**\nVocê sabia que mais de 80% das falhas em máquinas retas, overloques e galoneiras podem ser resolvidas em menos de 15 minutos quando você domina a mecânica de bancada? Ficar dependendo de visitas técnicas caras paralisa sua produção e corrói seus lucros.\n\n📍 **Duas Formas de Resolver Hoje:**\n1️⃣ **Domine a Profissão Mais Rentável:** No curso *Mecânica e Manutenção de Máquinas de Costura* com o CEO Eloizio Silva (30+ anos de experiência), você aprende o conserto passo a passo. O curso se paga nos primeiros 2 consertos que você fizer!\n2️⃣ **Conserto Especializado na Oficina:** Se preferir trazer seu equipamento até nossa sede em São Gonçalo - RJ, nossa equipe executa a revisão com garantia.\n\n💳 **Condição Exclusiva Vanguard:** Em até 12x no **Mercado Pago** com meu cupom **SOFIA15** (-15% OFF)!\n\nQual é a sua escolha: aprender a consertar e nunca mais depender de ninguém, ou agendar o reparo? Me informe seu Nome e WhatsApp!";
+    $diag = "🔬 **Diagnóstico Técnico por Sofia (Expert Vanguard - Grupo Eloizio):**\n\nRecebi e analisei sua foto com sucesso! Identifiquei sinais claros de **{$defeito}** no componente **{$peca}**.\n\n💡 **Psicologia de Solução Prática:**\nVocê sabia que mais de 80% das falhas em máquinas retas, overloques e galoneiras podem ser resolvidas em menos de 15 minutos quando você domina a mecânica de bancada? Ficar dependendo de visitas técnicas caras paralisa sua produção e corrói seus lucros.\n\n📍 **Duas Formas de Resolver Hoje:**\n1️⃣ **Domine a Profissão Mais Rentável:** No curso *Mecânica e Manutenção de Máquinas de Costura* com o CEO Eloizio Assunção (30+ anos de experiência), você aprende o conserto passo a passo. O curso se paga nos primeiros 2 consertos que você fizer!\n2️⃣ **Conserto Especializado na Oficina:** Se preferir trazer seu equipamento até nossa sede em São Gonçalo - RJ, nossa equipe executa a revisão com garantia.\n\n💳 **Condição Exclusiva Vanguard:** Em até 12x no **Mercado Pago** com meu cupom **SOFIA15** (-15% OFF)!\n\nQual é a sua escolha: aprender a consertar e nunca mais depender de ninguém, ou agendar o reparo? Me informe seu Nome e WhatsApp!";
 
     jsonResponse([
         'success' => true,
@@ -190,7 +190,7 @@ function callSofiaGeminiApi(
 - Saudação: Use '{$timeGreeting}' no início da conversa com entusiasmo e elegância.
 
 2. DOMÍNIO TOTAL DOS CURSOS DO GRUPO ELOIZIO:
-- Mecânica e Manutenção de Máquinas de Costura (com o CEO Eloizio Silva - 30+ anos de bancada):
+- Mecânica e Manutenção de Máquinas de Costura (com o CEO Eloizio Assunção - 30+ anos de bancada):
   * Destaque: Uma das profissões mais lucrativas e escassas do país. O aluno aprende a consertar máquinas retas, overloques, galoneiras e motores direct-drive.
   * Psicologia de Marketing: Consertando apenas duas máquinas na sua cidade, o aluno já recupera 100% do valor do curso e cria uma renda de R$ 5.000 a R$ 15.000/mês.
 - Engenharia de Software Moderna & Arquitetura Cloud (com a Profa. Dra. Mariana Fernandes da USP):
@@ -204,7 +204,7 @@ function callSofiaGeminiApi(
 - Operação e Ajustes de Máquinas Industriais, Gestão Escolar 360° e UI/UX Design.
 
 3. PSICOLOGIA DE MARKETING & GATILHOS PERSUASIVOS ÉTICOS:
-- Gatilho da Autoridade: Cursos ministrados por quem atua no mercado de verdade (CEO Eloizio Silva e Dra. Mariana da USP) e amparados pela Lei Federal nº 9.394/96 (MEC).
+- Gatilho da Autoridade: Cursos ministrados por quem atua no mercado de verdade (CEO Eloizio Assunção e Dra. Mariana da USP) e amparados pela Lei Federal nº 9.394/96 (MEC).
 - Gatilho da Prova Social: Mais de 340+ alunos formados e atuando no mercado.
 - Gatilho do Retorno sobre Investimento (ROI): Demonstre que o valor da parcela cabe com folga no orçamento e se paga rapidamente com o conhecimento adquirido.
 - Gatilho da Urgência & Escassez: O cupom especial de 15% de desconto da Sofia é o **SOFIA15**! Incentive o fechamento antes que a turma encerre as vagas com mentoria.
@@ -265,20 +265,16 @@ function generateLocalSofiaReply(
 ): string {
     $q = strtolower(trim($userQuery));
 
-    // 1. Identidade Sofia Vanguard (Zero Crise de Identidade com Camilla)
+    // 1. Identidade Camilla Faria & Grupo Eloizio
     if (
         str_contains($q, 'quem é você') ||
         str_contains($q, 'quem e voce') ||
         str_contains($q, 'seu nome') ||
+        str_contains($q, 'camilla') ||
         str_contains($q, 'sofia') ||
-        str_contains($q, 'vanguard') ||
-        str_contains($q, 'camilla')
+        str_contains($q, 'gerente')
     ) {
-        $camillaClarification = str_contains($q, 'camilla')
-            ? "\n\n💡 *Nota:* Camilla não atende neste canal! Eu sou a **Sofia**, sua única e exclusiva Expert Vanguard em Cursos e Carreiras do Grupo Eloizio!"
-            : "";
-
-        return "{$timeGreeting}! ✨ Eu sou a **Sofia**, a **Expert Vanguard** do Grupo Eloizio!{$camillaClarification}\n\nMeu papel é entender seu momento profissional e traçar a rota mais rápida para sua independência financeira através de competências práticas de alta demanda no mercado.\n\nDomino profundamente todas as nossas formações e os ganhos reais da profissão:\n\n• 🪡 **Mecânica & Manutenção de Máquinas de Costura** (com o CEO Eloizio Silva — profissão escassa com lucro de R$ 5.000 a R$ 15.000/mês consertando máquinas reta, overloque e galoneira);\n• 🚀 **Engenharia de Software Moderna & Arquitetura Cloud** (com a Profa. Dra. Mariana da USP — microsserviços, DevOps e salários de elite de até R$ 22.000/mês);\n• 💼 **Contabilidade & Assessoria Prática para MEI** (blindagem fiscal, NFS-e e regularização sem burocracia);\n• 🤖 **Inteligência Artificial Aplicada aos Negócios** (automação e produtividade prática);\n• 📜 **Certificação Oficial MEC** (LDB 9.394/96 Art. 42) e Carteirinha Estudantil DNE Nacional (50% de meia-entrada).\n\n🎁 Para incentivar sua decisão agora, reservei seu cupom oficial **SOFIA15** (-15% OFF no Mercado Pago em até 12x).\n\nQual carreira ou habilidade você deseja transformar hoje?";
+        return "{$timeGreeting}! ☕ Aqui é a **Camilla Faria**, **Gerente Geral e Atendente Inteligente do Grupo Eloizio** (grupoeloizio.com.br)!\n\nSou carioca, tenho 28 anos, atuo com foco em São Gonçalo - RJ e atendo todo o Brasil online. Costumo brincar que só \"dou boot\" depois da primeira xícara de café, mas tenho autonomia executiva total para criar e colocar em produção nossos **Cursos Profissionalizantes Livres** (somente cursos livres amparados pela Lei 9.394/96 Art. 42 e MEC) com:\n• 🛠️ **Manuais Técnicos Ilustrados** de bancada e peças;\n• 📖 **Livros Digitais (E-books)** de negócios e prática profissional;\n• 📝 **Apostilas Oficiais** com questões práticas e gabarito;\n• 🎥 **Vídeos Explicativos Práticos** em alta definição;\n• 💳 **Venda Imediata no Mercado Pago** (em até 12x ou PIX instantâneo com liberação imediata).\n\nNosso Diretor e CEO é o mestre **Eloizio Assunção**. Meu WhatsApp oficial é **(21) 99613-4073**.\n\nComo posso te ajudar hoje a transformar sua profissão?";
     }
 
     // 2. Psicologia de Marketing: Máquinas de Costura & Mecânica com CEO Eloizio
@@ -296,7 +292,7 @@ function generateLocalSofiaReply(
         str_contains($q, 'são gonçalo') ||
         str_contains($q, 'sao goncalo')
     ) {
-        return "🪡 **O Segredo das Oficinas de Alta Rentabilidade com o CEO Eloizio Silva:**\n\nDeixa eu te contar um dado real de mercado: **falta mecânico qualificado no Brasil inteiro!** Centenas de confecções, ateliês e costureiras ficam com máquinas paradas perdendo milhares de reais toda semana porque não encontram profissionais de confiança.\n\nUm conserto simples de ponto frouxo ou ajuste de lançadeira custa entre **R$ 150 e R$ 350**. Consertando apenas 2 máquinas, você já paga o investimento total do curso!\n\n⭐ **O que você aprende no Curso Oficial:**\n• Anatomia completa de máquinas Reta, Overloque, Interloque e Galoneira;\n• Sincronismo perfeito de laçada e ponto milimétrico;\n• Diagnóstico eletrônico de motores Direct-Drive e painéis digitais;\n• Como precificar e atrair clientes na sua região.\n\n💰 **Investimento com Psicologia de Acesso:**\nDe R$ 480,00 por apenas **12x de R$ 34,00** no Mercado Pago usando seu cupom **SOFIA15** (-15% OFF) — isso é menos de **R$ 1,20 por dia**!\n\nVocê prefere continuar dependendo de terceiros ou se tornar o técnico de referência que fatura alto na sua cidade? Deixe seu Nome e WhatsApp que libero sua vaga agora!";
+        return "🪡 **O Segredo das Oficinas de Alta Rentabilidade com o CEO Eloizio Assunção:**\n\nDeixa eu te contar um dado real de mercado: **falta mecânico qualificado no Brasil inteiro!** Centenas de confecções, ateliês e costureiras ficam com máquinas paradas perdendo milhares de reais toda semana porque não encontram profissionais de confiança.\n\nUm conserto simples de ponto frouxo ou ajuste de lançadeira custa entre **R$ 150 e R$ 350**. Consertando apenas 2 máquinas, você já paga o investimento total do curso!\n\n⭐ **O que você aprende no Curso Oficial:**\n• Anatomia completa de máquinas Reta, Overloque, Interloque e Galoneira;\n• Sincronismo perfeito de laçada e ponto milimétrico;\n• Diagnóstico eletrônico de motores Direct-Drive e painéis digitais;\n• Como precificar e atrair clientes na sua região.\n\n💰 **Investimento com Psicologia de Acesso:**\nDe R$ 480,00 por apenas **12x de R$ 34,00** no Mercado Pago usando seu cupom **SOFIA15** (-15% OFF) — isso é menos de **R$ 1,20 por dia**!\n\nVocê prefere continuar dependendo de terceiros ou se tornar o técnico de referência que fatura alto na sua cidade? Deixe seu Nome e WhatsApp que libero sua vaga agora!";
     }
 
     // 3. Psicologia de Marketing: Tecnologia & Engenharia de Software

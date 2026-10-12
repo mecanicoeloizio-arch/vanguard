@@ -26,10 +26,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 // Configurações do Grupo Eloizio
 define('GRUPO_ELOIZIO_NOME', 'Grupo Eloizio');
 define('GRUPO_ELOIZIO_SITE', 'https://grupoeloizio.com.br');
-define('GRUPO_ELOIZIO_WHATSAPP_CAMILLA', '21996134073');
+define('GRUPO_ELOIZIO_WHATSAPP_SOFIA', '21996134073');
+define('GRUPO_ELOIZIO_WHATSAPP_CAMILLA', '21996134073'); // Compatibilidade
 define('GRUPO_ELOIZIO_WHATSAPP_CEO', '21987648727');
 define('DEFAULT_MASTER_PASSWORD', 'ELOIZIO@MASTER2026');
-define('CAMILLA_CUPOM_PADRAO', 'CAMILLA15');
+define('SOFIA_CUPOM_PADRAO', 'SOFIA15');
+define('SOFIA_DESCONTO_PERCENTUAL', 15);
+define('CAMILLA_CUPOM_PADRAO', 'SOFIA15'); // Redirecionado para cupom oficial
 define('CAMILLA_DESCONTO_PERCENTUAL', 15);
 
 // Configurações do Gateway Mercado Pago (Modo Produção Oficial)
@@ -67,9 +70,9 @@ function getJsonInput(): array
 }
 
 /**
- * Saudação inteligente de acordo com o horário de Brasília
+ * Saudação inteligente de acordo com o horário de Brasília (Sofia Vanguard)
  */
-function obterSaudacaoCamilla(): array
+function obterSaudacaoSofia(): array
 {
     $hora = (int)date('H');
     if ($hora >= 5 && $hora < 12) {
@@ -79,4 +82,9 @@ function obterSaudacaoCamilla(): array
         return ['saudacao' => 'Boa tarde', 'isManha' => false];
     }
     return ['saudacao' => 'Boa noite', 'isManha' => false];
+}
+
+function obterSaudacaoCamilla(): array
+{
+    return obterSaudacaoSofia();
 }

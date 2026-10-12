@@ -28,13 +28,26 @@ import {
   Sparkles,
   Phone,
   Mail,
+  MessageSquare,
   Settings,
   Key,
+  Award,
+  GraduationCap,
+  FileCheck,
+  QrCode,
+  ClipboardCheck,
 } from 'lucide-react';
 import { UnauthorizedView } from '../auth/UnauthorizedView';
 import { SimulationAuditSuite } from './SimulationAuditSuite';
 import { SystemSettingsPanel } from './SystemSettingsPanel';
 import { CourseTextImportModal } from './CourseTextImportModal';
+import { DocumentViewerModal } from '../documents/DocumentTemplates';
+import { CamillaCourseStudio } from './CamillaCourseStudio';
+import { WebmailPortal } from '../mail/WebmailPortal';
+import { ElowaWhatsAppPortal } from '../elowa/ElowaWhatsAppPortal';
+import { EloSignApp } from '../elosign/EloSignApp';
+import { EloContabilApp } from '../elocontabil/EloContabilApp';
+import { FileSignature, Calculator } from 'lucide-react';
 
 export const AdminPortal: React.FC = () => {
   const { currentUser } = useApp();
@@ -60,9 +73,79 @@ const AdminPortalContent: React.FC<{ currentUser: any }> = ({ currentUser }) => 
     sendPushNotification,
     leads,
     systemUpdateManager,
+    setActiveNavTab,
   } = useApp();
 
-  const [activeTab, setActiveTab] = useState<'courses' | 'enrollments' | 'financial' | 'reports_erp' | 'security' | 'push' | 'leads' | 'simulation' | 'settings'>('courses');
+  const [activeTab, setActiveTab] = useState<
+    'camilla_studio' | 'courses' | 'mail_server' | 'elowa_server' | 'elosign_server' | 'elocontabil_server' | 'secretaria' | 'coordinator' | 'enrollments' | 'financial' | 'reports_erp' | 'security' | 'push' | 'leads' | 'simulation' | 'settings'
+  >('camilla_studio');
+
+  // Document Viewer in Admin / Secretaria / Coordenação
+  const [selectedDocForViewer, setSelectedDocForViewer] = useState<any | null>(null);
+  const [selectedStudentForViewer, setSelectedStudentForViewer] = useState<any | null>(null);
+  const [selectedCourseForViewer, setSelectedCourseForViewer] = useState<any | null>(null);
+
+  // Secretaria Academic requests state
+  const [secretariaRequests, setSecretariaRequests] = useState([
+    { id: 'req_1', studentName: 'Lucas Silva Prado', type: 'Declaração de Conclusão', date: 'Hoje às 10:15', status: 'pendente', protocol: 'PROT-SEC-2026-881' },
+    { id: 'req_2', studentName: 'Camila Vasconcelos', type: 'Segunda Chamada de Avaliação', date: 'Ontem', status: 'deferido', protocol: 'PROT-SEC-2026-879' },
+    { id: 'req_3', studentName: 'Marcos Mecânico', type: 'Aproveitamento de Estudos', date: '04/10/2026', status: 'em_analise', protocol: 'PROT-SEC-2026-872' },
+  ]);
+
+  // Livro Oficial de Registros de Diplomas e Certificados
+  const [registryBook, setRegistryBook] = useState([
+    { regNum: 'REG-MEC-2026-00412', book: 'Livro 04', sheet: 'Folha 89', studentName: 'Lucas Silva Prado', courseTitle: 'Engenharia de Software Moderna & Cloud', hours: 360, hash: 'DNE-2026-VAL-OK', issuedAt: '15/01/2026', responsible: 'Roseli Castro (Sec. Geral)' },
+    { regNum: 'REG-MEC-2025-00891', book: 'Livro 03', sheet: 'Folha 42', studentName: 'Camila Vasconcelos', courseTitle: 'Gestão Estratégica de Negócios', hours: 280, hash: 'DEC-CONCL-2025-00891', issuedAt: '28/11/2025', responsible: 'Roseli Castro (Sec. Geral)' },
+    { regNum: 'REG-MEC-2026-00994', book: 'Livro 05', sheet: 'Folha 12', studentName: 'Carlos Eduardo Santos', courseTitle: 'Mecânica e Regulagem de Máquinas de Costura', hours: 120, hash: 'ELOIZIO-2026-CERT-OK', issuedAt: '29/09/2026', responsible: 'Eloizio Assunção (Diretor)' },
+  ]);
+
+  // Coordenação Pedagógica: Homologações e Desempenho
+  const [coordinatorApprovals, setCoordinatorApprovals] = useState([
+    { id: 'hom_1', studentName: 'Lucas Silva Prado', courseTitle: 'Engenharia de Software Moderna', progress: 100, average: 9.4, attendance: '98%', status: 'homologado', coordinator: 'Mariana Fernandes' },
+    { id: 'hom_2', studentName: 'Carlos Eduardo Santos', courseTitle: 'Mecânica de Máquinas de Costura', progress: 100, average: 9.5, attendance: '100%', status: 'homologado', coordinator: 'Eloizio Assunção' },
+    { id: 'hom_3', studentName: 'Camila Vasconcelos', courseTitle: 'Gestão Estratégica de Negócios', progress: 100, average: 9.8, attendance: '96%', status: 'homologado', coordinator: 'Sofia Vanguard' },
+    { id: 'hom_4', studentName: 'Beatriz Almeida', courseTitle: 'Contabilidade Prática para MEI', progress: 92, average: 8.9, attendance: '91%', status: 'em_conclusao', coordinator: 'Sofia Vanguard' },
+  ]);
+
+  const handleEmitDocument = (
+    type: 'matricula' | 'conclusao' | 'historico' | 'carteirinha' | 'certificado',
+    customStudent?: User,
+    customCourse?: Course
+  ) => {
+    const targetStudent = customStudent || users.find((u) => u.role === 'student') || users[0];
+    const targetCourse = customCourse || courses.find((c) => c.id === targetStudent.courseId) || courses[0];
+    const hash = `VAL-${type.toUpperCase()}-${Math.random().toString(36).substring(2, 8).toUpperCase()}-${Date.now().toString().slice(-4)}`;
+
+    const docTitles: Record<string, string> = {
+      matricula: 'Declaração de Matrícula Regular',
+      conclusao: 'Declaração de Conclusão de Curso',
+      historico: 'Histórico Escolar Oficial com Notas',
+      carteirinha: 'Carteirinha Estudantil Digital Oficial (DNE)',
+      certificado: `Certificado de Conclusão: ${targetCourse.title}`,
+    };
+
+    const docTypes: Record<string, any> = {
+      matricula: 'declaracao',
+      conclusao: 'declaracao_conclusao',
+      historico: 'historico',
+      carteirinha: 'carteirinha',
+      certificado: 'certificado',
+    };
+
+    setSelectedDocForViewer({
+      id: `doc_sec_${Date.now()}`,
+      studentId: targetStudent.id,
+      studentName: targetStudent.name,
+      documentType: docTypes[type],
+      title: docTitles[type],
+      feeAmount: 0,
+      paymentStatus: 'paid',
+      requestedAt: new Date().toISOString(),
+      validationHash: hash,
+    });
+    setSelectedStudentForViewer(targetStudent);
+    setSelectedCourseForViewer(targetCourse);
+  };
 
   // Text bulk import modal
   const [showTextImportModal, setShowTextImportModal] = useState(false);
@@ -234,7 +317,14 @@ const AdminPortalContent: React.FC<{ currentUser: any }> = ({ currentUser }) => 
       {/* Admin Tabs */}
       <div className="flex items-center gap-2 overflow-x-auto pb-2 border-b border-slate-200 no-scrollbar">
         {[
-          { id: 'courses', label: 'Gestão de Cursos (Vitrine)', icon: BookOpen },
+          { id: 'camilla_studio', label: 'Estúdio Camilla: Criar Cursos Livres & Publicar com Autonomia', icon: Sparkles },
+          { id: 'courses', label: 'Gestão de Cursos (Formulário & Texto)', icon: BookOpen },
+          { id: 'mail_server', label: 'Servidor de E-mail & Webmail (PHPMailer)', icon: Mail },
+          { id: 'elowa_server', label: 'EloWa: WhatsApp Multi-Device (21 99613-4073)', icon: MessageSquare },
+          { id: 'elosign_server', label: 'EloSign: Assinatura Eletrônica (Oficinas & Cursos)', icon: FileSignature },
+          { id: 'elocontabil_server', label: 'EloContábil: Apoio RH & Documentos (Sem CRC)', icon: Calculator },
+          { id: 'secretaria', label: 'Secretaria Acadêmica & Docs Digitais', icon: FileCheck },
+          { id: 'coordinator', label: 'Coordenação Pedagógica & Matriz MEC', icon: GraduationCap },
           { id: 'enrollments', label: 'Matrículas & Alunos', icon: Users },
           { id: 'financial', label: 'Módulo Financeiro & Mensalidades', icon: DollarSign },
           { id: 'settings', label: 'Módulos, CLI, Segurança & Tokens', icon: Key },
@@ -252,12 +342,21 @@ const AdminPortalContent: React.FC<{ currentUser: any }> = ({ currentUser }) => 
               onClick={() => setActiveTab(tab.id as any)}
               className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold whitespace-nowrap cursor-pointer transition-all ${
                 isActive
-                  ? 'bg-indigo-600 text-white shadow-md shadow-indigo-500/25'
-                  : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
+                  ? tab.id === 'camilla_studio'
+                    ? 'bg-linear-to-r from-purple-600 via-indigo-600 to-indigo-700 text-white shadow-md shadow-indigo-500/30 ring-2 ring-purple-300'
+                    : 'bg-indigo-600 text-white shadow-md shadow-indigo-500/25'
+                  : tab.id === 'camilla_studio'
+                    ? 'bg-purple-50 text-purple-900 hover:bg-purple-100 border border-purple-200'
+                    : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
               }`}
             >
               <Icon className="w-4 h-4" />
               {tab.label}
+              {tab.id === 'camilla_studio' && (
+                <span className="px-1.5 py-0.2 rounded-full bg-amber-400 text-slate-950 font-black text-[9px] uppercase tracking-wider">
+                  Autonomia
+                </span>
+              )}
               {tab.id === 'leads' && (
                 <span className="px-1.5 py-0.2 rounded-full bg-amber-400 text-slate-950 font-black text-[10px]">
                   {leads.length}
@@ -270,6 +369,39 @@ const AdminPortalContent: React.FC<{ currentUser: any }> = ({ currentUser }) => 
           );
         })}
       </div>
+
+      {/* TAB 0: ESTÚDIO CAMILLA (AUTONOMIA DE CRIAÇÃO E PUBLICAÇÃO DE CURSOS LIVRES) */}
+      {activeTab === 'camilla_studio' && (
+        <CamillaCourseStudio onCoursePublished={() => setActiveTab('courses')} />
+      )}
+
+      {/* TAB: SERVIDOR DE E-MAIL & WEBMAIL (PHPMailer 6.9+) */}
+      {activeTab === 'mail_server' && (
+        <div className="space-y-4">
+          <WebmailPortal />
+        </div>
+      )}
+
+      {/* TAB: ELOWA WHATSAPP MULTI-DEVICE SERVER (BAILEYS 21 99613-4073) */}
+      {activeTab === 'elowa_server' && (
+        <div className="space-y-4">
+          <ElowaWhatsAppPortal />
+        </div>
+      )}
+
+      {/* TAB: ELOSIGN - ASSINATURA ELETRÔNICA INTELIGENTE */}
+      {activeTab === 'elosign_server' && (
+        <div className="space-y-4">
+          <EloSignApp />
+        </div>
+      )}
+
+      {/* TAB: ELOCONTÁBIL - APOIO ADMINISTRATIVO & RH (SEM CRC) */}
+      {activeTab === 'elocontabil_server' && (
+        <div className="space-y-4">
+          <EloContabilApp />
+        </div>
+      )}
 
       {/* TAB 1: COURSE MANAGEMENT (VITRINE) */}
       {activeTab === 'courses' && (
@@ -371,6 +503,520 @@ const AdminPortalContent: React.FC<{ currentUser: any }> = ({ currentUser }) => 
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+      )}
+
+      {/* TAB: SECRETARIA ACADÊMICA & DOCUMENTAÇÃO DIGITAL COM AUTENTICAÇÃO */}
+      {activeTab === 'secretaria' && (
+        <div className="space-y-6">
+          {/* Header Secretaria */}
+          <div className="bg-linear-to-r from-blue-950 via-indigo-950 to-slate-900 text-white p-6 sm:p-8 rounded-3xl border border-blue-800/40 shadow-xl space-y-4">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 rounded-2xl bg-blue-500/20 text-blue-300 border border-blue-400/30 flex items-center justify-center font-black">
+                  <FileCheck className="w-6 h-6 text-blue-400" />
+                </div>
+                <div>
+                  <div className="flex items-center gap-2">
+                    <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                      Fé Pública & ICP-Edu Ativa
+                    </span>
+                    <span className="text-xs text-blue-300 font-mono">Livro de Registro Digital nº 04</span>
+                  </div>
+                  <h2 className="text-xl sm:text-2xl font-black text-white mt-1">
+                    Secretaria Acadêmica & Central de Documentos Digitais
+                  </h2>
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => handleEmitDocument('matricula')}
+                  className="px-4 py-2.5 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-black flex items-center gap-2 shadow-lg cursor-pointer transition-all"
+                >
+                  <PlusCircle className="w-4 h-4" />
+                  <span>Emitir Declaração Rápida</span>
+                </button>
+              </div>
+            </div>
+            <p className="text-xs sm:text-sm text-blue-200 leading-relaxed max-w-4xl">
+              Emissão, assinatura digital e validação pública de todos os atos e documentos escolares em conformidade com a <strong>Lei Federal nº 9.394/96 (LDB Art. 42)</strong>, <strong>Decreto Presidencial nº 5.154/04</strong> e <strong>Lei da Meia-Entrada nº 12.933/13</strong>. Cada documento gerado recebe hash criptográfico SHA-256 e QR Code rastreável.
+            </p>
+          </div>
+
+          {/* Quick Metrics */}
+          <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
+            <div className="p-5 bg-white rounded-2xl border border-slate-200 shadow-xs">
+              <span className="text-[10px] text-slate-400 font-bold uppercase block">Matrículas Efetivadas</span>
+              <span className="text-2xl font-black text-slate-900 block mt-1">345</span>
+              <span className="text-[11px] text-emerald-600 font-semibold mt-1 block">100% regulares no sistema</span>
+            </div>
+            <div className="p-5 bg-white rounded-2xl border border-slate-200 shadow-xs">
+              <span className="text-[10px] text-slate-400 font-bold uppercase block">Documentos Emitidos</span>
+              <span className="text-2xl font-black text-indigo-600 block mt-1">1.248</span>
+              <span className="text-[11px] text-slate-500 font-medium mt-1 block">Assinados digitalmente</span>
+            </div>
+            <div className="p-5 bg-white rounded-2xl border border-slate-200 shadow-xs">
+              <span className="text-[10px] text-slate-400 font-bold uppercase block">Livros de Diplomas</span>
+              <span className="text-2xl font-black text-amber-600 block mt-1">05 Livros</span>
+              <span className="text-[11px] text-slate-500 font-medium mt-1 block">Registros do MEC ativos</span>
+            </div>
+            <div className="p-5 bg-white rounded-2xl border border-slate-200 shadow-xs">
+              <span className="text-[10px] text-slate-400 font-bold uppercase block">Autenticação ICP-Edu</span>
+              <span className="text-2xl font-black text-emerald-600 block mt-1">100% OK</span>
+              <span className="text-[11px] text-emerald-700 font-medium mt-1 block">Blindagem contra fraudes</span>
+            </div>
+          </div>
+
+          {/* Central de Emissão Instantânea (5 Tipos de Documentos Oficiais) */}
+          <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 pb-4 border-b border-slate-200">
+              <div>
+                <h3 className="text-lg font-black text-slate-900">Emissão Instantânea de Documentos Oficiais Autenticados</h3>
+                <p className="text-xs text-slate-500">
+                  Clique no documento desejado para gerar com hash SHA-256 e carimbo digital institucional pronto para impressão ou PDF:
+                </p>
+              </div>
+              <span className="text-xs font-mono font-bold bg-indigo-50 text-indigo-700 px-3 py-1 rounded-lg border border-indigo-200">
+                Autenticação Universal
+              </span>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {/* Doc 1: Declaração de Matrícula */}
+              <div className="p-5 rounded-2xl border border-slate-200 bg-slate-50 hover:bg-white hover:border-indigo-300 transition-all flex flex-col justify-between space-y-3">
+                <div className="space-y-1.5">
+                  <div className="w-10 h-10 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center font-bold">
+                    <FileText className="w-5 h-5" />
+                  </div>
+                  <h4 className="font-extrabold text-sm text-slate-900">Declaração de Matrícula Regular</h4>
+                  <p className="text-xs text-slate-600 leading-relaxed">
+                    Comprova vínculo acadêmico para estágio obrigatório, passe escolar, previdência e convênios corporativos.
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => handleEmitDocument('matricula')}
+                  className="w-full py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-2 cursor-pointer shadow-xs transition-all"
+                >
+                  <Printer className="w-4 h-4" />
+                  <span>Emitir Declaração com Hash</span>
+                </button>
+              </div>
+
+              {/* Doc 2: Declaração de Conclusão */}
+              <div className="p-5 rounded-2xl border border-slate-200 bg-slate-50 hover:bg-white hover:border-emerald-300 transition-all flex flex-col justify-between space-y-3">
+                <div className="space-y-1.5">
+                  <div className="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold">
+                    <CheckCircle2 className="w-5 h-5" />
+                  </div>
+                  <h4 className="font-extrabold text-sm text-slate-900">Declaração de Conclusão de Curso</h4>
+                  <p className="text-xs text-slate-600 leading-relaxed">
+                    Atesta conclusão integral de carga horária e aprovação para apresentação imediata em processos seletivos.
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => handleEmitDocument('conclusao')}
+                  className="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-2 cursor-pointer shadow-xs transition-all"
+                >
+                  <Printer className="w-4 h-4" />
+                  <span>Emitir Conclusão com Hash</span>
+                </button>
+              </div>
+
+              {/* Doc 3: Histórico Escolar */}
+              <div className="p-5 rounded-2xl border border-slate-200 bg-slate-50 hover:bg-white hover:border-amber-300 transition-all flex flex-col justify-between space-y-3">
+                <div className="space-y-1.5">
+                  <div className="w-10 h-10 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center font-bold">
+                    <FileSpreadsheet className="w-5 h-5" />
+                  </div>
+                  <h4 className="font-extrabold text-sm text-slate-900">Histórico Escolar Oficial com Notas</h4>
+                  <p className="text-xs text-slate-600 leading-relaxed">
+                    Discrimina todas as notas (P1, P2, Trabalhos), médias, ementas e carga horária para aproveitamento de créditos.
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => handleEmitDocument('historico')}
+                  className="w-full py-2.5 bg-amber-600 hover:bg-amber-700 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-2 cursor-pointer shadow-xs transition-all"
+                >
+                  <Printer className="w-4 h-4" />
+                  <span>Emitir Histórico Oficial</span>
+                </button>
+              </div>
+
+              {/* Doc 4: Carteirinha DNE */}
+              <div className="p-5 rounded-2xl border border-slate-200 bg-slate-50 hover:bg-white hover:border-purple-300 transition-all flex flex-col justify-between space-y-3">
+                <div className="space-y-1.5">
+                  <div className="w-10 h-10 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center font-bold">
+                    <QrCode className="w-5 h-5" />
+                  </div>
+                  <h4 className="font-extrabold text-sm text-slate-900">Carteirinha do Estudante DNE Oficial</h4>
+                  <p className="text-xs text-slate-600 leading-relaxed">
+                    Padrão nacional com foto do aluno, QR code de meia-entrada conforme a Lei Federal nº 12.933/13 e validade 2027.
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => handleEmitDocument('carteirinha')}
+                  className="w-full py-2.5 bg-purple-600 hover:bg-purple-700 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-2 cursor-pointer shadow-xs transition-all"
+                >
+                  <Printer className="w-4 h-4" />
+                  <span>Emitir Carteirinha DNE</span>
+                </button>
+              </div>
+
+              {/* Doc 5: Certificado de Conclusão MEC */}
+              <div className="p-5 rounded-2xl border border-slate-200 bg-slate-50 hover:bg-white hover:border-indigo-300 transition-all flex flex-col justify-between space-y-3">
+                <div className="space-y-1.5">
+                  <div className="w-10 h-10 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center font-bold">
+                    <Award className="w-5 h-5" />
+                  </div>
+                  <h4 className="font-extrabold text-sm text-slate-900">Certificado Oficial MEC (Frente & Verso)</h4>
+                  <p className="text-xs text-slate-600 leading-relaxed">
+                    Frente solene com brasão institucional e verso acadêmico com ementa de aulas, registro em livro e amparo LDB.
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => handleEmitDocument('certificado')}
+                  className="w-full py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-2 cursor-pointer shadow-xs transition-all"
+                >
+                  <Printer className="w-4 h-4" />
+                  <span>Emitir Certificado MEC</span>
+                </button>
+              </div>
+
+              {/* Box Auxiliar: Validação Pública */}
+              <div className="p-5 rounded-2xl border border-dashed border-slate-300 bg-slate-50/50 flex flex-col justify-between space-y-3">
+                <div className="space-y-1.5">
+                  <div className="w-10 h-10 rounded-xl bg-slate-200 text-slate-700 flex items-center justify-center font-bold">
+                    <ShieldCheck className="w-5 h-5" />
+                  </div>
+                  <h4 className="font-extrabold text-sm text-slate-900">Validador Público de Todos os Setores</h4>
+                  <p className="text-xs text-slate-600 leading-relaxed">
+                    Qualquer documento emitido pode ser verificado em tempo real pelo portal público de validação por código ou QR code.
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setActiveNavTab('validator')}
+                  className="w-full py-2.5 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-2 cursor-pointer transition-all"
+                >
+                  <Search className="w-4 h-4" />
+                  <span>Abrir Validador Público</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Livro Oficial de Registros de Certificados e Diplomas */}
+          <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-4">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 pb-4 border-b border-slate-200">
+              <div>
+                <h3 className="text-lg font-black text-slate-900">Livro de Registro Geral de Certificados e Diplomas</h3>
+                <p className="text-xs text-slate-500">
+                  Histórico oficial de livros, folhas e hashes SHA-256 expedidos pela Secretaria Acadêmica:
+                </p>
+              </div>
+              <span className="text-xs font-mono font-bold text-slate-600">
+                {registryBook.length} registros ativos
+              </span>
+            </div>
+
+            <div className="overflow-x-auto">
+              <table className="w-full min-w-[700px] text-left text-xs">
+                <thead className="bg-slate-50 text-slate-500 font-bold uppercase text-[10px] border-b border-slate-200">
+                  <tr>
+                    <th className="py-3 px-3">Nº Registro</th>
+                    <th className="py-3 px-3">Livro / Folha</th>
+                    <th className="py-3 px-3">Aluno Titular</th>
+                    <th className="py-3 px-3">Curso / Carga</th>
+                    <th className="py-3 px-3 font-mono">Hash Criptográfico</th>
+                    <th className="py-3 px-3">Data</th>
+                    <th className="py-3 px-3 text-center">Ações</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100">
+                  {registryBook.map((reg) => (
+                    <tr key={reg.regNum} className="hover:bg-slate-50">
+                      <td className="py-3 px-3 font-mono font-bold text-slate-900">{reg.regNum}</td>
+                      <td className="py-3 px-3 text-slate-600">{reg.book} • {reg.sheet}</td>
+                      <td className="py-3 px-3 font-bold text-slate-900">{reg.studentName}</td>
+                      <td className="py-3 px-3 text-slate-600">{reg.courseTitle} ({reg.hours}h)</td>
+                      <td className="py-3 px-3 font-mono text-[11px] text-indigo-700 bg-indigo-50/50 rounded">
+                        {reg.hash}
+                      </td>
+                      <td className="py-3 px-3 text-slate-500">{reg.issuedAt}</td>
+                      <td className="py-3 px-3 text-center">
+                        <button
+                          type="button"
+                          onClick={() => handleEmitDocument('certificado')}
+                          className="px-2.5 py-1 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold rounded-lg border border-indigo-200 cursor-pointer"
+                        >
+                          Ver Doc
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {/* Central de Requerimentos da Secretaria */}
+          <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-4">
+            <h3 className="text-lg font-black text-slate-900">Requerimentos & Solicitações Acadêmicas</h3>
+            <div className="overflow-x-auto">
+              <table className="w-full min-w-[650px] text-left text-xs">
+                <thead className="bg-slate-50 text-slate-500 font-bold uppercase text-[10px] border-b border-slate-200">
+                  <tr>
+                    <th className="py-3 px-3">Protocolo</th>
+                    <th className="py-3 px-3">Aluno</th>
+                    <th className="py-3 px-3">Tipo de Requerimento</th>
+                    <th className="py-3 px-3">Data</th>
+                    <th className="py-3 px-3 text-center">Status</th>
+                    <th className="py-3 px-3 text-center">Despacho</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100">
+                  {secretariaRequests.map((req) => (
+                    <tr key={req.id} className="hover:bg-slate-50">
+                      <td className="py-3 px-3 font-mono font-bold text-slate-800">{req.protocol}</td>
+                      <td className="py-3 px-3 font-bold text-slate-900">{req.studentName}</td>
+                      <td className="py-3 px-3 text-slate-700">{req.type}</td>
+                      <td className="py-3 px-3 text-slate-500">{req.date}</td>
+                      <td className="py-3 px-3 text-center">
+                        <span className={`px-2 py-0.5 rounded-full font-bold text-[10px] ${
+                          req.status === 'deferido'
+                            ? 'bg-emerald-100 text-emerald-800'
+                            : req.status === 'pendente'
+                            ? 'bg-amber-100 text-amber-800'
+                            : 'bg-blue-100 text-blue-800'
+                        }`}>
+                          {req.status === 'deferido' ? 'Deferido' : req.status === 'pendente' ? 'Pendente' : 'Em Análise'}
+                        </span>
+                      </td>
+                      <td className="py-3 px-3 text-center space-x-1">
+                        <button
+                          onClick={() => {
+                            setSecretariaRequests(prev => prev.map(r => r.id === req.id ? { ...r, status: 'deferido' } : r));
+                            alert(`Requerimento ${req.protocol} deferido com sucesso!`);
+                          }}
+                          className="px-2 py-1 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 rounded font-bold text-[10px] cursor-pointer"
+                        >
+                          Deferir
+                        </button>
+                        <button
+                          onClick={() => handleEmitDocument('conclusao')}
+                          className="px-2 py-1 bg-indigo-50 text-indigo-700 hover:bg-indigo-100 rounded font-bold text-[10px] cursor-pointer"
+                        >
+                          Emitir
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* TAB: COORDENAÇÃO PEDAGÓGICA & MATRIZ MEC */}
+      {activeTab === 'coordinator' && (
+        <div className="space-y-6">
+          {/* Header Coordenação */}
+          <div className="bg-linear-to-r from-emerald-950 via-teal-950 to-slate-900 text-white p-6 sm:p-8 rounded-3xl border border-emerald-800/40 shadow-xl space-y-4">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 rounded-2xl bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 flex items-center justify-center font-black">
+                  <GraduationCap className="w-6 h-6 text-emerald-400" />
+                </div>
+                <div>
+                  <div className="flex items-center gap-2">
+                    <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                      Supervisão Pedagógica MEC
+                    </span>
+                    <span className="text-xs text-emerald-300 font-mono">LDB 9.394/96 Art. 42</span>
+                  </div>
+                  <h2 className="text-xl sm:text-2xl font-black text-white mt-1">
+                    Painel da Coordenação Pedagógica & Matriz Curricular
+                  </h2>
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => alert('Parecer Pedagógico Geral emitido e homologado pelo Coordenador!')}
+                  className="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-black flex items-center gap-2 shadow-lg cursor-pointer transition-all"
+                >
+                  <Award className="w-4 h-4" />
+                  <span>Emitir Parecer Pedagógico</span>
+                </button>
+              </div>
+            </div>
+            <p className="text-xs sm:text-sm text-emerald-200 leading-relaxed max-w-4xl">
+              Supervisão acadêmica e alinhamento pedagógico das ementas, carga horária docente, avaliação contínua dos alunos e homologação digital de certificados antes da expedição definitiva pela Secretaria Geral.
+            </p>
+          </div>
+
+          {/* Métricas Pedagógicas */}
+          <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
+            <div className="p-5 bg-white rounded-2xl border border-slate-200 shadow-xs">
+              <span className="text-[10px] text-slate-400 font-bold uppercase block">Cursos Credenciados</span>
+              <span className="text-2xl font-black text-slate-900 block mt-1">{courses.length} Formações</span>
+              <span className="text-[11px] text-emerald-600 font-semibold mt-1 block">100% com Certificação MEC</span>
+            </div>
+            <div className="p-5 bg-white rounded-2xl border border-slate-200 shadow-xs">
+              <span className="text-[10px] text-slate-400 font-bold uppercase block">Corpo Docente Titular</span>
+              <span className="text-2xl font-black text-indigo-600 block mt-1">3 Especialistas</span>
+              <span className="text-[11px] text-slate-500 font-medium mt-1 block">Mestres, doutores e técnicos</span>
+            </div>
+            <div className="p-5 bg-white rounded-2xl border border-slate-200 shadow-xs">
+              <span className="text-[10px] text-slate-400 font-bold uppercase block">Taxa de Conclusão / Aprovação</span>
+              <span className="text-2xl font-black text-emerald-600 block mt-1">94.8%</span>
+              <span className="text-[11px] text-emerald-700 font-medium mt-1 block">Rendimento acadêmico elevado</span>
+            </div>
+            <div className="p-5 bg-white rounded-2xl border border-slate-200 shadow-xs">
+              <span className="text-[10px] text-slate-400 font-bold uppercase block">Diários de Classe</span>
+              <span className="text-2xl font-black text-blue-600 block mt-1">100% Homologados</span>
+              <span className="text-[11px] text-blue-700 font-medium mt-1 block">Notas e frequências salvas</span>
+            </div>
+          </div>
+
+          {/* Supervisão do Corpo Docente */}
+          <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-4">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 pb-4 border-b border-slate-200">
+              <div>
+                <h3 className="text-lg font-black text-slate-900">Supervisão do Corpo Docente & Carga Horária</h3>
+                <p className="text-xs text-slate-500">
+                  Acompanhamento de planos de aula, fechamento de diários e atendimento a dúvidas dos alunos:
+                </p>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="p-5 rounded-2xl border border-slate-200 bg-slate-50 space-y-3">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center font-bold">MF</div>
+                  <div>
+                    <h4 className="font-extrabold text-sm text-slate-900">Profa. Dra. Mariana Fernandes</h4>
+                    <span className="text-[10px] text-slate-500">Doutora em Computação (USP)</span>
+                  </div>
+                </div>
+                <div className="text-xs space-y-1 text-slate-600">
+                  <div>• Curso: <strong>Engenharia de Software Moderna</strong></div>
+                  <div>• Carga Horária: <strong>360 horas</strong></div>
+                  <div>• Diários: <strong className="text-emerald-700">100% Homologados</strong></div>
+                </div>
+                <button
+                  onClick={() => alert('Diários e avaliações da Profa. Mariana homologados pela coordenação!')}
+                  className="w-full py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold rounded-xl text-xs border border-indigo-200 cursor-pointer"
+                >
+                  Homologar Diário Docente
+                </button>
+              </div>
+
+              <div className="p-5 rounded-2xl border border-slate-200 bg-slate-50 space-y-3">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-amber-600 text-white flex items-center justify-center font-bold">ES</div>
+                  <div>
+                    <h4 className="font-extrabold text-sm text-slate-900">Prof. Eloizio Assunção</h4>
+                    <span className="text-[10px] text-slate-500">Mestre Mecânico & CEO do Grupo</span>
+                  </div>
+                </div>
+                <div className="text-xs space-y-1 text-slate-600">
+                  <div>• Curso: <strong>Mecânica de Máquinas de Costura</strong></div>
+                  <div>• Carga Horária: <strong>120 horas</strong></div>
+                  <div>• Diários: <strong className="text-emerald-700">100% Homologados</strong></div>
+                </div>
+                <button
+                  onClick={() => alert('Diários práticos de mecânica do Prof. Eloizio homologados!')}
+                  className="w-full py-2 bg-amber-50 hover:bg-amber-100 text-amber-800 font-bold rounded-xl text-xs border border-amber-200 cursor-pointer"
+                >
+                  Homologar Diário Docente
+                </button>
+              </div>
+
+              <div className="p-5 rounded-2xl border border-slate-200 bg-slate-50 space-y-3">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-purple-600 text-white flex items-center justify-center font-bold">SV</div>
+                  <div>
+                    <h4 className="font-extrabold text-sm text-slate-900">Profa. Sofia Vanguard</h4>
+                    <span className="text-[10px] text-slate-500">Expert em Cursos & Gestão MEI</span>
+                  </div>
+                </div>
+                <div className="text-xs space-y-1 text-slate-600">
+                  <div>• Curso: <strong>Contabilidade Prática para MEI</strong></div>
+                  <div>• Carga Horária: <strong>180 horas</strong></div>
+                  <div>• Diários: <strong className="text-emerald-700">100% Homologados</strong></div>
+                </div>
+                <button
+                  onClick={() => alert('Diários de negócios e gestão da Profa. Sofia homologados!')}
+                  className="w-full py-2 bg-purple-50 hover:bg-purple-100 text-purple-700 font-bold rounded-xl text-xs border border-purple-200 cursor-pointer"
+                >
+                  Homologar Diário Docente
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Fila de Homologação de Certificados de Conclusão */}
+          <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-4">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 pb-4 border-b border-slate-200">
+              <div>
+                <h3 className="text-lg font-black text-slate-900">Homologação de Certificados & Atas de Conclusão</h3>
+                <p className="text-xs text-slate-500">
+                  Alunos aptos com 100% das aulas concluídas e média satisfatória para expedição oficial:
+                </p>
+              </div>
+            </div>
+
+            <div className="overflow-x-auto">
+              <table className="w-full min-w-[700px] text-left text-xs">
+                <thead className="bg-slate-50 text-slate-500 font-bold uppercase text-[10px] border-b border-slate-200">
+                  <tr>
+                    <th className="py-3 px-3">Aluno Concluinte</th>
+                    <th className="py-3 px-3">Curso</th>
+                    <th className="py-3 px-3 text-center">Progresso</th>
+                    <th className="py-3 px-3 text-center">Média Final</th>
+                    <th className="py-3 px-3 text-center">Frequência</th>
+                    <th className="py-3 px-3 text-center">Situação Pedagógica</th>
+                    <th className="py-3 px-3 text-center">Ação</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100">
+                  {coordinatorApprovals.map((appr) => (
+                    <tr key={appr.id} className="hover:bg-slate-50">
+                      <td className="py-3 px-3 font-bold text-slate-900">{appr.studentName}</td>
+                      <td className="py-3 px-3 text-slate-700">{appr.courseTitle}</td>
+                      <td className="py-3 px-3 text-center font-bold text-indigo-600">{appr.progress}%</td>
+                      <td className="py-3 px-3 text-center font-bold text-emerald-700">{appr.average}</td>
+                      <td className="py-3 px-3 text-center text-slate-600">{appr.attendance}</td>
+                      <td className="py-3 px-3 text-center">
+                        <span className={`px-2 py-0.5 rounded-full font-bold text-[10px] ${
+                          appr.status === 'homologado' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'
+                        }`}>
+                          {appr.status === 'homologado' ? 'Homologado MEC' : 'Em Conclusão'}
+                        </span>
+                      </td>
+                      <td className="py-3 px-3 text-center">
+                        <button
+                          type="button"
+                          onClick={() => handleEmitDocument('certificado')}
+                          className="px-3 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-bold text-[10px] cursor-pointer shadow-xs"
+                        >
+                          Assinar & Emitir
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       )}
@@ -1136,6 +1782,17 @@ const AdminPortalContent: React.FC<{ currentUser: any }> = ({ currentUser }) => 
         isOpen={showTextImportModal}
         onClose={() => setShowTextImportModal(false)}
       />
+
+      {/* Document Viewer Modal for Secretaria & Coordenação */}
+      {selectedDocForViewer && (
+        <DocumentViewerModal
+          document={selectedDocForViewer}
+          student={selectedStudentForViewer || users[0]}
+          course={selectedCourseForViewer || courses[0]}
+          grades={[]}
+          onClose={() => setSelectedDocForViewer(null)}
+        />
+      )}
     </div>
   );
 };

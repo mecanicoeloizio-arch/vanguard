@@ -1,18 +1,46 @@
-# 🚀 Grupo Eloizio — Pacote Completo PHP 8, HTML5, CSS3, JavaScript Vanilla & cURL
+# 🚀 Grupo Eloizio — Pacote Completo 100% PHP 8.1+, HTML5, cURL, JavaScript, CSS & jQuery
 
-Este pacote contém o sistema completo e 100% autônomo do **Grupo Eloizio** construído em **PHP 8.1+**, **HTML5**, **Tailwind CSS**, **JavaScript** e **cURL**.
+Este pacote contém o sistema educacional completo e 100% autônomo do **Grupo Eloizio**, desenvolvido em **PHP 8.1+**, **HTML5 Semântico**, **cURL Oficial para APIs**, **JavaScript Moderno**, **Tailwind CSS** e **jQuery 3.7.1** (com fallback local).
 
-### 🌟 Destaque de Transporte
-> **NÃO PRECISA DE NENHUMA INSTALAÇÃO!**  
+### 🌟 Destaque de Transporte & Execução Direta
+> **NÃO PRECISA DE COMPILAÇÃO OU NODE.JS NO SERVIDOR!**  
 > Basta transportar e colocar todo o conteúdo desta pasta (`php-dist/`) diretamente dentro da pasta **`public_html`** do seu servidor cPanel, Apache, HostGator, Hostinger, Locaweb ou Nginx.  
-> Não precisa rodar `npm install`, não precisa de `composer install`, não precisa de Node.js no servidor de produção.
+> Não precisa rodar `npm install`, não precisa de `composer install`. O sistema é 100% nativo e autossuficiente!
+
+---
+
+## 🎓 Modalidades de Ensino Oferecidas
+1. **Cursos 100% Online (EAD Nacional):**
+   - Estude de qualquer cidade ou estado do Brasil com flexibilidade 24/7.
+   - Videoaulas em alta resolução, apostilas em PDF, simuladores interativos e avaliações com correção automática.
+   - Certificado Oficial registrado (LDB nº 9.394/96 Art. 42) com hash criptográfico SHA-256 e QR Code.
+   - Carteirinha de Estudante DNE Oficial Nacional (Lei nº 12.933/2013) com meia-entrada em todo o país.
+
+2. **Formações Híbridas (Teoria Online + Prática Presencial em São Gonçalo - RJ):**
+   - Teoria completa acessível na plataforma EAD.
+   - Oficinas práticas presenciais e plantões de bancada no **Polo Técnico de São Gonçalo - RJ** (Alcântara / Centro).
+   - Treinamento prático com máquinas industriais reais: Reta eletrônica, Overloque 3 e 4 fios, Galoneira, Motores Direct-Drive e Painéis Digitais.
+   - Orientação direta do especialista mecânico e CEO **Eloizio Assunção** (30+ anos de bancada e experiência industrial).
+
+3. **Estágio Supervisionado Opcional Conveniado (Lei nº 11.788/2008):**
+   - Estágio não obrigatório com alta valorização curricular.
+   - Emissão de Termo de Compromisso Oficial (TCE) timbrado e homologação de **+120h a +180h práticas** adicionadas diretamente à carga horária do Certificado Oficial!
+   - Encaminhamento direto para a **Cooperativa de Melhores Alunos & Balcão de Empregos** junto a indústrias e confecções parceiras.
+
+---
+
+## 👩‍💼 Atendimento Executivo & Suporte Oficial
+- **Camilla Faria (Assistente Executiva & Gerente Geral do Grupo Eloizio):** WhatsApp: **(21) 99613-4073**
+- **Eloizio Assunção (Fundador & CEO do Grupo Eloizio):** WhatsApp Pessoal: **(21) 98764-8727**
+- **Polo Presencial:** São Gonçalo - RJ (Alcântara, Centro e Região Metropolitana)
+- **Portal Oficial:** `https://grupoeloizio.com.br`
 
 ---
 
 ## 🔑 Credenciais Master de Acesso
 - **Senha Master Oficial:** `ELOIZIO@MASTER2026`
 - **E-mail do Administrador / CEO:** `mecanicoeloizio@gmail.com` ou `eloizio@grupoeloizio.com.br`
-- **Expert Vanguard & Marketing:** `sofia@grupoeloizio.com.br` (Cupom ativo: `SOFIA15` com -15% OFF)
+- **Gerente Geral & Atendente:** `camilla@grupoeloizio.com.br` / `(21) 99613-4073`
 - **Aluno Padrão:** `aluno@grupoeloizio.com.br`
 - **Professor / Docente:** `mariana.fernandes@grupoeloizio.com.br`
 
@@ -22,21 +50,31 @@ Este pacote contém o sistema completo e 100% autônomo do **Grupo Eloizio** con
 
 | Arquivo | Descrição & Recursos |
 | :--- | :--- |
-| **`index.php`** | **Vitrine de Cursos Oficiais & Portal Principal:** Catálogo com filtros por categoria (Tecnologia, Engenharia, Negócios, Design), modal com ementa completa de aulas, cálculo de parcelamento em até 12x e checkout de matrícula via PIX Mercado Pago. |
-| **`aluno.php`** | **Portal Acadêmico do Aluno:** Videoaulas com player LMS, anotações, transcrição, materiais para download, **Simulador Técnico Interativo** (com teste de componentes de máquinas de costura e injeção, ajuste de RPM, tensão e osciloscópio), Boletim Escolar com notas e faltas, avaliações online, emissão de Certificado Oficial com QR Code e histórico financeiro. |
-| **`professor.php`** | **Portal do Professor:** Lançamento de notas bimestrais (N1, N2, Trabalhos), registro de presença/frequência dos alunos com cálculo automático de porcentagem, gerenciamento de módulos e aulas. |
-| **`admin.php`** | **Painel Executivo da Direção (CEO Eloizio & Sofia Vanguard):** Catálogo de cursos com exclusão e edição, **Preenchimento de Cursos via Texto (Rápido)** com formulário e modelos pré-formatados, Gestão completa de Matrículas e Alunos, CRM de Propostas Comerciais de Cursos e Alunos com cupom `SOFIA15`, Conciliação financeira Mercado Pago e Auditoria com logs da Senha Master `ELOIZIO@MASTER2026`. |
-| **`propostas.php`** | **Central de Propostas de Cursos & Alunos:** Simulador e gerador de Proposta Comercial Personalizada com desconto de 15% (Cupom `SOFIA15`), cálculo de 12x sem juros, link direto para conversa no WhatsApp oficial do aluno, histórico de propostas ativas (CRM) e Propostas de Novos Cursos submetidas pela comunidade. |
-| **`validar_certificado.php`** | **Validador Oficial de Certificados:** Consulta pública por código de registro (ex: `CERT-2026-BR-8912`) ou hash SHA-256, exibição do certificado oficial autêntico com QR Code, dados do formando, carga horária, assinaturas e botão de impressão em papel timbrado ou PDF. |
-| **`calendario.php`** | **Calendário Acadêmico & Biblioteca Digital:** Cronograma com aulas inaugurais, plantões de dúvidas ao vivo com o CEO Eloizio, datas de avaliações e acervo de apostilas em PDF para download gratuito. |
-| **`chat.php`** | **Chat Acadêmico & Central de Mensagens:** Canais de atendimento (Mural Geral de Avisos, Atendimento com a Expert Sofia Vanguard, Oficina & Máquinas com Eloizio Silva, Tira-Dúvidas dos Alunos) com envio de mensagens em tempo real. |
-| **`manuais.php`** | **Manuais do Sistema & Procedimentos:** Manual do Aluno, Manual do Administrador, Manual do Professor e Guia Operacional de Deploy. |
-| **`auth.php`** | **Autenticação Segura & Senha Master:** Login unificado para Aluno, Professor e Administrador, bloqueio de força bruta e bypass imediato com a Senha Master `ELOIZIO@MASTER2026`. |
-| **`dados.php`** | **Repositório Central de Dados:** Base portátil de cursos, ementas, alunos, propostas comerciais, notas, avaliações, certificados e mensagens com cache JSON automático. |
-| **`mercadopago.php`** | **Gateway Mercado Pago Nativo:** Checkout Pro, PIX com QR Code dinâmico e validação HMAC SHA-256 de webhooks via cURL. |
-| **`sofia_ia.php`** | **Sofia Vanguard — Expert em Cursos & Marketing:** Diagnóstico técnico multimodal de máquinas e motor cognitivo especialista com psicologia de marketing educacional. |
-| **`admin_cli.php`** | **Terminal CLI Administrativo:** Comandos de auditoria, diagnóstico de sistema e conciliação financeira. |
-| **`header.php` / `footer.php`** | **Cabeçalho e Rodapé Universais:** Navbar responsiva com menu desktop e drawer mobile, modal universal de login com a Senha Master e links integrados. |
+| **`index.php`** | **Página Inicial & Vitrine de Cursos:** 10 vantagens exclusivas, comparativo 100% Online vs Híbrido, catálogo de cursos com filtros dinâmicos em jQuery, modal de ementa completa, depoimentos reais, FAQ interativo com acordeão jQuery e painel de auditoria técnica da stack com teste cURL em tempo real. |
+| **`matricula.php`** | **Formulário Oficial de Matrícula Digital:** Cadastro completo com RG, CPF, endereço com busca de CEP, filiação, upload de documentos e foto 3x4 do aluno, emissão de Registro Acadêmico (RA) e checkout via Mercado Pago. |
+| **`aluno.php`** | **Portal Acadêmico do Aluno:** Videoaulas com player LMS, simulador técnico interativo, boletim escolar com notas e faltas, avaliações online, emissão de Certificado Oficial com QR Code e histórico financeiro. |
+| **`cooperativa.php`** | **Cooperativa de Melhores Alunos & Balcão de Oportunidades:** Vitrine profissional, vagas de emprego e estágios opcionais conveniados (Lei nº 11.788/2008) com emissão de Termo de Compromisso Oficial. |
+| **`mercadopago.php`** | **Gateway Mercado Pago via cURL:** Processamento de pagamentos 100% via cURL em PHP 8.1+ com PIX dinâmico (QR Code e Copia e Cola), Cartão em até 12x, Boleto Bancário e Webhooks IPN com validação HMAC. |
+| **`validar_certificado.php`** | **Validação Pública com Chave SHA-256:** Consulta pública criptográfica com QR Code para atestar autenticidade e fé pública do certificado em todo o Brasil. |
+| **`professor.php`** | **Portal do Professor:** Lançamento de notas bimestrais, controle de frequência e gerenciamento de módulos. |
+| **`admin.php`** | **Painel Executivo da Direção:** Gestão de cursos, importação rápida de cursos por texto, auditoria com a Senha Master `ELOIZIO@MASTER2026`, CRM de matrículas e conciliação financeira. |
+| **`propostas.php`** | **Central de Propostas Comerciais:** Simulador de descontos com parcelamento em 12x, geração de link do WhatsApp e CRM de negociação. |
+| **`calendario.php`** | **Calendário Acadêmico & Biblioteca Digital:** Cronograma com aulas inaugurais, plantões de dúvidas e acervo de apostilas técnicas em PDF. |
+| **`chat.php`** | **Chat Acadêmico & Mensagens:** Canais de atendimento em tempo real. |
+| **`manuais.php`** | **Manuais do Sistema:** Guias operacionais do Aluno, Professor e Administrador. |
+| **`auth.php`** | **Autenticação Segura & Senha Master:** Login unificado e proteção contra força bruta. |
+| **`dados.php`** | **Repositório Central de Dados:** Base portátil de cursos (online e híbridos), ementas, alunos, notas e certificados com persistência em JSON. |
+| **`jquery.min.js`** | **Biblioteca jQuery 3.7.1 Local:** Fallback offline garantindo 100% de funcionamento sem depender de conexões externas. |
+
+---
+
+## 🛠️ Stack 100% Homologada
+- **PHP 8.1+**: Tipagem estrita (`declare(strict_types=1);`), funções nativas, seguro e ultra veloz.
+- **HTML5**: Semântico, responsivo, acessível e otimizado para SEO.
+- **cURL**: Comunicação direta com a API do Mercado Pago e serviços externos.
+- **JavaScript (Vanilla & ES6)**: Scripts nativos sem transpilação pesada.
+- **Tailwind CSS**: Estilização moderna e fluida com suporte mobile-first.
+- **jQuery 3.7.1**: Interatividade com acordeões de FAQ, filtros em tempo real e teste de diagnóstico AJAX/cURL.
 
 ---
 

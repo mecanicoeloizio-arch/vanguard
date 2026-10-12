@@ -26,7 +26,7 @@ $apostilas = getBibliotecaData();
         Calendário Acadêmico & Biblioteca Virtual
       </h1>
       <p class="text-xs sm:text-sm text-indigo-200">
-        Fique por dentro das aulas inaugurais, plantões ao vivo com o CEO Eloizio Silva e baixe apostilas completas em PDF.
+        Fique por dentro das aulas inaugurais, plantões ao vivo com o CEO Eloizio Assunção e baixe apostilas completas em PDF.
       </p>
     </div>
 

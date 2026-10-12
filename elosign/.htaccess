@@ -1,0 +1,23 @@
+# EloSign Apache / LiteSpeed Configuration
+Options -Indexes
+DirectoryIndex index.php index.html
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^s/(.*)$ index.php?route=sign&id=$1 [QSA,L]
+    RewriteRule ^validar/(.*)$ index.php?route=validate&hash=$1 [QSA,L]
+    RewriteRule ^api/(.*)$ api.php?action=$1 [QSA,L]
+</IfModule>
+
+<FilesMatch "^(envelopes|templates|audits)\.json$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+<IfModule mod_headers.c>
+    Header set Access-Control-Allow-Origin "*"
+    Header set Access-Control-Allow-Methods "GET, POST, OPTIONS"
+    Header set Access-Control-Allow-Headers "Content-Type, Authorization, X-Api-Key"
+</IfModule>

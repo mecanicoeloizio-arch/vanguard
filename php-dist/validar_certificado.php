@@ -63,11 +63,14 @@ if (!empty($codigoBuscado)) {
         </div>
       </div>
 
-      <!-- Atalhos de Exemplo Rápido -->
-      <div class="flex items-center gap-2 text-[11px] text-slate-500 flex-wrap">
-        <span>Exemplos para teste:</span>
-        <a href="validar_certificado.php?codigo=CERT-2026-BR-8912" class="text-indigo-600 font-bold hover:underline font-mono bg-indigo-50 px-2 py-0.5 rounded">CERT-2026-BR-8912</a>
-        <a href="validar_certificado.php?codigo=CERT-2026-BR-8913" class="text-indigo-600 font-bold hover:underline font-mono bg-indigo-50 px-2 py-0.5 rounded">CERT-2026-BR-8913</a>
+      <!-- Atalhos de Exemplo Rápido por Setor -->
+      <div class="flex items-center gap-1.5 text-[11px] text-slate-500 flex-wrap">
+        <span class="font-bold">Testar por Setor:</span>
+        <a href="validar_certificado.php?codigo=DNE-2026-VAL-OK" class="text-indigo-600 font-bold hover:underline font-mono bg-indigo-50 px-2 py-0.5 rounded">📜 Certificado MEC</a>
+        <a href="validar_certificado.php?codigo=DNE-CARTEIRINHA-2026" class="text-indigo-600 font-bold hover:underline font-mono bg-indigo-50 px-2 py-0.5 rounded">🪪 Carteirinha DNE</a>
+        <a href="validar_certificado.php?codigo=DEC-MAT-2026-OK" class="text-indigo-600 font-bold hover:underline font-mono bg-indigo-50 px-2 py-0.5 rounded">🏛️ Declaração Matrícula</a>
+        <a href="validar_certificado.php?codigo=HIST-OFICIAL-2026-OK" class="text-indigo-600 font-bold hover:underline font-mono bg-indigo-50 px-2 py-0.5 rounded">📑 Histórico Escolar</a>
+        <a href="validar_certificado.php?codigo=ELOIZIO-2026-CERT-OK" class="text-indigo-600 font-bold hover:underline font-mono bg-indigo-50 px-2 py-0.5 rounded">🔧 Certificado Técnico</a>
       </div>
     </form>
   </div>
@@ -84,11 +87,16 @@ if (!empty($codigoBuscado)) {
               ✓
             </div>
             <div>
-              <span class="text-[10px] uppercase font-black tracking-widest text-emerald-700 bg-emerald-100 px-2.5 py-0.5 rounded-full border border-emerald-300">
-                Certificado Autêntico & Válido
-              </span>
+              <div class="flex items-center gap-2 flex-wrap">
+                <span class="text-[10px] uppercase font-black tracking-widest text-emerald-700 bg-emerald-100 px-2.5 py-0.5 rounded-full border border-emerald-300">
+                  <?= htmlspecialchars($certificadoEncontrado['documentType'] ?? 'Documento Acadêmico Oficial') ?>
+                </span>
+                <span class="text-[10px] uppercase font-black tracking-wider text-indigo-700 bg-indigo-100 px-2.5 py-0.5 rounded-full border border-indigo-300">
+                  Setor: <?= htmlspecialchars($certificadoEncontrado['issuingSector'] ?? 'Secretaria Acadêmica & Coordenação') ?>
+                </span>
+              </div>
               <h2 class="text-lg sm:text-xl font-black text-slate-900 mt-1">
-                Autenticidade Oficial Confirmada no Registro Acadêmico
+                Autenticidade Oficial Confirmada no Registro Acadêmico Digital
               </h2>
             </div>
           </div>
@@ -105,7 +113,7 @@ if (!empty($codigoBuscado)) {
             <h3 class="text-xl sm:text-3xl font-black text-slate-950 tracking-tight font-serif">
               GRUPO ELOIZIO EDUCAÇÃO & TECNOLOGIA
             </h3>
-            <span class="text-xs font-medium text-slate-500">Credenciamento Nacional de Cursos Livres e Profissionalizantes</span>
+            <span class="text-xs font-bold text-slate-600">Educação Profissional de Nível Livre • Lei Federal nº 9.394/96 Art. 42 & Decreto nº 5.154/2004 (MEC)</span>
           </div>
 
           <div class="max-w-2xl mx-auto py-4 space-y-3 text-xs sm:text-base text-slate-700 leading-relaxed">
@@ -119,7 +127,7 @@ if (!empty($codigoBuscado)) {
               CPF: <?= htmlspecialchars($certificadoEncontrado['cpf']) ?> • Matrícula: <?= htmlspecialchars($certificadoEncontrado['registrationNumber']) ?>
             </p>
             <p>
-              concluiu com êxito todas as exigências pedagógicas, avaliações teóricas e práticas do curso de
+              concluiu com êxito todas as exigências pedagógicas do curso livre profissionalizante de
             </p>
             <p class="text-base sm:text-xl font-black text-slate-950">
               <?= htmlspecialchars($certificadoEncontrado['courseTitle']) ?>
@@ -133,15 +141,24 @@ if (!empty($codigoBuscado)) {
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-8 pt-8 border-t border-slate-200 max-w-3xl mx-auto text-xs">
             <div class="space-y-1">
               <div class="w-40 border-b border-slate-800 mx-auto"></div>
-              <strong class="text-slate-900 block font-bold">Eloizio Silva</strong>
+              <strong class="text-slate-900 block font-bold">Eloizio Assunção</strong>
               <span class="text-[11px] text-slate-500">Fundador, CEO & Especialista Técnico</span>
             </div>
             <div class="space-y-1">
               <div class="w-40 border-b border-slate-800 mx-auto"></div>
-              <strong class="text-slate-900 block font-bold">Profa. Dra. Mariana Fernandes</strong>
-              <span class="text-[11px] text-slate-500">Coordenação Pedagógica & Ensino Superior</span>
+              <strong class="text-slate-900 block font-bold"><?= htmlspecialchars($certificadoEncontrado['signedBy'] ?? 'Profa. Dra. Mariana Fernandes & Roseli Castro') ?></strong>
+              <span class="text-[11px] text-slate-500">Coordenação Pedagógica & Secretaria Geral</span>
             </div>
           </div>
+
+          <?php if (!empty($certificadoEncontrado['book'])): ?>
+            <div class="mt-4 p-3 bg-amber-50/80 rounded-xl border border-amber-200 text-xs text-amber-950 flex flex-wrap items-center justify-center gap-4 font-mono">
+              <span>📖 <?= htmlspecialchars($certificadoEncontrado['book']) ?></span>
+              <span>📄 <?= htmlspecialchars($certificadoEncontrado['sheet']) ?></span>
+              <span>🏛️ <?= htmlspecialchars($certificadoEncontrado['registryNumber']) ?></span>
+              <span class="text-emerald-700 font-bold">✓ Homologado MEC / LDB 9.394/96</span>
+            </div>
+          <?php endif; ?>
 
           <!-- Metadados Criptográficos -->
           <div class="pt-6 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-4 text-left text-[11px] text-slate-500 bg-slate-50 p-4 rounded-xl font-mono">

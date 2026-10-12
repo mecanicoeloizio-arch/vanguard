@@ -6,6 +6,8 @@
   <title>Grupo Eloizio - Cursos 100% Online, Contabilidade & Máquinas de Costura</title>
   <meta name="description" content="Grupo Eloizio: Cursos Livres com Certificação Oficial MEC, Contabilidade e Assessoria Digital 100% Online, e Oficina Mecânica de Máquinas de Costura em São Gonçalo - RJ.">
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script>window.jQuery || document.write('<script src="jquery.min.js"><\/script>')</script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -54,8 +56,8 @@
         <button onclick="abrirModalAuth()" id="btnAuthNav" class="px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs transition shadow-sm cursor-pointer flex items-center gap-1.5">
           <span>🔒 Entrar / Login</span>
         </button>
-        <button onclick="abrirCamilla()" class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs transition shadow-sm cursor-pointer flex items-center gap-2">
-          <span>☕ Falar com Camilla Faria</span>
+        <button onclick="abrirSofia()" class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs transition shadow-sm cursor-pointer flex items-center gap-2">
+          <span>✨ Consultar Sofia Vanguard</span>
         </button>
       </div>
     </div>
@@ -71,15 +73,15 @@
         Educação Profissional, Assessoria Contábil & Oficina de Máquinas de Costura
       </h2>
       <p class="text-sm sm:text-base text-slate-300 max-w-2xl mx-auto leading-relaxed">
-        Soluções completas lideradas pelo CEO Eloizio e pela Gerente Geral Camilla Faria. Atendimento direto, dinâmico e pagamentos 100% seguros pelo Mercado Pago.
+        Soluções completas lideradas pelo CEO Eloizio e pela Expert Vanguard Sofia. Atendimento direto, dinâmico e pagamentos 100% seguros pelo Mercado Pago.
       </p>
 
       <div class="flex flex-wrap items-center justify-center gap-3 pt-4">
-        <button onclick="abrirCamilla()" class="px-6 py-3 rounded-2xl bg-indigo-600 hover:bg-indigo-500 text-white font-black text-xs sm:text-sm transition shadow-lg shadow-indigo-600/30 cursor-pointer">
-          Conversar com a Atendente Camilla
+        <button onclick="abrirSofia()" class="px-6 py-3 rounded-2xl bg-indigo-600 hover:bg-indigo-500 text-white font-black text-xs sm:text-sm transition shadow-lg shadow-indigo-600/30 cursor-pointer">
+          Conversar com Sofia Vanguard
         </button>
         <button onclick="abrirModalPagamento('Curso Engenharia de Software Moderna', 1606.50)" class="px-6 py-3 rounded-2xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs sm:text-sm border border-white/20 transition cursor-pointer">
-          Checkout Mercado Pago (Cupom CAMILLA15)
+          Checkout Mercado Pago (Cupom SOFIA15)
         </button>
       </div>
     </div>
@@ -130,7 +132,7 @@
         <p class="text-xs text-slate-600 leading-relaxed">
           Oficina especializada em São Gonçalo - RJ liderada pelo CEO Eloizio. Compra, venda, conserto e reforma completa de máquinas industriais (reta, overloque) e domésticas (Singer, Siruba, Brother).
         </p>
-        <button onclick="abrirCamillaFoto()" class="w-full py-2.5 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-900 font-bold text-xs transition cursor-pointer">
+        <button onclick="abrirSofiaFoto()" class="w-full py-2.5 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-900 font-bold text-xs transition cursor-pointer">
           Enviar Foto da Máquina para Diagnóstico &rarr;
         </button>
       </div>
@@ -163,7 +165,7 @@
             <div>
               <span class="text-[10px] text-slate-400 line-through block">De R$ 1.890,00</span>
               <span class="text-lg font-black text-emerald-600">12x R$ 133,87</span>
-              <span class="text-[10px] text-indigo-600 font-bold block">com cupom CAMILLA15</span>
+              <span class="text-[10px] text-indigo-600 font-bold block">com cupom SOFIA15</span>
             </div>
             <button onclick="abrirModalPagamento('Engenharia de Software Moderna', 1606.50)" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold text-xs transition cursor-pointer">
               Matricular
@@ -188,7 +190,7 @@
             <div>
               <span class="text-[10px] text-slate-400 line-through block">De R$ 890,00</span>
               <span class="text-lg font-black text-emerald-600">12x R$ 63,04</span>
-              <span class="text-[10px] text-indigo-600 font-bold block">com cupom CAMILLA15</span>
+              <span class="text-[10px] text-indigo-600 font-bold block">com cupom SOFIA15</span>
             </div>
             <button onclick="abrirModalPagamento('Gestão Contábil Prática', 756.50)" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold text-xs transition cursor-pointer">
               Matricular
@@ -213,7 +215,7 @@
             <div>
               <span class="text-[10px] text-slate-400 line-through block">De R$ 1.200,00</span>
               <span class="text-lg font-black text-emerald-600">12x R$ 85,00</span>
-              <span class="text-[10px] text-indigo-600 font-bold block">com cupom CAMILLA15</span>
+              <span class="text-[10px] text-indigo-600 font-bold block">com cupom SOFIA15</span>
             </div>
             <button onclick="abrirModalPagamento('Manutenção de Máquinas de Costura', 1020.00)" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold text-xs transition cursor-pointer">
               Matricular
@@ -283,11 +285,11 @@
     </div>
   </div>
 
-  <!-- Widget Flutuante Camilla Faria -->
+  <!-- Widget Flutuante Sofia Vanguard -->
   <div id="widgetCamilla" class="fixed bottom-6 right-6 z-40">
-    <button onclick="abrirCamilla()" class="px-4 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-full font-bold text-xs shadow-xl flex items-center gap-2 cursor-pointer hover:scale-105 transition">
-      <span>☕</span>
-      <span>Camilla Faria (Grupo Eloizio)</span>
+    <button onclick="abrirSofia()" class="px-4 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-full font-bold text-xs shadow-xl flex items-center gap-2 cursor-pointer hover:scale-105 transition">
+      <span>✨</span>
+      <span>Sofia Vanguard (Expert em Cursos)</span>
       <span class="w-2.5 h-2.5 bg-emerald-400 rounded-full animate-pulse"></span>
     </button>
   </div>
@@ -302,7 +304,7 @@
           <span class="text-[10px] text-indigo-200">Expert em Cursos & Marketing • Grupo Eloizio</span>
         </div>
       </div>
-      <button onclick="fecharCamilla()" class="text-slate-400 hover:text-white text-lg">&times;</button>
+      <button onclick="fecharSofia()" class="text-slate-400 hover:text-white text-lg">&times;</button>
     </div>
 
     <!-- Seletor de Perfil -->

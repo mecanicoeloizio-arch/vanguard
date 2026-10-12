@@ -27,6 +27,19 @@ export interface Lesson {
   isCompleted?: boolean;
 }
 
+export interface CourseMaterialItem {
+  id: string;
+  title: string;
+  type: 'livro' | 'manual' | 'apostila';
+  format: 'PDF' | 'EPUB' | 'Vídeo Explicativo';
+  pages?: number;
+  durationMinutes?: number;
+  description: string;
+  downloadUrl?: string;
+  priceStandalone?: number; // Para venda avulsa no Mercado Pago
+  includedInCourse: boolean;
+}
+
 export interface CourseModule {
   id: string;
   title: string;
@@ -53,6 +66,13 @@ export interface Course {
   tags: string[];
   enrolledStudentsCount: number;
   rating: number;
+  modality?: 'online' | 'hibrido';
+  practicalLocation?: string;
+  materials?: CourseMaterialItem[]; // Manuais, Livros digitais e Apostilas inclusos ou para venda
+  isProductionLive?: boolean;
+  publishedBy?: string; // 'Camilla Faria (Gerente Geral)'
+  publishedAt?: string;
+  mercadoPagoPaymentLink?: string;
 }
 
 export interface GradeItem {
@@ -111,7 +131,16 @@ export interface StudentSubmission {
   teacherFeedback?: string;
 }
 
-export type DocumentType = 'carteirinha' | 'certificado' | 'historico' | 'declaracao';
+export type DocumentType =
+  | 'carteirinha'
+  | 'certificado'
+  | 'historico'
+  | 'declaracao'
+  | 'ementa'
+  | 'segunda_via_carteirinha'
+  | 'segunda_via_certificado'
+  | 'segunda_via_historico'
+  | 'segunda_via_declaracao';
 
 export interface DocumentRequest {
   id: string;
@@ -127,6 +156,10 @@ export interface DocumentRequest {
   issuedAt?: string;
   validationHash?: string;
   downloadUrl?: string;
+  internshipHoursValidated?: number;
+  internshipDetails?: string;
+  isFirstIssueFree?: boolean; // 1ª via gratuita (carteirinha livre, certificado com mensalidades em dia)
+  isSecondIssue?: boolean; // 2ª via paga definida pela secretaria
 }
 
 export interface FinancialTransaction {
@@ -382,4 +415,362 @@ export interface SecurityAuditReport {
   totalChecks: number;
   passedChecks: number;
 }
+
+export interface EnrollmentDocumentUploads {
+  photoBase64?: string;
+  rgFrontBase64?: string;
+  rgBackBase64?: string;
+  proofResidenceBase64?: string;
+  proofEducationBase64?: string;
+}
+
+export interface CentralProjectBrandConfig {
+  id: 'vanguard' | 'elomak' | 'elocontabil' | 'elosign' | 'portal' | 'elowa' | 'webmail';
+  name: string;
+  badge: string;
+  primaryColor: string;
+  secondaryColor: string;
+  logoUrl: string;
+  slogan: string;
+  faviconUrl: string;
+  status: 'online' | 'maintenance' | 'offline';
+  portOrPath: string;
+  version: string;
+  independentPanelUrl: string;
+  recordsCount: number;
+}
+
+export interface CentralDatabaseConfig {
+  recommendedType: string;
+  activeDriver: 'mysql' | 'mariadb' | 'sqlite' | 'postgres';
+  host: string;
+  port: number;
+  database: string;
+  user: string;
+  passwordMasked: string;
+  charset: string;
+  status: 'connected' | 'disconnected' | 'warning';
+  latencyMs: number;
+  totalTables: number;
+  totalRecords: number;
+  databaseSizeMb: number;
+  tables: Array<{ name: string; description: string; rows: number; sizeKb: number }>;
+}
+
+export interface MasterTokensConfig {
+  mercadopagoPublicKey: string;
+  mercadopagoAccessToken: string;
+  mercadopagoClientId: string;
+  mercadopagoClientSecret: string;
+  mercadopagoWebhookSecret: string;
+  mercadopagoEnvironment: 'sandbox' | 'production';
+  geminiApiKey: string;
+  geminiModel: string;
+  lastUpdated: string;
+}
+
+export interface BirthdayRecord {
+  id: string;
+  name: string;
+  birthDate: string; // MM-DD or YYYY-MM-DD
+  whatsapp: string;
+  email: string;
+  category: 'aluno' | 'cliente_oficina' | 'empresa_contabil' | 'assinante_elosign';
+  congratulatedToday: boolean;
+  congratulatedAt?: string;
+  couponCode: string;
+  discountPercent: number;
+}
+
+export interface FullEnrollmentData {
+  id: string;
+  fullName: string;
+  cpf: string;
+  rg: string;
+  issuerOrg: string;
+  birthDate: string;
+  gender: string;
+  email: string;
+  phone: string;
+  motherName: string;
+  fatherName?: string;
+  cep: string;
+  street: string;
+  number: string;
+  complement?: string;
+  neighborhood: string;
+  city: string;
+  state: string;
+  previousEducation: string;
+  previousSchool?: string;
+  courseId: string;
+  courseTitle: string;
+  modality: 'online' | 'hibrido' | 'presencial_sg';
+  documents: EnrollmentDocumentUploads;
+  termsAccepted: boolean;
+  signedAt: string;
+  registrationNumber: string;
+  status: 'pendente_pagamento' | 'ativa' | 'em_analise_documentos';
+  paymentMethod: 'pix' | 'credit_card' | 'boleto';
+  createdAt: string;
+}
+
+export interface StoredExamRecord {
+  examId: string;
+  title: string;
+  score: number;
+  maxPoints: number;
+  date: string;
+  category: string;
+  verifiedBy: string;
+  certificateHash?: string;
+  feedback?: string;
+}
+
+export interface CourseUpdateRecord {
+  year: number;
+  title: string;
+  hours: number;
+  status: 'atualizado' | 'em_andamento';
+  badge: string;
+}
+
+export interface ValidatedInternshipRecord {
+  id: string;
+  vacancyId?: string;
+  companyName: string;
+  title: string;
+  hoursValidated: number;
+  completionDate: string;
+  supervisor: string;
+  validationCode: string;
+  certificateMention: string;
+  status: 'validado' | 'em_andamento' | 'pendente_analise';
+}
+
+export interface CooperativeMember {
+  id: string;
+  userId: string;
+  name: string;
+  avatar: string;
+  registrationNumber: string;
+  courseTitle: string;
+  courseCategory: string;
+  city: string;
+  overallAverage: number;
+  completionPercentage: number;
+  topPerformerBadge: boolean;
+  bio: string;
+  technicalSkills: string[];
+  storedExams: StoredExamRecord[];
+  courseUpdates: CourseUpdateRecord[];
+  validatedInternships?: ValidatedInternshipRecord[];
+  totalInternshipHours?: number;
+  contactPhone: string;
+  contactEmail: string;
+  availableForHire: boolean;
+  linkedinOrPortfolio?: string;
+  resumeSummary: string;
+  hasConcludedCourse?: boolean; // Se for aluno concluinte de cursos
+  badgeIssued?: boolean; // Crachá funcional da cooperativa emitido
+  badgeStatus?: 'ativo' | 'isento_concluinte' | 'anuidade_pendente' | 'renovado';
+  badgeAnnualRenewalFee?: number; // Cobrado na anuidade para renovação se não for aluno concluinte
+  isBadgeRenewalExempt?: boolean; // NÃO será cobrado se for aluno concluinte de cursos
+}
+
+export interface JobVacancy {
+  id: string;
+  title: string;
+  companyName: string;
+  companyLogo?: string;
+  location: string;
+  salaryRange: string;
+  type: 'clt' | 'pj' | 'estagio' | 'prestador_servico';
+  category: 'Mecânica e Máquinas' | 'Contabilidade e Gestão' | 'Tecnologia e Software' | 'Geral';
+  description: string;
+  requirements: string[];
+  benefits: string[];
+  contactEmail: string;
+  contactPhone: string;
+  createdAt: string;
+  status: 'open' | 'filled';
+  applicantsCount: number;
+  // Campos de estágio opcional para validação
+  isOptionalInternship?: boolean;
+  internshipHours?: number;
+  modality?: 'presencial' | 'remoto' | 'hibrido';
+  supervisorName?: string;
+  supervisorRole?: string;
+  allowCourseValidation?: boolean;
+}
+
+export interface JobApplication {
+  id: string;
+  vacancyId: string;
+  vacancyTitle: string;
+  memberId: string;
+  memberName: string;
+  appliedAt: string;
+  status: 'em_analise' | 'entrevista_agendada' | 'aprovado' | 'banco_reserva' | 'estagio_iniciado' | 'estagio_concluido';
+  coverNote?: string;
+  isInternship?: boolean;
+  internshipHours?: number;
+  companySupervisor?: string;
+  validationCode?: string;
+  validatedAt?: string;
+  validationHoursAwarded?: number;
+  supervisorEvaluation?: string;
+}
+
+// ==========================================
+// SERVIDOR DE E-MAIL & WEBMAIL (PHPMailer Engine)
+// Subdomínio: webmail.grupoeloizio.com.br
+// ==========================================
+
+export interface EmailAttachment {
+  id: string;
+  name: string;
+  size: string;
+  type: string;
+  url: string;
+  contentBase64?: string;
+}
+
+export interface EmailMessage {
+  id: string;
+  mailbox: string;
+  folder: 'inbox' | 'sent' | 'drafts' | 'trash' | 'spam';
+  fromName: string;
+  fromEmail: string;
+  to: string[];
+  subject: string;
+  date: string;
+  timestamp: number;
+  read: boolean;
+  starred: boolean;
+  bodyHtml: string;
+  attachments: EmailAttachment[];
+}
+
+export interface MailboxAccount {
+  id: string;
+  email: string;
+  name: string;
+  role: 'admin' | 'student' | 'subscriber' | 'support';
+  plan: 'vanguard_student' | 'subscriber_pro' | 'subscriber_enterprise' | 'admin_unlimited';
+  quotaMb: number;
+  usedMb: number;
+  status: 'active' | 'suspended' | 'pending_payment';
+  isStudentFree: boolean;
+  course?: string;
+  subscriptionPaymentStatus?: 'free_for_student' | 'paid_mercadopago' | 'pending_mercadopago';
+  subscriptionExpiresAt?: string;
+  createdAt: string;
+}
+
+export interface WhatsAppMediaAttachment {
+  type: 'audio' | 'video' | 'pdf' | 'image';
+  url: string;
+  fileName: string;
+  mimeType?: string;
+  size?: string;
+  duration?: number;
+  pages?: number;
+}
+
+export interface WhatsAppMessage {
+  id: string;
+  instanceId: string;
+  chatPhone: string;
+  chatName: string;
+  fromMe: boolean;
+  type: 'text' | 'audio' | 'video' | 'pdf' | 'image';
+  text: string;
+  timestamp: string;
+  status: 'sent' | 'delivered' | 'read';
+  media?: WhatsAppMediaAttachment | null;
+}
+
+export interface WhatsAppInstance {
+  id: string;
+  name: string;
+  phone: string;
+  phoneDisplay: string;
+  role: 'admin_master' | 'student' | 'subscriber';
+  isMaster: boolean;
+  status: 'connected' | 'connecting' | 'disconnected';
+  battery: number;
+  plan: 'vanguard_student' | 'subscriber_pro' | 'subscriber_enterprise';
+  isStudentFree: boolean;
+  subscriptionActive?: boolean;
+  mercadoPagoPaymentId?: string;
+  qrCode?: string | null;
+  pairingCode?: string;
+  createdAt: string;
+  lastActive: string;
+  totalSent: number;
+  totalReceived: number;
+  webhookUrl?: string;
+}
+
+export interface EloSignSigner {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  cpf: string;
+  order: number;
+  status: 'waiting' | 'signed' | 'refused';
+  signedAt?: string | null;
+  ip?: string | null;
+  userAgent?: string | null;
+  signatureBase64?: string | null;
+  selfieUrl?: string | null;
+  documentPhotoUrl?: string | null;
+}
+
+export interface EloSignEnvelope {
+  id: string;
+  title: string;
+  summary: string;
+  whatsappMessage: string;
+  status: 'draft' | 'pending' | 'signed' | 'expired';
+  templateId?: string;
+  authMethod: 'email_sms' | 'selfie_dynamic' | 'selfie_doc' | 'pix_valida';
+  originalSha256: string;
+  finalSha256?: string | null;
+  createdAt: string;
+  signedAt?: string | null;
+  signers: EloSignSigner[];
+  variables: Record<string, string>;
+  rawText?: string;
+  pdfDataUrl?: string;
+  signedPdfDataUrl?: string;
+  brandName?: string;
+  brandLogo?: string;
+  brandColor?: string;
+}
+
+export interface EloSignTemplate {
+  id: string;
+  title: string;
+  category: string;
+  description: string;
+  content: string;
+  variables: string[];
+}
+
+export interface EloSignSettings {
+  workshopName: string;
+  primaryColor: string;
+  logoUrl: string;
+  apiKey: string;
+  currentPlan: 'start' | 'pro' | 'enterprise';
+  docsUsedThisMonth: number;
+  docsLimit: number;
+}
+
+
+
+
 

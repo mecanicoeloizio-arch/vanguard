@@ -28,7 +28,7 @@ function getCursosData(): array
             'id' => 'course_1',
             'title' => 'Engenharia de Software Moderna & Arquitetura Cloud',
             'shortDescription' => 'Do design de sistemas escaláveis à computação distribuída e integração com Inteligência Artificial.',
-            'fullDescription' => 'Este curso completo de nível superior desenvolve competências sólidas em microsserviços, DevOps, segurança de software, banco de dados distribuídos e automação em nuvem com GCP e AWS. Aulas teóricas e práticas com projetos reais.',
+            'fullDescription' => 'Este curso livre de qualificação profissionalizante de alta performance desenvolve competências sólidas em microsserviços, DevOps, segurança de software, banco de dados distribuídos e automação em nuvem com GCP e AWS. Aulas teóricas e práticas com projetos reais amparadas pela Lei Federal nº 9.394/96 Art. 42.',
             'category' => 'Tecnologia',
             'price' => 1890.00,
             'workloadHours' => 360,
@@ -39,6 +39,7 @@ function getCursosData(): array
             'featured' => true,
             'enrolledStudentsCount' => 342,
             'rating' => 4.9,
+            'modality' => 'online',
             'tags' => ['Arquitetura', 'Cloud', 'TypeScript', 'DevOps', 'Clean Architecture'],
             'syllabus' => [
                 [
@@ -67,12 +68,14 @@ function getCursosData(): array
             'price' => 480.00,
             'workloadHours' => 80,
             'level' => 'Iniciante',
-            'instructorName' => 'Eloizio Silva (CEO)',
+            'instructorName' => 'Eloizio Assunção (CEO)',
             'instructorTitle' => 'Fundador, CEO & Especialista Mecânico com 30+ anos de experiência',
             'thumbnail' => 'https://images.unsplash.com/photo-1558769132-cb1aea458c5e?auto=format&fit=crop&q=80&w=800',
             'featured' => true,
             'enrolledStudentsCount' => 285,
             'rating' => 5.0,
+            'modality' => 'hibrido',
+            'practicalLocation' => 'Oficina Técnica Polo São Gonçalo - RJ',
             'tags' => ['Mecânica', 'Máquinas de Costura', 'Overloque', 'Galoneira', 'São Gonçalo'],
             'syllabus' => [
                 [
@@ -113,6 +116,7 @@ function getCursosData(): array
             'featured' => true,
             'enrolledStudentsCount' => 198,
             'rating' => 4.95,
+            'modality' => 'online',
             'tags' => ['Contabilidade', 'MEI', 'Notas Fiscais', 'Gestão Financeira', 'Impostos'],
             'syllabus' => [
                 [
@@ -140,12 +144,14 @@ function getCursosData(): array
             'price' => 590.00,
             'workloadHours' => 100,
             'level' => 'Intermediário',
-            'instructorName' => 'Eloizio Silva (CEO)',
+            'instructorName' => 'Eloizio Assunção (CEO)',
             'instructorTitle' => 'Fundador, CEO & Especialista Mecânico',
             'thumbnail' => 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=800',
             'featured' => false,
             'enrolledStudentsCount' => 142,
             'rating' => 4.9,
+            'modality' => 'hibrido',
+            'practicalLocation' => 'Polo Industrial Têxtil São Gonçalo - RJ',
             'tags' => ['Indústria', 'Automação', 'Costura Industrial', 'Pneumática'],
             'syllabus' => [
                 [
@@ -172,6 +178,7 @@ function getCursosData(): array
             'featured' => false,
             'enrolledStudentsCount' => 215,
             'rating' => 4.85,
+            'modality' => 'online',
             'tags' => ['Gestão', 'Finanças', 'Liderança', 'Educação'],
             'syllabus' => [
                 [
@@ -197,12 +204,175 @@ function getCursosData(): array
             'featured' => false,
             'enrolledStudentsCount' => 189,
             'rating' => 4.95,
+            'modality' => 'online',
             'tags' => ['Figma', 'UI/UX', 'Design System', 'Prototipagem'],
             'syllabus' => [
                 [
                     'title' => 'Módulo 1: Fundamentos de UX',
                     'lessons' => [
                         ['title' => '1. Heurísticas de Usabilidade e Acessibilidade WCAG', 'duration' => '50 min', 'completed' => false, 'videoUrl' => 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4']
+                    ]
+                ]
+            ]
+        ],
+        [
+            'id' => 'course_7',
+            'title' => 'Mecânica e Regulagem de Máquinas de Costura Domésticas (100% Online EAD)',
+            'shortDescription' => 'Curso prático 100% a distância para aprender consertos, regulagem de ponto e lubrificação de Singer, Elgin e Janome.',
+            'fullDescription' => 'Formação 100% online voltada para costureiras, ateliês e futuros técnicos em qualquer lugar do Brasil. Aprenda anatomia mecânica, regulagem de laçada, remoção de folgas, troca de correias e manutenção preventiva sem sair da sua casa.',
+            'category' => 'Engenharia',
+            'price' => 380.00,
+            'workloadHours' => 60,
+            'level' => 'Iniciante',
+            'instructorName' => 'Eloizio Assunção (CEO)',
+            'instructorTitle' => 'Fundador & Especialista Mecânico com 30+ anos de experiência',
+            'thumbnail' => 'https://images.unsplash.com/photo-1544441893-675973e31985?auto=format&fit=crop&q=80&w=800',
+            'featured' => false,
+            'enrolledStudentsCount' => 176,
+            'rating' => 4.95,
+            'modality' => 'online',
+            'tags' => ['Máquinas Domésticas', 'Singer', 'Elgin', 'Janome', 'EAD 100% Online'],
+            'syllabus' => [
+                [
+                    'title' => 'Módulo 1: Anatomia das Máquinas Domésticas',
+                    'lessons' => [
+                        ['title' => '1. Componentes e Desmontagem Segura', 'duration' => '35 min', 'completed' => false, 'videoUrl' => 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4'],
+                        ['title' => '2. Tensão da Linha e Troca de Lançadeira', 'duration' => '40 min', 'completed' => false, 'videoUrl' => 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4']
+                    ]
+                ]
+            ]
+        ],
+        [
+            'id' => 'course_8',
+            'title' => 'Eletrônica e Manutenção de Motores Direct-Drive e Painéis Digitais',
+            'shortDescription' => 'Formação híbrida com teoria online e plantão presencial com bancada e osciloscópio no Polo Técnico em São Gonçalo - RJ.',
+            'fullDescription' => 'Especialização de alto nível para técnicos que desejam reparar placas eletrônicas, inversores de frequência e motores direct-drive para confecções modernas. Módulos teóricos online e imersão prática na oficina técnica de São Gonçalo.',
+            'category' => 'Engenharia',
+            'price' => 650.00,
+            'workloadHours' => 120,
+            'level' => 'Avançado',
+            'instructorName' => 'Eloizio Assunção (CEO)',
+            'instructorTitle' => 'Fundador & Especialista Mecânico e Eletrônico',
+            'thumbnail' => 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&q=80&w=800',
+            'featured' => false,
+            'enrolledStudentsCount' => 98,
+            'rating' => 5.0,
+            'modality' => 'hibrido',
+            'practicalLocation' => 'Laboratório Eletrônico Polo São Gonçalo - RJ',
+            'tags' => ['Eletrônica', 'Direct-Drive', 'Inversores', 'São Gonçalo', 'Híbrido'],
+            'syllabus' => [
+                [
+                    'title' => 'Módulo 1: Circuitos de Potência e Inversores',
+                    'lessons' => [
+                        ['title' => '1. Diagnóstico de Códigos de Erro (E1 a E9)', 'duration' => '45 min', 'completed' => false, 'videoUrl' => 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4']
+                    ]
+                ]
+            ]
+        ],
+        [
+            'id' => 'course_9',
+            'title' => 'Curso Completo de Cuidador de Idosos e Dependentes (Legislação RJ - Lei nº 8.528/2019 & CBO 5162-10)',
+            'shortDescription' => 'Formação profissional integral regulamentada no Rio de Janeiro com estágio supervisionado conveniado e práticas em São Gonçalo - RJ.',
+            'fullDescription' => 'Formação oficial completa em conformidade rigorosa com a Lei Estadual RJ nº 8.528/2019 e CBO 5162-10. O programa capacita para o cuidado integral humanizado de idosos e pessoas com dependência física ou cognitiva. Abrange primeiros socorros geriátricos, administração segura de rotinas e medicamentos sob prescrição médica, nutrição da terceira idade, transferências posturais, direitos fundamentais do Estatuto do Idoso (Lei Federal nº 10.741/2003) e estágio supervisionado opcional conveniado.',
+            'category' => 'Saúde & Cuidado',
+            'price' => 450.00,
+            'workloadHours' => 240,
+            'level' => 'Iniciante',
+            'instructorName' => 'Enfª Esp. Beatriz Albuquerque',
+            'instructorTitle' => 'Especialista em Gerontologia & Cuidados Integrados',
+            'thumbnail' => 'https://images.unsplash.com/photo-1576765608535-5f04d1e3f289?auto=format&fit=crop&q=80&w=800',
+            'featured' => true,
+            'enrolledStudentsCount' => 312,
+            'rating' => 4.98,
+            'modality' => 'hibrido',
+            'practicalLocation' => 'Polo de Saúde & Enfermagem São Gonçalo - RJ',
+            'tags' => ['Cuidador de Idosos', 'Legislação RJ', 'Lei 8.528/2019', 'CBO 5162-10', 'Primeiros Socorros', 'São Gonçalo', 'Híbrido'],
+            'syllabus' => [
+                [
+                    'title' => 'Módulo 1: Marco Legal do RJ e Princípios do Cuidado',
+                    'lessons' => [
+                        ['title' => '1. Legislação Fluminense para Cuidadores de Idosos (Lei 8.528/19)', 'duration' => '45 min', 'completed' => false, 'videoUrl' => 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4'],
+                        ['title' => '2. Primeiros Socorros Geriátricos e Sinais Vitais', 'duration' => '50 min', 'completed' => false, 'videoUrl' => 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4']
+                    ]
+                ]
+            ]
+        ],
+        [
+            'id' => 'course_10',
+            'title' => 'Cuidador de Idosos e Dependentes (100% Online EAD - Legislação RJ & CBO 5162-10)',
+            'shortDescription' => 'Formação 100% a distância com flexibilidade total, videoaulas práticas de simulação e certificado com validade estadual RJ e nacional.',
+            'fullDescription' => 'Capacitação 100% online voltada para quem precisa de flexibilidade para estudar de qualquer cidade do Rio de Janeiro ou do Brasil. Aborda assistência biopsicossocial, sinais de alerta de emergência, noções de higiene e biossegurança, estimulação cognitiva e prevenção de quedas domésticas com suporte tutorial diário da equipe de saúde.',
+            'category' => 'Saúde & Cuidado',
+            'price' => 340.00,
+            'workloadHours' => 180,
+            'level' => 'Iniciante',
+            'instructorName' => 'Enfª Esp. Beatriz Albuquerque',
+            'instructorTitle' => 'Especialista em Gerontologia & Cuidados Integrados',
+            'thumbnail' => 'https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?auto=format&fit=crop&q=80&w=800',
+            'featured' => false,
+            'enrolledStudentsCount' => 224,
+            'rating' => 4.94,
+            'modality' => 'online',
+            'tags' => ['Cuidador de Idosos', '100% Online', 'Legislação RJ', 'Lei 8.528/2019', 'EAD Nacional'],
+            'syllabus' => [
+                [
+                    'title' => 'Módulo 1: Fundamentos do Cuidado a Distância',
+                    'lessons' => [
+                        ['title' => '1. Rotinas Diárias e Prevenção de Acidentes', 'duration' => '40 min', 'completed' => false, 'videoUrl' => 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4']
+                    ]
+                ]
+            ]
+        ],
+        [
+            'id' => 'course_11',
+            'title' => 'Curso Completo de Massoterapia & Terapias Manuais (Legislação RJ - Lei nº 7.859/2018 & Lei nº 3.968/1961 - CBO 3221-20)',
+            'shortDescription' => 'Formação clínica híbrida com anatomia palpatória, manobras terapêuticas e laboratório presencial no Polo São Gonçalo - RJ.',
+            'fullDescription' => 'Formação presencial-híbrida estruturada de acordo com a Lei Estadual RJ nº 7.859/2018 (Práticas Integrativas no RJ), a Lei Federal nº 3.968/1961 (Regulamentação dos Massagistas) e a CBO 3221-20. O curso capacita para atuação em clínicas, spas, clubes e atendimento domiciliar. Conteúdo aprofundado em anatomofisiologia, drenagem linfática manual, massagem relaxante e terapêutica, pontos-gatilho (trigger points), shiatsu, ergonomia do terapeuta e normas rigorosas de biossegurança da ANVISA e SES-RJ.',
+            'category' => 'Saúde & Terapias',
+            'price' => 580.00,
+            'workloadHours' => 280,
+            'level' => 'Intermediário',
+            'instructorName' => 'Prof. Fisioterapeuta Thiago Ramos',
+            'instructorTitle' => 'Mestre em Terapias Manuais & Práticas Integrativas',
+            'thumbnail' => 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&q=80&w=800',
+            'featured' => true,
+            'enrolledStudentsCount' => 268,
+            'rating' => 4.97,
+            'modality' => 'hibrido',
+            'practicalLocation' => 'Clínica-Escola de Terapias Manuais Polo São Gonçalo - RJ',
+            'tags' => ['Massoterapia', 'Legislação RJ', 'Lei 7.859/2018', 'Lei 3.968/1961', 'Anatomia Palpatória', 'São Gonçalo', 'Híbrido'],
+            'syllabus' => [
+                [
+                    'title' => 'Módulo 1: Fundamentos Legais e Biossegurança Clínica',
+                    'lessons' => [
+                        ['title' => '1. Regulamentação da Massoterapia no Estado do RJ', 'duration' => '50 min', 'completed' => false, 'videoUrl' => 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4'],
+                        ['title' => '2. Anatomia Palpatória e Cadeias Miofasciais', 'duration' => '55 min', 'completed' => false, 'videoUrl' => 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4']
+                    ]
+                ]
+            ]
+        ],
+        [
+            'id' => 'course_12',
+            'title' => 'Atualizações e Especializações em Massoterapia (Miofascial, Drenagem & Terapias Manuais RJ)',
+            'shortDescription' => 'Módulos modulares 100% online de aperfeiçoamento contínuo para terapeutas manuais, esteticistas e profissionais de saúde.',
+            'fullDescription' => 'Programa contínuo de atualização técnica para profissionais que buscam diferenciação clínica. Abrange Liberação Miofascial Instrumental e Manual, Drenagem Linfática Pós-Operatória em Cirurgias Plásticas, Quick Massage Corporativa para eventos e empresas, e Protocolos de Biossegurança em Cabine de Atendimento conforme diretrizes da Vigilância Sanitária do RJ.',
+            'category' => 'Saúde & Terapias',
+            'price' => 320.00,
+            'workloadHours' => 120,
+            'level' => 'Avançado',
+            'instructorName' => 'Prof. Fisioterapeuta Thiago Ramos',
+            'instructorTitle' => 'Mestre em Terapias Manuais & Práticas Integrativas',
+            'thumbnail' => 'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&q=80&w=800',
+            'featured' => false,
+            'enrolledStudentsCount' => 185,
+            'rating' => 4.96,
+            'modality' => 'online',
+            'tags' => ['Atualização Massoterapia', 'Liberação Miofascial', 'Drenagem Linfática', 'Legislação RJ', '100% Online'],
+            'syllabus' => [
+                [
+                    'title' => 'Módulo 1: Técnicas Avançadas e Protocolos Clínicos',
+                    'lessons' => [
+                        ['title' => '1. Liberação Miofascial e Pontos Gatilho', 'duration' => '45 min', 'completed' => false, 'videoUrl' => 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4']
                     ]
                 ]
             ]
@@ -504,7 +674,7 @@ function getPropostasNovosCursos(): array
         [
             'id' => 'pnc_1',
             'title' => 'Eletrônica e Injeção Eletrônica Automotiva com Osciloscópio',
-            'author' => 'Eloizio Silva & Equipe Mecânica',
+            'author' => 'Eloizio Assunção & Equipe Mecânica',
             'targetAudience' => 'Mecânicos automotivos, técnicos em injeção e entusiastas',
             'workloadHours' => 120,
             'estimatedPrice' => 690.00,
@@ -515,7 +685,7 @@ function getPropostasNovosCursos(): array
         [
             'id' => 'pnc_2',
             'title' => 'Regulagem e Placas Eletrônicas em Motores Direct-Drive',
-            'author' => 'Eloizio Silva (CEO)',
+            'author' => 'Eloizio Assunção (CEO)',
             'targetAudience' => 'Mecânicos de confecções industriais e polos de moda',
             'workloadHours' => 90,
             'estimatedPrice' => 520.00,
@@ -544,17 +714,130 @@ function salvarPropostasNovosCursos(array $propostas): void
 }
 
 /**
- * Certificados Oficiais Emitidos para Validação Pública Instantânea
+ * Certificados e Documentos Acadêmicos Oficiais Emitidos para Validação Pública Instantânea
+ * Cobrindo TODOS os setores com autenticação digital criptográfica (SHA-256 / QR Code / ICP-Brasil)
  */
 function getCertificadosData(): array
 {
     $alunos = getAlunosData();
-    $certificados = [];
+    $certificados = [
+        'DNE-2026-VAL-OK' => [
+            'code' => 'DNE-2026-VAL-OK',
+            'hash' => 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855',
+            'documentType' => 'Certificado Oficial de Conclusão MEC',
+            'issuingSector' => 'Direção Geral & Coordenação Pedagógica',
+            'studentName' => 'Lucas Silva Prado',
+            'cpf' => '123.456.789-00',
+            'registrationNumber' => 'MAT-2026-9812',
+            'courseTitle' => 'Engenharia de Software Moderna & Arquitetura Cloud',
+            'workloadHours' => 360,
+            'issueDate' => '15/01/2026',
+            'mecCompliant' => true,
+            'book' => 'Livro 04',
+            'sheet' => 'Folha 89',
+            'registryNumber' => 'REG-MEC-2026-00412',
+            'status' => 'Autêntico & Válido em Todo o Território Nacional',
+            'signedBy' => 'Eloizio Assunção (Diretor Presidente) & Profa. Dra. Mariana Fernandes (Coordenadora)'
+        ],
+        'DNE-CARTEIRINHA-2026' => [
+            'code' => 'DNE-CARTEIRINHA-2026',
+            'hash' => 'dne77a98b41cd2290f12456789abcdef0123456789abcdef0123456789abcdef',
+            'documentType' => 'Carteirinha Estudantil Digital Oficial (DNE)',
+            'issuingSector' => 'Secretaria Acadêmica Central',
+            'studentName' => 'Lucas Silva Prado',
+            'cpf' => '123.456.789-00',
+            'registrationNumber' => 'MAT-2026-9812',
+            'courseTitle' => 'Engenharia de Software Moderna & Arquitetura Cloud',
+            'workloadHours' => 360,
+            'issueDate' => 'Ano Letivo 2026 (Validade 31/03/2027)',
+            'mecCompliant' => true,
+            'book' => 'DNE Nacional',
+            'sheet' => 'Série 2026',
+            'registryNumber' => 'DNE-BR-2026-998812',
+            'status' => 'Autêntico & Válido em Todo o Território Nacional (Lei nº 12.933/13)',
+            'signedBy' => 'Roseli Castro (Secretária Geral de Registros Acadêmicos)'
+        ],
+        'DEC-MAT-2026-OK' => [
+            'code' => 'DEC-MAT-2026-OK',
+            'hash' => 'dec1010101010101010101010101010101010101010101010101010101010101',
+            'documentType' => 'Declaração de Matrícula Regular',
+            'issuingSector' => 'Secretaria Acadêmica & Registros',
+            'studentName' => 'Lucas Silva Prado',
+            'cpf' => '123.456.789-00',
+            'registrationNumber' => 'MAT-2026-9812',
+            'courseTitle' => 'Engenharia de Software Moderna & Arquitetura Cloud',
+            'workloadHours' => 360,
+            'issueDate' => '10/02/2026',
+            'mecCompliant' => true,
+            'book' => 'Livro Matrículas',
+            'sheet' => 'Folha 18',
+            'registryNumber' => 'DEC-MAT-2026-00192',
+            'status' => 'Autêntico & Regularmente Matriculado',
+            'signedBy' => 'Roseli Castro (Secretária Geral de Registros)'
+        ],
+        'DEC-CONCL-2026-OK' => [
+            'code' => 'DEC-CONCL-2026-OK',
+            'hash' => 'dec2020202020202020202020202020202020202020202020202020202020202',
+            'documentType' => 'Declaração de Conclusão de Curso',
+            'issuingSector' => 'Secretaria Acadêmica & Coordenação Pedagógica',
+            'studentName' => 'Camila Vasconcelos',
+            'cpf' => '987.654.321-99',
+            'registrationNumber' => 'MAT-2025-4421',
+            'courseTitle' => 'Gestão Estratégica de Negócios & Liderança Digital',
+            'workloadHours' => 280,
+            'issueDate' => '28/11/2025',
+            'mecCompliant' => true,
+            'book' => 'Livro 03',
+            'sheet' => 'Folha 42',
+            'registryNumber' => 'DEC-CONCL-2025-00891',
+            'status' => 'Autêntico & Conclusão Homologada com Aproveitamento 100%',
+            'signedBy' => 'Roseli Castro (Secretária) & Sofia Vanguard (Coordenadora de Negócios)'
+        ],
+        'HIST-OFICIAL-2026-OK' => [
+            'code' => 'HIST-OFICIAL-2026-OK',
+            'hash' => 'hist303030303030303030303030303030303030303030303030303030303030',
+            'documentType' => 'Histórico Escolar Oficial com Notas & Ementas',
+            'issuingSector' => 'Secretaria Acadêmica Central',
+            'studentName' => 'Lucas Silva Prado',
+            'cpf' => '123.456.789-00',
+            'registrationNumber' => 'MAT-2026-9812',
+            'courseTitle' => 'Engenharia de Software Moderna & Arquitetura Cloud',
+            'workloadHours' => 360,
+            'issueDate' => '05/02/2026',
+            'mecCompliant' => true,
+            'book' => 'Livro Históricos',
+            'sheet' => 'Folha 95',
+            'registryNumber' => 'HIST-2026-00412',
+            'status' => 'Autêntico & Notas Oficiais Homologadas pelo Colegiado',
+            'signedBy' => 'Roseli Castro (Secretária Geral) & Profa. Dra. Mariana Fernandes (Docente)'
+        ],
+        'ELOIZIO-2026-CERT-OK' => [
+            'code' => 'ELOIZIO-2026-CERT-OK',
+            'hash' => 'eloizio99887766554433221100aabbccddeeff00112233445566778899aabb',
+            'documentType' => 'Certificado Técnico Especialista em Mecânica de Máquinas',
+            'issuingSector' => 'Gabinete do CEO & Direção Geral Técnica',
+            'studentName' => 'Carlos Eduardo Santos',
+            'cpf' => '111.222.333-44',
+            'registrationNumber' => 'MAT-2026-7731',
+            'courseTitle' => 'Mecânica e Manutenção de Máquinas de Costura (Domésticas e Industriais)',
+            'workloadHours' => 120,
+            'issueDate' => '29/09/2026',
+            'mecCompliant' => true,
+            'book' => 'Livro 05',
+            'sheet' => 'Folha 12',
+            'registryNumber' => 'REG-MEC-2026-00994',
+            'status' => 'Autêntico & Registrado no Livro Oficial de Diplomas',
+            'signedBy' => 'Eloizio Assunção (Mestre Mecânico & CEO) & Roseli Castro (Secretária)'
+        ]
+    ];
+
     foreach ($alunos as $a) {
-        if (!empty($a['certificateCode'])) {
+        if (!empty($a['certificateCode']) && !isset($certificados[$a['certificateCode']])) {
             $certificados[$a['certificateCode']] = [
                 'code' => $a['certificateCode'],
                 'hash' => $a['certificateHash'],
+                'documentType' => 'Certificado Oficial de Conclusão MEC',
+                'issuingSector' => 'Direção Geral & Coordenação Pedagógica',
                 'studentName' => $a['name'],
                 'cpf' => $a['cpf'],
                 'registrationNumber' => $a['registrationNumber'],
@@ -562,8 +845,11 @@ function getCertificadosData(): array
                 'workloadHours' => 360,
                 'issueDate' => '10/03/2026',
                 'mecCompliant' => true,
+                'book' => 'Livro 04',
+                'sheet' => 'Folha 90',
+                'registryNumber' => 'REG-MEC-2026-' . substr(md5($a['certificateCode']), 0, 5),
                 'status' => 'Autêntico & Válido em Todo o Território Nacional',
-                'signedBy' => 'Eloizio Silva (Diretor Presidente) & Profa. Dra. Mariana Fernandes'
+                'signedBy' => 'Eloizio Assunção (Diretor Presidente) & Profa. Dra. Mariana Fernandes'
             ];
         }
     }
@@ -593,7 +879,7 @@ function getBibliotecaData(): array
         [
             'id' => 'bib_1',
             'title' => 'Manual Completo do Mecânico de Máquinas de Costura',
-            'author' => 'Eloizio Silva (CEO)',
+            'author' => 'Eloizio Assunção (CEO)',
             'category' => 'Mecânica Industrial',
             'pages' => 142,
             'fileSize' => '14.8 MB',
@@ -648,7 +934,7 @@ function getMensagensChat(): array
     }
 
     return [
-        ['id' => 'c1', 'channel' => 'geral', 'author' => 'Eloizio Silva (CEO)', 'role' => 'admin', 'text' => 'Sejam muito bem-vindos ao Grupo Eloizio! Estamos à disposição para apoiar sua capacitação profissional!', 'time' => 'Ontem 10:00'],
+        ['id' => 'c1', 'channel' => 'geral', 'author' => 'Eloizio Assunção (CEO)', 'role' => 'admin', 'text' => 'Sejam muito bem-vindos ao Grupo Eloizio! Estamos à disposição para apoiar sua capacitação profissional!', 'time' => 'Ontem 10:00'],
         ['id' => 'c2', 'channel' => 'geral', 'author' => 'Sofia Vanguard', 'role' => 'admin', 'text' => 'Bom dia alunos! Lembrando que o cupom SOFIA15 segue ativo para quem deseja iniciar um novo curso com 15% de desconto.', 'time' => 'Ontem 10:15'],
         ['id' => 'c3', 'channel' => 'suporte', 'author' => 'Lucas Silva Prado', 'role' => 'student', 'text' => 'Olá Sofia, meu certificado foi emitido certinho com o QR Code! Obrigado pela agilidade!', 'time' => 'Hoje 09:20'],
         ['id' => 'c4', 'channel' => 'suporte', 'author' => 'Sofia Vanguard', 'role' => 'admin', 'text' => 'Parabéns pela conquista Lucas! Seu certificado já consta como autenticado no validador oficial.', 'time' => 'Hoje 09:22'],
@@ -662,3 +948,369 @@ function salvarMensagemChat(array $novaMensagem): void
     $cacheFile = sys_get_temp_dir() . '/grupo_eloizio_chat.json';
     file_put_contents($cacheFile, json_encode($msgs, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
 }
+
+/**
+ * =========================================================================
+ * COOPERATIVA DE MELHORES ALUNOS, EMPREGABILIDADE E BANCO DE TALENTOS
+ * =========================================================================
+ */
+
+function getCooperativaMembrosData(): array
+{
+    $cacheFile = sys_get_temp_dir() . '/grupo_eloizio_cooperativa_membros.json';
+    if (file_exists($cacheFile)) {
+        $raw = file_get_contents($cacheFile);
+        $decoded = json_decode((string)$raw, true);
+        if (is_array($decoded) && count($decoded) > 0) {
+            return $decoded;
+        }
+    }
+
+    return [
+        [
+            'id' => 'coop_1',
+            'userId' => 'usr_1',
+            'name' => 'Lucas Silva Prado',
+            'avatar' => 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=300',
+            'registrationNumber' => 'MAT-2026-9812',
+            'courseTitle' => 'Engenharia de Software Moderna & Arquitetura Cloud',
+            'courseCategory' => 'Tecnologia',
+            'city' => 'São Gonçalo - RJ (Disponível Remoto / Híbrido)',
+            'overallAverage' => 9.4,
+            'completionPercentage' => 100,
+            'topPerformerBadge' => true,
+            'bio' => 'Desenvolvedor Fullstack com sólida bagagem em TypeScript, React, PHP, Node.js e microsserviços. Formado com distinção acadêmica no EduVanguard.',
+            'technicalSkills' => ['PHP 8.2', 'TypeScript', 'React.js', 'PostgreSQL', 'Docker', 'Clean Architecture', 'APIs REST'],
+            'storedExams' => [
+                [
+                    'examId' => 'ex_1',
+                    'title' => 'Avaliação Teórica de Microsserviços e APIs Resilientes',
+                    'score' => 10.0,
+                    'maxPoints' => 10,
+                    'date' => '15/01/2026',
+                    'category' => 'Arquitetura de Software',
+                    'verifiedBy' => 'Profa. Dra. Mariana Fernandes',
+                    'certificateHash' => 'DNE-2026-VAL-OK',
+                    'feedback' => 'Desempenho exemplar na modelagem de microsserviços e resiliência.'
+                ],
+                [
+                    'examId' => 'ex_2',
+                    'title' => 'Prova Prática: Pipeline CI/CD e Conteinerização',
+                    'score' => 9.6,
+                    'maxPoints' => 10,
+                    'date' => '28/01/2026',
+                    'category' => 'DevOps & Nuvem',
+                    'verifiedBy' => 'Profa. Dra. Mariana Fernandes',
+                    'certificateHash' => 'DNE-2026-VAL-OK',
+                    'feedback' => 'Excelente organização de contêineres e scripts automatizados.'
+                ]
+            ],
+            'courseUpdates' => [
+                [
+                    'year' => 2026,
+                    'title' => 'Atualização Tecnológica: IA Generativa & Agentes Autônomos em Produção',
+                    'hours' => 40,
+                    'status' => 'atualizado',
+                    'badge' => 'Certificação 2026 Ativa'
+                ],
+                [
+                    'year' => 2026,
+                    'title' => 'Reciclagem de Segurança em Nuvem & Conformidade LGPD',
+                    'hours' => 20,
+                    'status' => 'atualizado',
+                    'badge' => 'Especialista Homologado'
+                ]
+            ],
+            'contactPhone' => '(21) 98112-9988',
+            'contactEmail' => 'lucas.prado.dev@gmail.com',
+            'availableForHire' => true,
+            'linkedinOrPortfolio' => 'https://github.com/lucas-prado-eng',
+            'resumeSummary' => 'Engenheiro de Software com foco em sistemas de alta disponibilidade e integrações seguras.',
+            'hasConcludedCourse' => true,
+            'badgeIssued' => true,
+            'badgeStatus' => 'isento_concluinte',
+            'badgeAnnualRenewalFee' => 0.0,
+            'isBadgeRenewalExempt' => true
+        ],
+        [
+            'id' => 'coop_2',
+            'userId' => 'usr_2',
+            'name' => 'Carlos Eduardo Santos',
+            'avatar' => 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=300',
+            'registrationNumber' => 'MAT-2026-7731',
+            'courseTitle' => 'Mecânica e Regulagem de Máquinas de Costura (Domésticas e Industriais)',
+            'courseCategory' => 'Engenharia',
+            'city' => 'São Gonçalo - RJ (Atende Niterói, Itaboraí e Região)',
+            'overallAverage' => 9.8,
+            'completionPercentage' => 100,
+            'topPerformerBadge' => true,
+            'bio' => 'Mestre técnico especialista em manutenção preventiva e corretiva de máquinas reta, overloque, galoneira e motores direct-drive. Formado pelo Grupo Eloizio com laudo técnico para confecções.',
+            'technicalSkills' => ['Sincronismo de Lançadeira', 'Regulagem de Ponto', 'Máquinas Direct-Drive', 'Overloque Industrial', 'Galoneira', 'Mecânica Fina', 'Diagnóstico Eletrônico'],
+            'hasConcludedCourse' => true,
+            'badgeIssued' => true,
+            'badgeStatus' => 'isento_concluinte',
+            'badgeAnnualRenewalFee' => 0.0,
+            'isBadgeRenewalExempt' => true,
+            'storedExams' => [
+                [
+                    'examId' => 'ex_mec_1',
+                    'title' => 'Prova Prática: Ajuste Fino de Lançadeira e Ponto de Laçada',
+                    'score' => 10.0,
+                    'maxPoints' => 10,
+                    'date' => '20/09/2026',
+                    'category' => 'Mecânica Aplicada',
+                    'verifiedBy' => 'Eloizio Assunção (Mestre CEO)',
+                    'certificateHash' => 'ELOIZIO-2026-CERT-OK',
+                    'feedback' => 'Calibração milimétrica sem folga e sem quebra de agulhas.'
+                ],
+                [
+                    'examId' => 'ex_mec_2',
+                    'title' => 'Diagnóstico e Troca de Sensores em Motores Direct-Drive',
+                    'score' => 9.8,
+                    'maxPoints' => 10,
+                    'date' => '25/09/2026',
+                    'category' => 'Eletrônica e Automação',
+                    'verifiedBy' => 'Eloizio Assunção (Mestre CEO)',
+                    'certificateHash' => 'ELOIZIO-2026-CERT-OK',
+                    'feedback' => 'Capacidade comprovada de recuperar placas e paradas programadas de agulha.'
+                ]
+            ],
+            'courseUpdates' => [
+                [
+                    'year' => 2026,
+                    'title' => 'Atualização Mecânica 2026: Motores Eletrônicos com Painel Touch',
+                    'hours' => 30,
+                    'status' => 'atualizado',
+                    'badge' => 'Credencial Técnica Oficial'
+                ]
+            ],
+            'contactPhone' => '(21) 98764-8727',
+            'contactEmail' => 'eloizio.mecanica.oficial@gmail.com',
+            'availableForHire' => true,
+            'linkedinOrPortfolio' => 'https://grupoeloizio.com.br/mecanica',
+            'resumeSummary' => 'Profissional gabaritado para gerenciar manutenção em fábricas de vestuário ou consultoria técnica independente.'
+        ],
+        [
+            'id' => 'coop_3',
+            'userId' => 'usr_3',
+            'name' => 'Camila Vasconcelos',
+            'avatar' => 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=300',
+            'registrationNumber' => 'MAT-2025-4421',
+            'courseTitle' => 'Contabilidade Digital & Assessoria Prática',
+            'courseCategory' => 'Negócios',
+            'city' => 'Niterói - RJ (Remoto / Presencial)',
+            'overallAverage' => 9.6,
+            'completionPercentage' => 100,
+            'topPerformerBadge' => true,
+            'bio' => 'Especialista em escrituração fiscal, SPED, conciliação financeira e abertura de empresas MEI e Simples Nacional.',
+            'technicalSkills' => ['SPED Fiscal', 'Simples Nacional', 'MEI Sem Erro', 'Conciliação Bancária', 'Gestão Financeira'],
+            'storedExams' => [
+                [
+                    'examId' => 'ex_cont_1',
+                    'title' => 'Elaboração e Fechamento de Balancete Mensal do Simples',
+                    'score' => 9.8,
+                    'maxPoints' => 10,
+                    'date' => '05/02/2026',
+                    'category' => 'Contabilidade Prática',
+                    'verifiedBy' => 'Coordenação Pedagógica Grupo Eloizio',
+                    'certificateHash' => 'CONT-2026-VAL-OK',
+                    'feedback' => 'Fechamento sem divergências e conciliação perfeita de extratos.'
+                ]
+            ],
+            'courseUpdates' => [
+                [
+                    'year' => 2026,
+                    'title' => 'Atualização Tributária 2026: Reforma e Regras do Simples',
+                    'hours' => 25,
+                    'status' => 'atualizado',
+                    'badge' => 'Cooperado Atualizado 2026'
+                ]
+            ],
+            'contactPhone' => '(21) 99613-4073',
+            'contactEmail' => 'camila.contabil@gmail.com',
+            'availableForHire' => true,
+            'linkedinOrPortfolio' => 'https://linkedin.com',
+            'resumeSummary' => 'Analista contábil para escritórios e suporte direto a microempresários.'
+        ]
+    ];
+}
+
+function salvarCooperativaMembrosData(array $membros): void
+{
+    $cacheFile = sys_get_temp_dir() . '/grupo_eloizio_cooperativa_membros.json';
+    file_put_contents($cacheFile, json_encode($membros, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
+}
+
+function getVagasCooperativaData(): array
+{
+    $cacheFile = sys_get_temp_dir() . '/grupo_eloizio_cooperativa_vagas.json';
+    if (file_exists($cacheFile)) {
+        $raw = file_get_contents($cacheFile);
+        $decoded = json_decode((string)$raw, true);
+        if (is_array($decoded) && count($decoded) > 0) {
+            return $decoded;
+        }
+    }
+
+    return [
+        [
+            'id' => 'vaga_1',
+            'title' => 'Mecânico de Máquinas de Costura Industrial (Reta & Overlock)',
+            'companyName' => 'Confecções Guanabara & Cia',
+            'location' => 'São Gonçalo - RJ (Alcântara)',
+            'salaryRange' => 'R$ 3.800 - R$ 4.500',
+            'type' => 'clt',
+            'category' => 'Mecânica e Máquinas',
+            'description' => 'Buscamos mecânico capacitado para atuar na manutenção preventiva e corretiva de maquinário industrial de vestuário na fábrica de Alcântara.',
+            'requirements' => [
+                'Certificado de conclusão em Mecânica de Máquinas pelo Grupo Eloizio ou similar',
+                'Experiência em ajuste fino de lançadeira e motores direct-drive',
+                'Disponibilidade para início imediato'
+            ],
+            'benefits' => [
+                'Vale Refeição R$ 35/dia',
+                'Vale Transporte',
+                'Plano de Saúde e Odontológico',
+                'Cesta Básica'
+            ],
+            'contactEmail' => 'rh@confeccoesguanabara.com.br',
+            'contactPhone' => '(21) 99613-4073',
+            'createdAt' => '05/02/2026',
+            'status' => 'open',
+            'applicantsCount' => 3
+        ],
+        [
+            'id' => 'vaga_2',
+            'title' => 'Assistente de Escrita Fiscal & Contabilidade Digital',
+            'companyName' => 'Assessoria Contábil Rio Leste',
+            'location' => 'Niterói / São Gonçalo - RJ (Híbrido)',
+            'salaryRange' => 'R$ 2.600 - R$ 3.200',
+            'type' => 'clt',
+            'category' => 'Contabilidade e Gestão',
+            'description' => 'Vaga para atuação com conciliações contábeis, apuração de impostos do Simples Nacional e declarações acessórias.',
+            'requirements' => [
+                'Formação no curso de Contabilidade Digital do Grupo Eloizio',
+                'Conhecimento de emissão de NFS-e e SPED',
+                'Boa comunicação com clientes'
+            ],
+            'benefits' => [
+                'Vale Alimentação R$ 750/mês',
+                'Vale Transporte',
+                'Seguro de Vida'
+            ],
+            'contactEmail' => 'selecao@riolestecontabil.com.br',
+            'contactPhone' => '(21) 99613-4073',
+            'createdAt' => '10/02/2026',
+            'status' => 'open',
+            'applicantsCount' => 2
+        ],
+        [
+            'id' => 'vaga_estagio_1',
+            'title' => 'Estágio Opcional Supervisionado: Mecânica & Regulagem de Máquinas',
+            'companyName' => 'Polo Têxtil Guanabara & Confecções Rio',
+            'location' => 'São Gonçalo - RJ (Presencial / Oficina)',
+            'salaryRange' => 'Bolsa R$ 1.500/mês + Auxílio Transporte + Seguro (180h)',
+            'type' => 'estagio',
+            'category' => 'Mecânica e Máquinas',
+            'isOptionalInternship' => true,
+            'internshipHours' => 180,
+            'modality' => 'presencial',
+            'supervisorName' => 'Gilberto Faria - Supervisor Técnico Chefe',
+            'allowCourseValidation' => true,
+            'description' => 'Vaga de estágio opcional supervisionado para validação curricular (Lei nº 11.788/2008). O estudante atuará na bancada técnica com manutenção de máquinas reta, overloque e eletrônicas direct-drive. As horas homologadas somam diretamente ao Certificado Oficial do Grupo Eloizio!',
+            'requirements' => [
+                'Matrícula ativa ou conclusão em curso de Mecânica pelo Grupo Eloizio',
+                'Interesse em regulagem prática de lançadeiras e motores eletrônicos',
+                'Comprometimento de 20h a 30h semanais com horários flexíveis'
+            ],
+            'benefits' => [
+                'Bolsa-auxílio pontual via Mercado Pago',
+                'Termo Oficial de Homologação (+180h no Certificado Oficial)',
+                'Possibilidade real de contratação CLT ao término do estágio'
+            ],
+            'contactEmail' => 'estagios@polotextilrio.com.br',
+            'contactPhone' => '(21) 99613-4073',
+            'createdAt' => '12/02/2026',
+            'status' => 'open',
+            'applicantsCount' => 4
+        ],
+        [
+            'id' => 'vaga_estagio_2',
+            'title' => 'Estágio Opcional em Desenvolvimento Web & APIs Cloud',
+            'companyName' => 'Vanguard Cloud & Software Hub',
+            'location' => 'Rio de Janeiro / Remoto 100% Online',
+            'salaryRange' => 'Bolsa R$ 1.800/mês + Auxílio Home Office (160h)',
+            'type' => 'estagio',
+            'category' => 'Tecnologia',
+            'isOptionalInternship' => true,
+            'internshipHours' => 160,
+            'modality' => 'remoto',
+            'supervisorName' => 'Dr. Fernando Vasconcelos - Tech Lead',
+            'allowCourseValidation' => true,
+            'description' => 'Estágio supervisionado com desenvolvimento de microsserviços, automação de testes e APIs em nuvem. As 160h práticas são homologadas e somadas ao seu Certificado de Engenharia de Software!',
+            'requirements' => [
+                'Estar cursando Engenharia de Software ou Desenvolvimento Web',
+                'Conhecimento de TypeScript, PHP, Node.js ou React',
+                'Boa comunicação para trabalho colaborativo assíncrono'
+            ],
+            'benefits' => [
+                'Bolsa-auxílio R$ 1.800/mês',
+                'Termo digital com chave SHA-256 de validação',
+                'Horário flexível e mentoria individual'
+            ],
+            'contactEmail' => 'talentos@vanguardtech.dev',
+            'contactPhone' => '(21) 99613-4073',
+            'createdAt' => '15/02/2026',
+            'status' => 'open',
+            'applicantsCount' => 6
+        ]
+    ];
+}
+
+function salvarVagasCooperativaData(array $vagas): void
+{
+    $cacheFile = sys_get_temp_dir() . '/grupo_eloizio_cooperativa_vagas.json';
+    file_put_contents($cacheFile, json_encode($vagas, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
+}
+
+function getCandidaturasCooperativaData(): array
+{
+    $cacheFile = sys_get_temp_dir() . '/grupo_eloizio_cooperativa_candidaturas.json';
+    if (file_exists($cacheFile)) {
+        $raw = file_get_contents($cacheFile);
+        $decoded = json_decode((string)$raw, true);
+        if (is_array($decoded) && count($decoded) > 0) {
+            return $decoded;
+        }
+    }
+
+    return [
+        [
+            'id' => 'cand_1',
+            'vacancyId' => 'vaga_1',
+            'vacancyTitle' => 'Mecânico de Máquinas de Costura Industrial (Reta & Overlock)',
+            'memberId' => 'coop_2',
+            'memberName' => 'Carlos Eduardo Santos',
+            'appliedAt' => '12/02/2026',
+            'status' => 'entrevista_agendada',
+            'coverNote' => 'Possuo domínio completo em motores eletrônicos direct-drive e sincronismo de lançadeira comprovado nas avaliações do curso.'
+        ],
+        [
+            'id' => 'cand_2',
+            'vacancyId' => 'vaga_2',
+            'vacancyTitle' => 'Assistente de Escrita Fiscal & Contabilidade Digital',
+            'memberId' => 'coop_3',
+            'memberName' => 'Camila Vasconcelos',
+            'appliedAt' => '14/02/2026',
+            'status' => 'em_analise',
+            'coverNote' => 'Tenho disponibilidade imediata para trabalho híbrido com foco em Simples Nacional e MEI.'
+        ]
+    ];
+}
+
+function salvarCandidaturasCooperativaData(array $candidaturas): void
+{
+    $cacheFile = sys_get_temp_dir() . '/grupo_eloizio_cooperativa_candidaturas.json';
+    file_put_contents($cacheFile, json_encode($candidaturas, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
+}
+

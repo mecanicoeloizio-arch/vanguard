@@ -24,10 +24,13 @@ export const CertificateValidator: React.FC = () => {
   const [searched, setSearched] = useState(false);
   const [selectedCertForModal, setSelectedCertForModal] = useState<any | null>(null);
 
-  // Default seed certificates for instant testing and demonstration
+  // Default seed certificates and documents for instant testing and demonstration across all sectors
   const knownCertificates = [
     {
       hash: 'DNE-2026-VAL-OK',
+      documentType: 'certificado',
+      docTypeName: 'Certificado Oficial de Conclusão MEC',
+      issuingSector: 'Direção Geral & Coordenação Pedagógica',
       studentName: 'Lucas Silva Prado',
       registrationNumber: 'MAT-2026-9812',
       courseTitle: 'Engenharia de Software Moderna & Arquitetura Cloud',
@@ -39,11 +42,52 @@ export const CertificateValidator: React.FC = () => {
       sheet: 'Folha 89',
       registryNumber: 'REG-MEC-2026-00412',
       institution: 'Grupo Eloizio — Instituto de Educação Profissional & Cursos Livres',
-      mecAuthorization: 'Amparo Legal: Lei Federal nº 9.394/96 Art. 42 e Carteirinha DNE Lei nº 12.933/13',
+      mecAuthorization: 'Amparo Legal: Lei Federal nº 9.394/96 Art. 42 e Decreto 5.154/04',
       studentAvatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=250',
     },
     {
-      hash: 'DNE-CERT-9988-OK',
+      hash: 'DNE-CARTEIRINHA-2026',
+      documentType: 'carteirinha',
+      docTypeName: 'Carteirinha Estudantil Digital Oficial (DNE)',
+      issuingSector: 'Secretaria Acadêmica Central',
+      studentName: 'Lucas Silva Prado',
+      registrationNumber: 'MAT-2026-9812',
+      courseTitle: 'Engenharia de Software Moderna & Arquitetura Cloud',
+      workloadHours: 360,
+      completionDate: 'Validade: 31/03/2027',
+      finalGrade: 9.2,
+      status: 'valido',
+      book: 'DNE Nac.',
+      sheet: 'Série 2026',
+      registryNumber: 'DNE-BR-2026-998812',
+      institution: 'Grupo Eloizio — Instituto de Educação Profissional',
+      mecAuthorization: 'Lei Federal da Meia-Entrada nº 12.933/2013 e Decreto 8.537/2015',
+      studentAvatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=250',
+    },
+    {
+      hash: 'DEC-MAT-2026-OK',
+      documentType: 'declaracao',
+      docTypeName: 'Declaração de Matrícula Regular',
+      issuingSector: 'Secretaria Acadêmica & Registros',
+      studentName: 'Lucas Silva Prado',
+      registrationNumber: 'MAT-2026-9812',
+      courseTitle: 'Engenharia de Software Moderna & Arquitetura Cloud',
+      workloadHours: 360,
+      completionDate: 'Ano Letivo: 2026 (Ativo)',
+      finalGrade: 9.2,
+      status: 'valido',
+      book: 'Livro Matr.',
+      sheet: 'Folha 18',
+      registryNumber: 'DEC-MAT-2026-00192',
+      institution: 'Grupo Eloizio — Instituto de Educação Profissional',
+      mecAuthorization: 'Comprovante Oficial de Matrícula e Regularidade Acadêmica',
+      studentAvatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=250',
+    },
+    {
+      hash: 'DEC-CONCL-2026-OK',
+      documentType: 'declaracao',
+      docTypeName: 'Declaração de Conclusão de Curso',
+      issuingSector: 'Secretaria Acadêmica & Coordenação',
       studentName: 'Camila Vasconcelos',
       registrationNumber: 'MAT-2025-4421',
       courseTitle: 'Gestão Estratégica de Negócios & Liderança Digital',
@@ -53,17 +97,39 @@ export const CertificateValidator: React.FC = () => {
       status: 'valido',
       book: 'Livro 03',
       sheet: 'Folha 42',
-      registryNumber: 'REG-MEC-2025-00891',
+      registryNumber: 'DEC-CONCL-2025-00891',
       institution: 'Grupo Eloizio — Instituto de Educação Profissional & Cursos Livres',
-      mecAuthorization: 'Amparo Legal: Lei Federal nº 9.394/96 Art. 42 e Carteirinha DNE Lei nº 12.933/13',
+      mecAuthorization: 'Certificação de Conclusão Plena com Aproveitamento 100%',
       studentAvatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=250',
     },
     {
-      hash: 'ELOIZIO-2026-CERT-OK',
-      studentName: 'Eloizio Mecânico Silva',
-      registrationNumber: 'MAT-2026-7731',
+      hash: 'HIST-OFICIAL-2026-OK',
+      documentType: 'historico',
+      docTypeName: 'Histórico Escolar Oficial com Notas & Ementas',
+      issuingSector: 'Secretaria Acadêmica & Coordenação Pedagógica',
+      studentName: 'Lucas Silva Prado',
+      registrationNumber: 'MAT-2026-9812',
       courseTitle: 'Engenharia de Software Moderna & Arquitetura Cloud',
       workloadHours: 360,
+      completionDate: 'Emitido em 2026',
+      finalGrade: 9.4,
+      status: 'valido',
+      book: 'Hist. Geral',
+      sheet: 'Folha 95',
+      registryNumber: 'HIST-2026-00412',
+      institution: 'Grupo Eloizio — Instituto de Educação Profissional & Cursos Livres',
+      mecAuthorization: 'Discriminação de Notas, Frequência e Amparo Legal LDB 9.394/96',
+      studentAvatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=250',
+    },
+    {
+      hash: 'ELOIZIO-2026-CERT-OK',
+      documentType: 'certificado',
+      docTypeName: 'Certificado de Curso Livre Profissionalizante (LDB Art. 42 & MEC)',
+      issuingSector: 'Gabinete do CEO & Direção Geral',
+      studentName: 'Carlos Eduardo Santos',
+      registrationNumber: 'MAT-2026-7731',
+      courseTitle: 'Mecânica e Regulagem de Máquinas de Costura',
+      workloadHours: 120,
       completionDate: '29/09/2026',
       finalGrade: 9.5,
       status: 'valido',
@@ -71,7 +137,7 @@ export const CertificateValidator: React.FC = () => {
       sheet: 'Folha 12',
       registryNumber: 'REG-MEC-2026-00994',
       institution: 'Grupo Eloizio — Instituto de Educação Profissional & Cursos Livres',
-      mecAuthorization: 'Amparo Legal: Lei Federal nº 9.394/96 Art. 42 e Carteirinha DNE Lei nº 12.933/13',
+      mecAuthorization: 'Amparo Legal: Cursos Profissionalizantes Livres (Lei nº 9.394/96 Art. 42, Decreto nº 5.154/04 e MEC)',
       studentAvatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=250',
     },
   ];
@@ -80,12 +146,24 @@ export const CertificateValidator: React.FC = () => {
   const normalizedQuery = searchQuery.trim().toLowerCase();
 
   const foundInApp = documentRequests
-    .filter((d) => d.paymentStatus === 'paid' && (d.documentType === 'certificado' || d.documentType === 'carteirinha'))
+    .filter((d) => d.paymentStatus === 'paid')
     .map((d) => {
       const student = users.find((u) => u.id === d.studentId);
       const course = courses.find((c) => c.id === student?.courseId) || courses[0];
+      const typeLabel =
+        d.documentType === 'certificado'
+          ? 'Certificado Oficial de Conclusão MEC'
+          : d.documentType === 'carteirinha'
+          ? 'Carteirinha Estudantil DNE Nacional'
+          : d.documentType === 'historico'
+          ? 'Histórico Escolar Oficial com Notas'
+          : 'Declaração Acadêmica com Fé Pública';
+
       return {
         hash: d.validationHash || 'DNE-2026-VAL-OK',
+        documentType: d.documentType,
+        docTypeName: typeLabel,
+        issuingSector: d.documentType === 'certificado' ? 'Coordenação Pedagógica' : 'Secretaria Acadêmica Geral',
         studentName: d.studentName,
         registrationNumber: student?.registrationNumber || 'MAT-2026-0001',
         courseTitle: course.title,
@@ -96,8 +174,8 @@ export const CertificateValidator: React.FC = () => {
         book: 'Livro 04',
         sheet: 'Folha 90',
         registryNumber: `REG-MEC-${d.id.slice(-6).toUpperCase()}`,
-        institution: 'EduVanguard Instituto de Educação e Tecnologia',
-        mecAuthorization: 'Portaria Normativa MEC nº 328/2023 - Reconhecimento Nacional',
+        institution: 'Grupo Eloizio — Instituto de Educação Profissional',
+        mecAuthorization: 'Portaria Normativa MEC LDB nº 9.394/96 Art. 42 - Reconhecimento Nacional',
         studentAvatar: student?.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=250',
       };
     });
@@ -193,22 +271,25 @@ export const CertificateValidator: React.FC = () => {
                     <CheckCircle2 className="w-7 h-7" />
                   </div>
                   <div>
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 flex-wrap">
                       <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase bg-emerald-100 text-emerald-800 border border-emerald-300">
-                        Certificado 100% Autêntico & Regular
+                        Documento 100% Autêntico & Regular
+                      </span>
+                      <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-indigo-100 text-indigo-900 border border-indigo-200">
+                        Setor: {(matchedCert as any).issuingSector || 'Secretaria Acadêmica'}
                       </span>
                       <span className="text-xs font-mono text-slate-500">
                         {matchedCert.registryNumber}
                       </span>
                     </div>
                     <h2 className="text-xl font-black text-slate-900 mt-1">
-                      Certificado de Conclusão de Curso Válido
+                      {(matchedCert as any).docTypeName || 'Certificado de Conclusão de Curso Válido'}
                     </h2>
                   </div>
                 </div>
 
                 <div className="text-right">
-                  <span className="text-[10px] text-slate-400 font-bold uppercase block">Chave ICP-Edu / DNE</span>
+                  <span className="text-[10px] text-slate-400 font-bold uppercase block">Chave ICP-Edu / Autenticidade</span>
                   <span className="font-mono text-sm font-extrabold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-lg border border-emerald-200">
                     {matchedCert.hash}
                   </span>
@@ -218,7 +299,7 @@ export const CertificateValidator: React.FC = () => {
               {/* Certificate Details Grid */}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 p-5 bg-slate-50 rounded-2xl border border-slate-200 text-xs">
                 <div>
-                  <span className="text-slate-400 font-bold uppercase text-[10px] block">Aluno Concluinte</span>
+                  <span className="text-slate-400 font-bold uppercase text-[10px] block">Titular do Documento</span>
                   <span className="font-extrabold text-slate-900 text-sm mt-0.5 block">
                     {matchedCert.studentName}
                   </span>
@@ -228,7 +309,7 @@ export const CertificateValidator: React.FC = () => {
                 </div>
 
                 <div>
-                  <span className="text-slate-400 font-bold uppercase text-[10px] block">Curso Concluído</span>
+                  <span className="text-slate-400 font-bold uppercase text-[10px] block">Curso Vinculado</span>
                   <span className="font-extrabold text-slate-900 text-sm mt-0.5 block">
                     {matchedCert.courseTitle}
                   </span>
@@ -238,17 +319,17 @@ export const CertificateValidator: React.FC = () => {
                 </div>
 
                 <div>
-                  <span className="text-slate-400 font-bold uppercase text-[10px] block">Data de Conclusão & Nota</span>
+                  <span className="text-slate-400 font-bold uppercase text-[10px] block">Emissão & Situação</span>
                   <span className="font-extrabold text-slate-900 text-sm mt-0.5 block">
                     {matchedCert.completionDate}
                   </span>
                   <span className="text-emerald-700 font-bold text-[11px] mt-0.5 block">
-                    Média de Aprovação: {matchedCert.finalGrade} / 10.0
+                    Aproveitamento: {matchedCert.finalGrade} (Aprovado)
                   </span>
                 </div>
 
                 <div>
-                  <span className="text-slate-400 font-bold uppercase text-[10px] block">Registro Acadêmico</span>
+                  <span className="text-slate-400 font-bold uppercase text-[10px] block">Registro no Livro</span>
                   <span className="font-mono font-bold text-slate-800 text-xs mt-0.5 block">
                     {matchedCert.book} • {matchedCert.sheet}
                   </span>
@@ -280,11 +361,11 @@ export const CertificateValidator: React.FC = () => {
                   type="button"
                   onClick={() =>
                     setSelectedCertForModal({
-                      id: 'cert_validated',
+                      id: 'doc_validated_' + Date.now(),
                       studentId: 'user_student_1',
                       studentName: matchedCert.studentName,
-                      documentType: 'certificado',
-                      title: `Certificado: ${matchedCert.courseTitle}`,
+                      documentType: (matchedCert as any).documentType || 'certificado',
+                      title: (matchedCert as any).docTypeName || `Documento Oficial: ${matchedCert.courseTitle}`,
                       feeAmount: 0,
                       paymentStatus: 'paid',
                       requestedAt: new Date().toISOString(),
@@ -294,7 +375,7 @@ export const CertificateValidator: React.FC = () => {
                   className="w-full sm:w-auto px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-black shadow-md cursor-pointer transition-all flex items-center justify-center gap-2"
                 >
                   <Printer className="w-4 h-4" />
-                  Abrir Certificado em Alta Resolução (Frente & Verso)
+                  Abrir e Imprimir Documento Autenticado em Alta Resolução
                 </button>
               </div>
             </div>

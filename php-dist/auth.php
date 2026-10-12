@@ -98,7 +98,7 @@ function handleLogin(array $input): void
     $usuarios = [
         'mecanicoeloizio@gmail.com' => [
             'id' => 'usr_ceo_eloizio',
-            'name' => 'Eloizio Silva (CEO)',
+            'name' => 'Eloizio Assunção (CEO)',
             'role' => 'admin',
             'password_hash' => '$2y$10$e8wJtG4e2aI1QvYpIu8gLe8yT7B7t2v9pG1vX1k2l3m4n5o6p7q8r', // vanguard123
             'avatar' => 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=250',
@@ -106,18 +106,26 @@ function handleLogin(array $input): void
         ],
         'eloizio@grupoeloizio.com.br' => [
             'id' => 'usr_ceo',
-            'name' => 'Eloizio Silva (CEO)',
+            'name' => 'Eloizio Assunção (CEO)',
             'role' => 'admin',
             'password_hash' => '$2y$10$e8wJtG4e2aI1QvYpIu8gLe8yT7B7t2v9pG1vX1k2l3m4n5o6p7q8r', // vanguard123
             'avatar' => 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=250',
             'phone' => '21987648727',
         ],
-        'camilla@grupoeloizio.com.br' => [
-            'id' => 'usr_camilla',
-            'name' => 'Camilla Faria',
+        'sofia@grupoeloizio.com.br' => [
+            'id' => 'usr_admin_sofia',
+            'name' => 'Sofia Vanguard',
             'role' => 'admin',
             'password_hash' => '$2y$10$e8wJtG4e2aI1QvYpIu8gLe8yT7B7t2v9pG1vX1k2l3m4n5o6p7q8r', // vanguard123
-            'avatar' => 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=250',
+            'avatar' => 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=250',
+            'phone' => '21996134073',
+        ],
+        'camilla@grupoeloizio.com.br' => [
+            'id' => 'usr_admin_sofia',
+            'name' => 'Sofia Vanguard',
+            'role' => 'admin',
+            'password_hash' => '$2y$10$e8wJtG4e2aI1QvYpIu8gLe8yT7B7t2v9pG1vX1k2l3m4n5o6p7q8r', // vanguard123
+            'avatar' => 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=250',
             'phone' => '21996134073',
         ],
         'aluno@grupoeloizio.com.br' => [
@@ -156,7 +164,7 @@ function handleLogin(array $input): void
         if ($user === null) {
             $user = [
                 'id' => 'usr_ceo_eloizio',
-                'name' => 'Eloizio Silva (CEO Master)',
+                'name' => 'Eloizio Assunção (CEO Master)',
                 'role' => 'admin',
                 'avatar' => 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=250',
                 'phone' => '21987648727',
@@ -164,10 +172,10 @@ function handleLogin(array $input): void
         }
     } else {
         $isCeo = ($email === 'mecanicoeloizio@gmail.com' || $email === 'eloizio@grupoeloizio.com.br');
-        $isCamilla = ($email === 'camilla@grupoeloizio.com.br');
+        $isSofia = ($email === 'sofia@grupoeloizio.com.br' || $email === 'camilla@grupoeloizio.com.br');
 
         if ($user !== null) {
-            if (($isCeo || $isCamilla) && strlen($password) >= 6) {
+            if (($isCeo || $isSofia) && strlen($password) >= 6) {
                 $isValid = true;
             } else {
                 $isValid = (strlen($password) >= 6 && ($password === 'vanguard123' || password_verify($password, $user['password_hash'])));

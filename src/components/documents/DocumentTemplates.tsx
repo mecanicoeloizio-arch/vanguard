@@ -8,6 +8,7 @@ import {
   Calendar,
   X,
   CheckCircle,
+  Briefcase,
 } from 'lucide-react';
 
 interface DocumentViewerModalProps {
@@ -224,11 +225,14 @@ export const DocumentViewerModal: React.FC<DocumentViewerModalProps> = ({
                 </div>
 
                 <h2 className="text-xs uppercase tracking-widest font-extrabold text-amber-900 mb-1">
-                  EduVanguard Instituto de Educação e Tecnologia
+                  Grupo Eloizio • Educação Profissional & Cursos Livres
                 </h2>
-                <h1 className="text-2xl sm:text-4xl font-serif font-black text-slate-900 tracking-tight mb-4">
-                  CERTIFICADO DE CONCLUSÃO
+                <h1 className="text-xl sm:text-3xl font-serif font-black text-slate-900 tracking-tight mb-2">
+                  CERTIFICADO DE CURSO LIVRE PROFISSIONALIZANTE
                 </h1>
+                <div className="inline-block px-3 py-1 rounded-full bg-amber-100 text-amber-900 text-[10px] font-black uppercase tracking-wider mb-3">
+                  Qualificação Profissional • Lei Federal nº 9.394/1996 (LDB Art. 42) • Decreto nº 5.154/2004 • MEC
+                </div>
 
                 <p className="text-xs sm:text-sm text-slate-600 max-w-lg mx-auto leading-relaxed">
                   Certificamos para os devidos fins que o(a) aluno(a)
@@ -239,31 +243,43 @@ export const DocumentViewerModal: React.FC<DocumentViewerModalProps> = ({
                 </div>
 
                 <p className="text-xs sm:text-sm text-slate-600 max-w-lg mx-auto leading-relaxed mt-2">
-                  concluiu com êxito o curso de{' '}
+                  concluiu com êxito o curso livre profissionalizante de{' '}
                   <strong className="text-slate-900 font-bold">
-                    {course?.title || 'Engenharia de Software Moderna & Arquitetura Cloud'}
+                    {course?.title || 'Formação Profissional Livre'}
                   </strong>
-                  , com carga horária total de{' '}
-                  <span className="font-bold text-slate-900">{course?.workloadHours || 360} horas</span>,
-                  tendo cumprido integralmente as exigências pedagógicas e regimentais.
+                  , com carga horária total certificada de{' '}
+                  <span className="font-bold text-slate-900">{(course?.workloadHours || 360) + (document.internshipHoursValidated || 0)} horas</span>
+                  {(document.internshipHoursValidated || 0) > 0 && (
+                    <span className="text-indigo-800 font-semibold">
+                      {' '}(sendo {course?.workloadHours || 360}h de formação regular e {document.internshipHoursValidated}h de Estágio Supervisionado Opcional Validado sob a Lei Federal 11.788/2008)
+                    </span>
+                  )}
+                  , tendo cumprido integralmente as exigências pedagógicas e regimentais da Educação Profissional de Nível Livre.
                 </p>
 
+                {(document.internshipHoursValidated || 0) > 0 && (
+                  <div className="mt-3 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-linear-to-r from-amber-500/20 via-indigo-500/10 to-emerald-500/20 border border-amber-500/40 text-[11px] font-bold text-amber-950">
+                    <span className="text-amber-800">⭐ Agregação Curricular de Alto Valor:</span>
+                    <span className="text-indigo-950">+{document.internshipHoursValidated}h de Prática Profissional em Estágio Supervisionado</span>
+                  </div>
+                )}
+
                 <div className="text-xs text-slate-500 mt-6 font-medium">
-                  São Paulo, {new Date().toLocaleDateString('pt-BR', { year: 'numeric', month: 'long', day: 'numeric' })}
+                  São Gonçalo - RJ, {new Date().toLocaleDateString('pt-BR', { year: 'numeric', month: 'long', day: 'numeric' })}
                 </div>
 
                 {/* Signatures */}
                 <div className="grid grid-cols-2 gap-8 mt-8 pt-4 border-t border-slate-300">
                   <div>
-                    <div className="font-serif italic text-base text-slate-800">Carlos Alberto Mendes</div>
+                    <div className="font-serif italic text-base text-slate-800">Eloizio Assunção</div>
                     <div className="border-t border-slate-400 mt-1 pt-1 text-[11px] font-semibold text-slate-500">
-                      Diretoria Geral Acadêmica
+                      Diretor Presidente • Grupo Eloizio
                     </div>
                   </div>
                   <div>
-                    <div className="font-serif italic text-base text-slate-800">Mariana Fernandes</div>
+                    <div className="font-serif italic text-base text-slate-800">Roseli Castro</div>
                     <div className="border-t border-slate-400 mt-1 pt-1 text-[11px] font-semibold text-slate-500">
-                      Coordenação Pedagógica
+                      Secretária Geral Acadêmica
                     </div>
                   </div>
                 </div>
@@ -306,7 +322,12 @@ export const DocumentViewerModal: React.FC<DocumentViewerModalProps> = ({
                   </div>
                   <div>
                     <span className="text-slate-400 text-[10px] block uppercase font-bold">Carga Total</span>
-                    <span className="font-bold text-slate-900">{course?.workloadHours || 360} Horas</span>
+                    <span className="font-bold text-slate-900">
+                      {(course?.workloadHours || 360) + (document.internshipHoursValidated || 0)} Horas
+                      {(document.internshipHoursValidated || 0) > 0 && (
+                        <span className="text-[10px] text-indigo-600 block">(+{document.internshipHoursValidated}h estágio)</span>
+                      )}
+                    </span>
                   </div>
                   <div>
                     <span className="text-slate-400 text-[10px] block uppercase font-bold">Média Final</span>
@@ -353,6 +374,29 @@ export const DocumentViewerModal: React.FC<DocumentViewerModalProps> = ({
                     </tbody>
                   </table>
                 </div>
+
+                {/* Estágio Supervisionado Opcional Validado */}
+                {(document.internshipHoursValidated || 0) > 0 && (
+                  <div className="p-3 bg-indigo-50/80 rounded-xl border border-indigo-200 text-xs space-y-1.5">
+                    <div className="flex items-center justify-between">
+                      <span className="font-extrabold text-indigo-950 uppercase text-[10px] flex items-center gap-1.5">
+                        <Briefcase className="w-3.5 h-3.5 text-indigo-600" />
+                        Estágio Supervisionado Opcional Homologado (Lei Federal nº 11.788/2008)
+                      </span>
+                      <span className="text-[10px] font-black text-indigo-700 bg-white px-2 py-0.5 rounded-md border border-indigo-200 shadow-xs">
+                        +{document.internshipHoursValidated}h Práticas Validadas
+                      </span>
+                    </div>
+                    <p className="text-[11px] text-slate-700 leading-relaxed">
+                      {document.internshipDetails ||
+                        `Cumprimento satisfatório de atividades práticas supervisionadas em empresa concedente conveniada ao Grupo Eloizio. Horas creditadas na integralização curricular do aluno com registro de aproveitamento e avaliação profissional satisfatória.`}
+                    </p>
+                    <div className="flex items-center gap-4 text-[10px] text-indigo-900 font-mono pt-1 border-t border-indigo-200/60">
+                      <span>Validação: <strong className="text-indigo-950">{document.validationHash || 'EST-2026-VAL-OK'}</strong></span>
+                      <span>Chancela: Termo de Compromisso Homologado</span>
+                    </div>
+                  </div>
+                )}
 
                 {/* Legal and Registry Stamps */}
                 <div className="p-3 bg-amber-50/50 rounded-xl border border-amber-200 text-[10px] text-slate-700 space-y-1">
@@ -491,21 +535,73 @@ export const DocumentViewerModal: React.FC<DocumentViewerModalProps> = ({
             </div>
           )}
 
-          {document.documentType === 'declaracao' && (
-            /* Declaração de Matrícula Regular */
+          {(document.documentType === 'declaracao' || (document as any).documentType === 'declaracao_conclusao') && (
+            /* Declaração Oficial com Autenticação Digital ICP-Edu */
             <div className="w-full max-w-2xl bg-white p-8 sm:p-12 rounded-xl shadow-lg border border-slate-300 text-slate-900 print-container">
-              <h2 className="text-center font-black text-lg tracking-wider uppercase mb-8">
-                DECLARAÇÃO DE MATRÍCULA REGULAR
-              </h2>
-              <p className="text-sm leading-relaxed text-slate-700 mb-6 text-justify">
-                Declaramos para os devidos fins a quem possa interessar, especialmente para fins de concessão de estágio, transporte estudantil e benefícios fiscais, que o(a) aluno(a) <strong className="text-slate-900">{student.name}</strong>, portador(a) da matrícula <strong className="font-mono">{student.registrationNumber}</strong>, encontra-se regularmente matriculado(a) e frequentando as aulas do curso de <strong className="text-slate-900">{course?.title || 'Engenharia de Software Moderna & Cloud'}</strong> nesta instituição no ano letivo de 2026.
-              </p>
-              <div className="text-right text-xs text-slate-500 mt-10">
-                São Paulo, {new Date().toLocaleDateString('pt-BR', { dateStyle: 'long' })}
+              <div className="border-b-2 border-slate-900 pb-4 mb-6 flex items-center justify-between">
+                <div>
+                  <h3 className="font-black text-sm uppercase text-slate-900">EduVanguard — Instituto de Educação Superior</h3>
+                  <p className="text-[10px] text-slate-500">Secretaria Acadêmica Central • Credenciamento MEC LDB 9.394/96 Art. 42</p>
+                </div>
+                <div className="text-right">
+                  <span className="text-[10px] font-mono font-bold bg-slate-100 px-2 py-1 rounded border border-slate-300">
+                    AUTENTICADO DIGITALMENTE
+                  </span>
+                </div>
               </div>
-              <div className="text-center mt-12 pt-6 border-t border-slate-300 max-w-xs mx-auto">
-                <p className="font-bold text-xs text-slate-800">Departamento de Registros Acadêmicos</p>
-                <p className="text-[10px] text-slate-400 font-mono mt-1">Hash: {document.validationHash || 'DEC-OK-2026'}</p>
+
+              <h2 className="text-center font-black text-lg tracking-wider uppercase mb-8">
+                {document.title?.toLowerCase().includes('conclusão') || (document as any).documentType === 'declaracao_conclusao'
+                  ? 'DECLARAÇÃO DE CONCLUSÃO DE CURSO'
+                  : 'DECLARAÇÃO DE MATRÍCULA REGULAR'}
+              </h2>
+
+              <p className="text-sm leading-relaxed text-slate-700 mb-6 text-justify">
+                {document.title?.toLowerCase().includes('conclusão') || (document as any).documentType === 'declaracao_conclusao' ? (
+                  <>
+                    Declaramos para os devidos fins de direito a quem possa interessar que o(a) aluno(a){' '}
+                    <strong className="text-slate-900">{student.name}</strong>, portador(a) da matrícula{' '}
+                    <strong className="font-mono">{student.registrationNumber}</strong>, concluiu com aproveitamento acadêmico integral e frequência satisfatória todas as disciplinas do curso de{' '}
+                    <strong className="text-slate-900">{course?.title || 'Engenharia de Software Moderna & Cloud'}</strong>, com carga horária total de{' '}
+                    <strong className="text-slate-900">{course?.workloadHours || 360} horas</strong>, encontrando-se apto(a) a exercer as competências profissionais e a receber seu Certificado Oficial registrado no MEC.
+                  </>
+                ) : (
+                  <>
+                    Declaramos para os devidos fins a quem possa interessar, especialmente para fins de concessão de estágio, transporte estudantil e benefícios fiscais, que o(a) aluno(a){' '}
+                    <strong className="text-slate-900">{student.name}</strong>, portador(a) da matrícula{' '}
+                    <strong className="font-mono">{student.registrationNumber}</strong>, encontra-se regularmente matriculado(a) e frequentando as aulas do curso de{' '}
+                    <strong className="text-slate-900">{course?.title || 'Engenharia de Software Moderna & Cloud'}</strong> nesta instituição no ano letivo de 2026.
+                  </>
+                )}
+              </p>
+
+              <div className="text-right text-xs text-slate-500 mt-10">
+                São Paulo / Rio de Janeiro, {new Date().toLocaleDateString('pt-BR', { dateStyle: 'long' })}
+              </div>
+
+              <div className="grid grid-cols-2 gap-4 mt-12 pt-6 border-t border-slate-300 text-xs text-slate-700">
+                <div className="text-left space-y-1">
+                  <p className="font-bold text-xs text-slate-900">Secretaria Acadêmica Geral</p>
+                  <p className="text-[10px] text-slate-500 font-mono">Assinado Digitalmente ICP-Edu</p>
+                  <p className="text-[10px] text-slate-400 font-mono break-all">Hash: {document.validationHash || 'DEC-OK-2026'}</p>
+                </div>
+                <div className="text-right flex flex-col items-end">
+                  <div className="w-14 h-14 bg-white border border-slate-300 rounded p-1 mb-1">
+                    <svg viewBox="0 0 100 100" className="w-full h-full text-slate-900">
+                      <rect x="0" y="0" width="35" height="35" fill="currentColor" />
+                      <rect x="5" y="5" width="25" height="25" fill="white" />
+                      <rect x="10" y="10" width="15" height="15" fill="currentColor" />
+                      <rect x="65" y="0" width="35" height="35" fill="currentColor" />
+                      <rect x="70" y="5" width="25" height="25" fill="white" />
+                      <rect x="75" y="10" width="15" height="15" fill="currentColor" />
+                      <rect x="0" y="65" width="35" height="35" fill="currentColor" />
+                      <rect x="5" y="70" width="25" height="25" fill="white" />
+                      <rect x="10" y="75" width="15" height="15" fill="currentColor" />
+                      <rect x="45" y="45" width="20" height="20" fill="currentColor" />
+                    </svg>
+                  </div>
+                  <span className="text-[9px] text-indigo-600 font-bold">Validação Pública QR</span>
+                </div>
               </div>
             </div>
           )}
