@@ -17,10 +17,39 @@
 
 declare(strict_types=1);
 
-require_once dirname(__DIR__) . '/webhook/config/config.php';
-require_once dirname(__DIR__) . '/webhook/controllers/CamillaCentralController.php';
+// Carregamento defensivo dos controladores e configurações (compatível com /var/www/html e hospedagens cPanel/VPS)
+$possibleConfigs = [
+    __DIR__ . '/webhook/config/config.php',
+    dirname(__DIR__) . '/webhook/config/config.php',
+    __DIR__ . '/config.php',
+];
 
-$saudacao = CamillaCentralController::getSaudacao();
+foreach ($possibleConfigs as $cfg) {
+    if (file_exists($cfg)) {
+        require_once $cfg;
+        break;
+    }
+}
+
+$possibleControllers = [
+    __DIR__ . '/webhook/controllers/CamillaCentralController.php',
+    dirname(__DIR__) . '/webhook/controllers/CamillaCentralController.php',
+];
+
+foreach ($possibleControllers as $ctrl) {
+    if (file_exists($ctrl)) {
+        require_once $ctrl;
+        break;
+    }
+}
+
+if (class_exists('CamillaCentralController') && method_exists('CamillaCentralController', 'getSaudacao')) {
+    $saudacao = CamillaCentralController::getSaudacao();
+} else {
+    $hora = (int)date('H');
+    $cumprimento = ($hora >= 5 && $hora < 12) ? 'Bom dia' : (($hora >= 12 && $hora < 18) ? 'Boa tarde' : 'Boa noite');
+    $saudacao = "{$cumprimento}! Sou a Camilla Faria (28 anos), Gerente Geral e assistente oficial do Grupo Eloizio. Como posso ajudar você hoje?";
+}
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -389,6 +418,102 @@ $saudacao = CamillaCentralController::getSaudacao();
         </div>
       </div>
 
+      <!-- 7. Eloizio Hub • Orquestrador Master & Instalador Geral -->
+      <div id="eloizio" class="p-6 rounded-2xl bg-zinc-900 border border-amber-500/40 hover:border-amber-400 transition flex flex-col justify-between group shadow-xl">
+        <div class="space-y-4">
+          <div class="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 text-xl group-hover:scale-110 transition">
+            <i class="fa-solid fa-bolt"></i>
+          </div>
+          <div>
+            <span class="text-[10px] font-mono text-amber-400 uppercase tracking-widest font-semibold">eloizio.grupoeloizio.com.br</span>
+            <h3 class="text-lg font-bold text-white mt-1">Eloizio Hub • Master Instalador & Auditoria</h3>
+          </div>
+          <p class="text-xs text-zinc-400 leading-relaxed">
+            Painel Executivo do CEO Eloizio Assunção: <strong>Script instalador e configurador automático de todos os projetos</strong> nas suas respectivas pastas, orquestrador Docker Traefik v3, sincronização de banco com 19 tabelas e testes de prontidão em produção.
+          </p>
+          <ul class="text-xs text-zinc-300 space-y-1.5">
+            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400 text-[10px]"></i> Instalação com 1 clique de todos os 9 sistemas</li>
+            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400 text-[10px]"></i> Ubuntu 24 LTS + Traefik v3 + FileBrowser Quantum</li>
+            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400 text-[10px]"></i> Auditoria minuciosa e eliminação de pastas espelhadas</li>
+          </ul>
+        </div>
+        <div class="pt-6 border-t border-zinc-800/80 mt-6 flex flex-wrap items-center justify-between gap-2">
+          <span class="text-xs font-bold text-amber-400">CEO & Orquestração</span>
+          <div class="flex items-center gap-2">
+            <a href="eloizio/" class="px-3 py-1.5 rounded-lg bg-amber-500/20 hover:bg-amber-500 text-amber-300 hover:text-slate-950 text-xs font-bold transition flex items-center gap-1">
+              <i class="fa-solid fa-folder-open text-[10px]"></i> /eloizio/
+            </a>
+            <a href="https://eloizio.grupoeloizio.com.br" target="_blank" class="px-3 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-black transition flex items-center gap-1">
+              Subdomínio <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 8. EloWa • WhatsApp Hub Multi-Device Baileys -->
+      <div id="elowa" class="p-6 rounded-2xl bg-zinc-900 border border-zinc-800 hover:border-emerald-500/50 transition flex flex-col justify-between group">
+        <div class="space-y-4">
+          <div class="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 text-xl group-hover:scale-110 transition">
+            <i class="fa-brands fa-whatsapp"></i>
+          </div>
+          <div>
+            <span class="text-[10px] font-mono text-emerald-400 uppercase tracking-widest font-semibold">elowa.grupoeloizio.com.br</span>
+            <h3 class="text-lg font-bold text-white mt-1">EloWa • WhatsApp Multi-Device Hub</h3>
+          </div>
+          <p class="text-xs text-zinc-400 leading-relaxed">
+            Servidor oficial de comunicação WhatsApp Baileys <strong>(21 99613-4073)</strong>. Conexão multi-device para atendimento automático da Camilla Faria, lembretes de vencimento ASO/CND e alertas de OS.
+          </p>
+          <ul class="text-xs text-zinc-300 space-y-1.5">
+            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400 text-[10px]"></i> Conexão multi-device sem desconexões</li>
+            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400 text-[10px]"></i> Lembretes automáticos ASO NR-7 e certidões</li>
+            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400 text-[10px]"></i> Felicitações com 15% OFF (PARABENS15)</li>
+          </ul>
+        </div>
+        <div class="pt-6 border-t border-zinc-800/80 mt-6 flex flex-wrap items-center justify-between gap-2">
+          <span class="text-xs font-bold text-white">Multi-Device Ativo</span>
+          <div class="flex items-center gap-2">
+            <a href="elowa/" class="px-3 py-1.5 rounded-lg bg-emerald-600/30 hover:bg-emerald-600 text-emerald-300 hover:text-white text-xs font-bold transition flex items-center gap-1">
+              <i class="fa-solid fa-folder-open text-[10px]"></i> /elowa/
+            </a>
+            <a href="https://elowa.grupoeloizio.com.br" target="_blank" class="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition flex items-center gap-1">
+              Subdomínio <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 9. Webmail Corporativo (PHPMailer & SPF/DKIM) -->
+      <div id="mail" class="p-6 rounded-2xl bg-zinc-900 border border-zinc-800 hover:border-blue-500/50 transition flex flex-col justify-between group">
+        <div class="space-y-4">
+          <div class="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 text-xl group-hover:scale-110 transition">
+            <i class="fa-solid fa-envelope"></i>
+          </div>
+          <div>
+            <span class="text-[10px] font-mono text-blue-400 uppercase tracking-widest font-semibold">mail.grupoeloizio.com.br</span>
+            <h3 class="text-lg font-bold text-white mt-1">Webmail & Contas @grupoeloizio.com.br</h3>
+          </div>
+          <p class="text-xs text-zinc-400 leading-relaxed">
+            Servidor de correio institucional e Webmail corporativo. Envio seguro com <strong>PHPMailer 6.9+</strong>, validação criptográfica SPF, DKIM e DMARC com alta taxa de entregabilidade na caixa de entrada.
+          </p>
+          <ul class="text-xs text-zinc-300 space-y-1.5">
+            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400 text-[10px]"></i> Contas personalizadas @grupoeloizio.com.br</li>
+            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400 text-[10px]"></i> Proteção antispam e SPF/DKIM configurados</li>
+            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400 text-[10px]"></i> Notificações automáticas de cursos e OS</li>
+          </ul>
+        </div>
+        <div class="pt-6 border-t border-zinc-800/80 mt-6 flex flex-wrap items-center justify-between gap-2">
+          <span class="text-xs font-bold text-white">Alta Entregabilidade</span>
+          <div class="flex items-center gap-2">
+            <a href="mail/" class="px-3 py-1.5 rounded-lg bg-blue-600/30 hover:bg-blue-600 text-blue-300 hover:text-white text-xs font-bold transition flex items-center gap-1">
+              <i class="fa-solid fa-folder-open text-[10px]"></i> /mail/
+            </a>
+            <a href="https://mail.grupoeloizio.com.br" target="_blank" class="px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold transition flex items-center gap-1">
+              Subdomínio <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+
     </div>
   </section>
 
@@ -501,10 +626,14 @@ $saudacao = CamillaCentralController::getSaudacao();
         </div>
 
         <div class="flex flex-wrap items-center justify-center gap-4 text-zinc-400">
+          <a href="https://eloizio.grupoeloizio.com.br" target="_blank" class="hover:text-amber-400 text-amber-300 font-bold">Eloizio Hub</a>
+          <a href="https://cursos.grupoeloizio.com.br" target="_blank" class="hover:text-orange-400">EduVanguard</a>
           <a href="https://elomak.grupoeloizio.com.br" target="_blank" class="hover:text-orange-400">EloMak</a>
           <a href="https://elocontabil.grupoeloizio.com.br" target="_blank" class="hover:text-orange-400">EloContábil</a>
           <a href="https://elosign.grupoeloizio.com.br" target="_blank" class="hover:text-orange-400">EloSign</a>
-          <a href="https://webhook.grupoeloizio.com.br" target="_blank" class="hover:text-orange-400">Webhook Hub</a>
+          <a href="https://elowa.grupoeloizio.com.br" target="_blank" class="hover:text-emerald-400">EloWa WhatsApp</a>
+          <a href="https://mail.grupoeloizio.com.br" target="_blank" class="hover:text-blue-400">Webmail</a>
+          <a href="https://webhook.grupoeloizio.com.br" target="_blank" class="hover:text-purple-400">Webhook Hub</a>
           <a href="https://wa.me/5521996134073" target="_blank" class="hover:text-emerald-400">WhatsApp Camilla</a>
         </div>
       </div>

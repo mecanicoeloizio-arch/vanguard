@@ -16,27 +16,91 @@ class CentralDatabase {
             return self::$connection;
         }
 
-        if (!is_dir(STORAGE_PATH)) {
-            @mkdir(STORAGE_PATH, 0755, true);
-        }
-
-        // Tentar MySQL primeiro
+        // 1. Tentar MySQL primeiro
         try {
-            $dsn = sprintf('mysql:host=%s;port=%d;dbname=%s;charset=utf8mb4', DB_HOST, DB_PORT, DB_NAME);
-            self::$connection = new PDO($dsn, DB_USER, DB_PASS, [
+            $dbHost = defined('DB_HOST') ? DB_HOST : 'localhost';
+            $dbPort = defined('DB_PORT') ? (int)DB_PORT : 3306;
+            $dbName = defined('DB_NAME') ? DB_NAME : 'grupoeloizio_central';
+            $dbUser = defined('DB_USER') ? DB_USER : 'root';
+            $dbPass = defined('DB_PASS') ? DB_PASS : '';
+
+            // Tenta obter credenciais da Central Master se disponíveis
+            $centralJson = dirname(__DIR__, 2) . '/database/central_config.json';
+            if (file_exists($centralJson)) {
+                $cData = json_decode(@file_get_contents($centralJson) ?: '', true);
+                if (!empty($cData['database']['host'])) {
+                    $dbHost = $cData['database']['host'];
+                    $dbPort = (int)($cData['database']['port'] ?? 3306);
+                    $dbName = $cData['database']['database'] ?? $dbName;
+                    $dbUser = $cData['database']['user'] ?? $dbUser;
+                    if (!empty($cData['database']['password']) && $cData['database']['password'] !== '••••••••••••') {
+                        $dbPass = $cData['database']['password'];
+                    }
+                }
+            }
+
+            $dsn = sprintf('mysql:host=%s;port=%d;dbname=%s;charset=utf8mb4', $dbHost, $dbPort, $dbName);
+            self::$connection = new PDO($dsn, $dbUser, $dbPass, [
                 PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
                 PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-                PDO::ATTR_TIMEOUT => 3,
+                PDO::ATTR_TIMEOUT => 2,
             ]);
             self::initMySqlTables(self::$connection);
+            return self::$connection;
         } catch (Throwable $e) {
-            // Fallback robusto e automático para SQLite local
-            $sqlitePath = STORAGE_PATH . '/central_grupoeloizio.sqlite';
-            self::$connection = new PDO("sqlite:" . $sqlitePath, null, null, [
+            // MySQL não conectou; prosseguir para SQLite com múltiplos caminhos
+        }
+
+        // 2. Fallback SQLite: Tentar múltiplos locais com permissão de escrita garantida
+        $storageDir = defined('STORAGE_PATH') ? STORAGE_PATH : (__DIR__ . '/../storage');
+        @mkdir($storageDir, 0777, true);
+
+        $databaseDir = dirname(__DIR__, 2) . '/database';
+        @mkdir($databaseDir, 0777, true);
+
+        $tempDir = sys_get_temp_dir();
+
+        $candidatos = [
+            $storageDir . '/central_grupoeloizio.sqlite',
+            $databaseDir . '/central_grupoeloizio.sqlite',
+            $tempDir . '/central_grupoeloizio.sqlite',
+            ':memory:',
+        ];
+
+        foreach ($candidatos as $sqlitePath) {
+            try {
+                if ($sqlitePath !== ':memory:') {
+                    $dir = dirname($sqlitePath);
+                    if (!is_dir($dir)) {
+                        @mkdir($dir, 0777, true);
+                    }
+                    if (!is_writable($dir) && !file_exists($sqlitePath)) {
+                        continue;
+                    }
+                }
+
+                $pdo = new PDO("sqlite:" . $sqlitePath, null, null, [
+                    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+                ]);
+                self::$connection = $pdo;
+                self::initSqliteTables(self::$connection);
+                return self::$connection;
+            } catch (Throwable $sqliteErr) {
+                // Tenta o próximo candidato
+                continue;
+            }
+        }
+
+        // 3. Fallback infalível absoluto: SQLite em memória
+        try {
+            self::$connection = new PDO("sqlite::memory:", null, null, [
                 PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
                 PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
             ]);
             self::initSqliteTables(self::$connection);
+        } catch (Throwable $finalErr) {
+            // Em caso extremo
         }
 
         return self::$connection;

@@ -6,6 +6,11 @@
     # RewriteCond %{HTTPS} off
     # RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
+    # Aliases amigáveis
+    RewriteRule ^teste_suite\.php$ test_suite.php [L,QSA]
+    RewriteRule ^central/?$ central_config.php [L,QSA]
+    RewriteRule ^vanguard/?(.*)$ cursos/$1 [L,QSA]
+
     # Roteamento de API
     RewriteRule ^api/(.*)$ api/index.php [QSA,L]
 

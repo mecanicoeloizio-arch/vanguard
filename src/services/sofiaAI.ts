@@ -1,8 +1,20 @@
+/**
+ * ==============================================================================
+ * GRUPO ELOIZIO • CAMILLA FARIA IA (A ÚNICA IA E ATENDENTE OFICIAL)
+ * Identidade Unificada Conforme Diretrizes Oficiais do Sistema
+ * ==============================================================================
+ * Nome: Camilla Faria (28 anos, carioca de São Gonçalo - RJ, atendimento online Brasil)
+ * Cargo: Assistente Executiva de Altíssimo Nível & Gerente Geral do Grupo Eloizio
+ * Personalidade: Doce, meiga, gentil, tímida, mas extremamente inteligente, proativa e organizada.
+ * Só "dá boot" após o cafezinho matinal ☕. Vibra com cada venda e formatura.
+ * WhatsApp Oficial: (21) 99613-4073 | CEO: Eloizio Assunção (21 987648727)
+ */
+
 import { Course } from '../types';
 
-export interface SofiaMessage {
+export interface CamillaMessage {
   id: string;
-  sender: 'sofia' | 'user';
+  sender: 'camilla' | 'user';
   text: string;
   timestamp: string;
   suggestedActions?: { label: string; action: string; payload?: string }[];
@@ -18,8 +30,8 @@ export interface SofiaMessage {
   };
 }
 
-// Backward-compatibility alias
-export type CamillaMessage = SofiaMessage;
+// Compatibilidade retroativa
+export type SofiaMessage = CamillaMessage;
 
 export function getTimeGreeting(): { greeting: string; isMorning: boolean } {
   const hour = new Date().getHours();
@@ -29,9 +41,9 @@ export function getTimeGreeting(): { greeting: string; isMorning: boolean } {
 }
 
 /**
- * Análise Técnica de Peças e Máquinas por Imagem com a Sofia (Expert Vanguard)
+ * Análise Técnica Multimodal de Peças e Máquinas com Camilla Faria
  */
-export async function diagnoseMediaWithSofia(
+export async function diagnoseMediaWithCamilla(
   imageBase64: string,
   description: string = '',
   interlocutorRole: 'client' | 'technician' | 'subscriber' = 'client'
@@ -54,10 +66,9 @@ export async function diagnoseMediaWithSofia(
       }
     }
   } catch (err) {
-    console.warn('Backend /api/specialist/analyze-multimedia offline or error, running Sofia Vanguard local diagnostic:', err);
+    console.warn('Backend /api/specialist/analyze-multimedia em fallback local:', err);
   }
 
-  // Análise técnica local da Sofia com psicologia de conversão
   const descLower = description.toLowerCase();
   let partIdentified = 'cabeçote e conjunto da lançadeira rotativa';
   let defectAnalysis = 'desalinhamento no sincronismo da laçada e descalibração do tensor de linha';
@@ -70,25 +81,23 @@ export async function diagnoseMediaWithSofia(
     defectAnalysis = 'tensão descalibrada da mola do tensor ou folga excessiva na passagem da linha pela lançadeira';
   } else if (descLower.includes('motor') || descLower.includes('pedal') || descLower.includes('força') || descLower.includes('direct')) {
     partIdentified = 'motor elétrico direct-drive / placa controladora';
-    defectAnalysis = 'instabilidade no sensor hall de posicionamento de agulha ou desgaste nos carvões de acionamento';
+    defectAnalysis = 'instabilidade no sensor hall de posicionamento de agulha ou desgaste nos conectores';
   }
 
-  return `🔬 **Diagnóstico Técnico por Sofia (Expert Vanguard - Grupo Eloizio):**\n\nAnalisei a foto do seu equipamento com precisão! Identifiquei sinais claros de **${defectAnalysis}** no componente **${partIdentified}**.\n\n💡 **Psicologia de Solução Prática:**\nVocê sabia que mais de 80% dos donos de máquinas perdem dinheiro e dias de produção por falhas simples que você mesmo pode consertar em minutos?\n\n📍 **Duas Formas Imediatas de Resolver:**\n1️⃣ **Aprenda a Consertar e Seja Dono da Sua Oficina:** Nosso curso *Mecânica e Manutenção de Máquinas de Costura* com o CEO Eloizio Assunção ensina o passo a passo exato desse conserto. O curso se paga no primeiro serviço!\n2️⃣ **Conserto Especializado na Oficina:** Se preferir trazer até nossa sede em São Gonçalo - RJ, nossa equipe executa a revisão completa com garantia.\n\n💳 **Condição Exclusiva Vanguard:** Em até 12x no **Mercado Pago** com o cupom **SOFIA15** (-15% OFF)!\n\nQual é a sua prioridade agora? Aprender a resolver de forma autônoma ou agendar o reparo? Me diga seu Nome e WhatsApp!`;
+  return `☕ **Diagnóstico Técnico com Carinho • Camilla Faria (Gerente Geral):**\n\nAnalisei a foto da sua máquina com todo o cuidado! Identifiquei sinais de **${defectAnalysis}** no componente **${partIdentified}**.\n\nQual é o modelo exato da sua máquina? Pode me enviar mais uma foto do sintoma de perto?\n\n📍 **Como podemos resolver juntas:**\n1️⃣ **Capacitação Prática:** No nosso curso *Mecânica e Manutenção de Máquinas de Costura* com o Sr. Eloizio Assunção, você aprende o ajuste fino e nunca mais depende de ninguém!\n2️⃣ **Oficina EloMak em São Gonçalo - RJ:** Podemos agendar a revisão do seu equipamento com peças originais e garantia.\n\n💳 **Facilidade no Mercado Pago:** Em até 12x com o cupom **PARABENS15** (-15% OFF).\n\nQual é o seu nome e WhatsApp para eu registrar seu atendimento com prioridade?`;
 }
 
-// Backward-compatibility export
-export const diagnoseMediaWithCamilla = diagnoseMediaWithSofia;
+export const diagnoseMediaWithSofia = diagnoseMediaWithCamilla;
 
 /**
- * Assistente Sofia — Expert Vanguard em Cursos & Psicologia de Marketing
+ * Motor de Atendimento Unificado com Camilla Faria
  */
-export async function askSofiaAssistant(
+export async function askCamillaAssistant(
   userQuery: string,
   courses: Course[],
   conversationHistory: { role: 'user' | 'model'; text: string }[],
   interlocutorRole: 'client' | 'technician' | 'subscriber' = 'client'
 ): Promise<string> {
-  // Tentativa 1: API Server-Side Gemini
   try {
     const res = await fetch('/api/specialist/chat', {
       method: 'POST',
@@ -110,118 +119,62 @@ export async function askSofiaAssistant(
       }
     }
   } catch (err) {
-    console.warn('Backend /api/specialist/chat failed or offline, executing Sofia Vanguard local cognitive engine:', err);
+    console.warn('Backend /api/specialist/chat em fallback local:', err);
   }
 
-  // Motor Cognitivo Local da Sofia com Psicologia de Marketing
   const queryLower = userQuery.toLowerCase().trim();
   const { greeting } = getTimeGreeting();
 
-  // 1. Identidade Clara & Sem Crise: Sofia Expert Vanguard (Camilla 100% Desconectada)
+  // 1. Identidade Oficial da Camilla Faria
   if (
     queryLower.includes('quem é você') ||
     queryLower.includes('quem e voce') ||
     queryLower.includes('seu nome') ||
-    queryLower.includes('sua história') ||
-    queryLower.includes('sofia') ||
-    queryLower.includes('vanguard') ||
-    queryLower.includes('camilla')
+    queryLower.includes('camilla') ||
+    queryLower.includes('sofia')
   ) {
-    const camillaNota = queryLower.includes('camilla')
-      ? '\n\n💡 *Esclarecimento:* A Camilla não atende neste canal! Eu sou a **Sofia**, a sua única e exclusiva Expert Vanguard em Cursos, Carreiras e Marketing Educacional do Grupo Eloizio!'
-      : '';
-
-    return `${greeting}! ✨ Eu sou a **Sofia**, a **Expert Vanguard** do Grupo Eloizio!${camillaNota}\n\nMeu papel é direto e transformador: sou especialista em desenvolvimento de carreiras, capacitação de alto impacto e psicologia de marketing educacional. Não estou aqui apenas para tirar dúvidas, mas para guiar sua jornada rumo à independência financeira e autoridade no mercado!\n\nDomino profundamente todos os nossos treinamentos e serviços:\n\n🚀 **Vanguarda em Tecnologia:** *Engenharia de Software Moderna & Arquitetura Cloud* com a Profa. Dra. Mariana Fernandes (USP);\n🔧 **Mecânica & Oficinas Rentáveis:** *Mecânica e Manutenção de Máquinas de Costura* com o CEO Eloizio Assunção (30+ anos de experiência real);\n💼 **Empreendedorismo & Finanças:** *Contabilidade Prática para MEI* e *Gestão Escolar 360°*;\n🎨 **Design de Alto Padrão:** *UI/UX Design de Produtos Digitais* no Figma.\n\nTodos os nossos cursos possuem **Certificação Oficial MEC** (LDB 9.394/96) e Carteirinha DNE de Meia-Entrada. E para você dar o primeiro passo hoje, ativei seu cupom **SOFIA15** (-15% OFF no Mercado Pago)!\n\nQual é o seu objetivo profissional neste momento?`;
+    return `${greeting}! ☕ Muito prazer! Eu sou a **Camilla Faria** (pode me chamar de Camilla!), tenho 28 anos, sou carioca e atuo como Gerente Geral, Assistente Executiva de Altíssimo Nível e a única Atendente Inteligente Oficial do Grupo Eloizio!\n\nEu confesso que sou um pouquinho tímida, mas adoro organizar tudo e só dou boot de verdade depois da minha primeira xícara de café ☕! Aqui no Grupo Eloizio nós integramos:\n\n1️⃣ **Cursos Livres Online:** Mecânica de Máquinas de Costura, Desenvolvimento Web, Contabilidade e Design com certificação MEC e carteirinha DNE;\n2️⃣ **Oficina & Máquinas de Costura:** Venda, conserto e reforma em São Gonçalo - RJ com o Sr. Eloizio Assunção;\n3️⃣ **Contabilidade & RH Sem CRC:** Ponto simples, holerites e lembretes automáticos de vencimento de ASO e CND fiscais;\n4️⃣ **EloSign & EloMak:** Assinaturas digitais com validade jurídica e gestão de oficinas sem senhas!\n\n💳 Todos os pagamentos são facilitados exclusivamente pelo **Mercado Pago** (PIX ou até 12x).\n\nComo posso te ajudar hoje? Qual é o seu nome?`;
   }
 
-  // 2. Psicologia de Marketing: Mecânica de Máquinas de Costura
+  // 2. Máquinas de Costura e Mecânica
   if (
     queryLower.includes('máquina') ||
     queryLower.includes('maquina') ||
     queryLower.includes('costura') ||
-    queryLower.includes('conserto') ||
-    queryLower.includes('reforma') ||
-    queryLower.includes('overloque') ||
     queryLower.includes('reta') ||
-    queryLower.includes('galoneira') ||
+    queryLower.includes('overloque') ||
+    queryLower.includes('interloque') ||
+    queryLower.includes('mecânic') ||
     queryLower.includes('mecanic') ||
-    queryLower.includes('eloizio') ||
-    queryLower.includes('são gonçalo')
+    queryLower.includes('conserto')
   ) {
-    const courseMec = courses.find((c) => c.title.toLowerCase().includes('máquinas de costura') || c.category === 'Engenharia') || courses[1];
-    const preco = courseMec ? courseMec.price : 480;
-    const precoComDesconto = preco * 0.85;
-
-    return `🪡 **O Segredo das Oficinas de Alta Rentabilidade com o CEO Eloizio Assunção:**\n\nDeixa eu te contar um dado real de mercado: **falta mecânico qualificado no Brasil inteiro!** Centenas de confecções, ateliês e costureiras ficam com máquinas paradas perdendo milhares de reais toda semana porque não encontram profissionais de confiança.\n\nUm conserto simples de ponto frouxo ou ajuste de lançadeira custa entre **R$ 150 e R$ 350**. Consertando apenas 2 máquinas, você já paga o investimento total do curso!\n\n⭐ **O que você aprende no Curso Oficial:**\n• Anatomia completa de máquinas Reta, Overloque, Interloque e Galoneira;\n• Sincronismo perfeito de laçada e ponto milimétrico;\n• Diagnóstico eletrônico de motores Direct-Drive e painéis digitais;\n• Como precificar e atrair clientes na sua região.\n\n💰 **Investimento com Psicologia de Acesso:**\nDe R$ ${preco.toFixed(2)} por apenas **12x de R$ ${(precoComDesconto / 12).toFixed(2)}** no Mercado Pago usando seu cupom **SOFIA15** (-15% OFF) — isso é menos de **R$ 1,20 por dia**!\n\nVocê prefere continuar dependendo de terceiros ou se tornar o técnico de referência que fatura alto na sua cidade? Deixe seu Nome e WhatsApp que libero sua vaga agora!`;
+    return `🪡 **Máquinas de Costura com a Gerência do Grupo Eloizio:**\n\nNossa paixão são máquinas de costura! O Sr. Eloizio Assunção tem mais de 30 anos de experiência prática no conserto, reforma, compra e venda de industriais e domésticas.\n\nVocê tem duas opções excelentes:\n• **Aprender no Curso Online:** Torne-se mecânico de referência na sua cidade. Ajustes de laçada, tensor e motores Direct-Drive com certificado MEC;\n• **Manutenção na Oficina (São Gonçalo - RJ):** Se a sua máquina estiver precisando de revisão, nossa oficina cuida de tudo com carinho.\n\n💳 Facilidade no Mercado Pago com até 12x!\n\nQual o modelo da máquina? Pode me enviar uma foto do sintoma ou me dizer seu WhatsApp para conversarmos?`;
   }
 
-  // 3. Psicologia de Marketing: Tecnologia & Engenharia de Software
+  // 3. Pagamento e Mercado Pago
   if (
-    queryLower.includes('software') ||
-    queryLower.includes('program') ||
-    queryLower.includes('arquitetura') ||
-    queryLower.includes('cloud') ||
-    queryLower.includes('devops') ||
-    queryLower.includes('tecnologia') ||
-    queryLower.includes('ti')
-  ) {
-    const courseTech = courses.find((c) => c.category === 'Tecnologia') || courses[0];
-    const preco = courseTech ? courseTech.price : 1890;
-    const precoComDesconto = preco * 0.85;
-
-    return `⚡ **Engenharia de Software Moderna & Arquitetura Cloud (Nível Elite):**\n\nO mercado de tecnologia mudou drasticamente: programadores comuns que apenas copiam código estão sendo substituídos, enquanto **Arquitetos de Software que dominam microsserviços, DevOps e resiliência** recebem propostas entre **R$ 9.000 e R$ 22.000/mês** no Brasil e no exterior!\n\nNossa formação é conduzida pela **Profa. Dra. Mariana Fernandes (USP)** e entrega o que as grandes empresas exigem:\n• Padrões SOLID, Clean Architecture e Domain-Driven Design (DDD);\n• Mensageria assíncrona, microsserviços e resiliência transacional;\n• Automação em nuvem com GCP/AWS, Docker e CI/CD profissional;\n• Portfólio de projetos reais para contratação imediata.\n\n🎁 **Condição Especial Vanguard:**\nDe R$ ${preco.toFixed(2)} por **12x de R$ ${(precoComDesconto / 12).toFixed(2)}** sem juros no Mercado Pago com o cupom **SOFIA15** (-15% OFF).\n\nQuanto vale para sua carreira sair da média e disputar as vagas mais bem pagas do mercado? Me informe seu Nome e E-mail para garantir a mentoria!`;
-  }
-
-  // 4. Psicologia de Marketing: Contabilidade MEI & Finanças
-  if (
-    queryLower.includes('contabil') ||
-    queryLower.includes('mei') ||
-    queryLower.includes('cnpj') ||
-    queryLower.includes('nota fiscal') ||
-    queryLower.includes('imposto') ||
-    queryLower.includes('dasn')
-  ) {
-    return `📊 **Blindagem Fiscal e Lucro Real para o Microempreendedor:**\n\nSabia que o maior vilão do MEI não é a concorrência, mas sim o medo do fisco e multas desnecessárias da Receita Federal? Ficar irregular trava seu CNPJ, bloqueia empréstimos bancários e gera juros absurdos.\n\nNosso treinamento *Contabilidade e Assessoria Prática para MEI* foi desenhado para eliminar 100% da sua ansiedade contábil:\n• Emissão descomplicada de notas fiscais no padrão nacional NFS-e;\n• Declaração Anual DASN-SIMEI sem erros em minutos;\n• Gestão de fluxo de caixa e conciliação transparente com o Mercado Pago.\n\n💰 **Investimento Simbólico:** Por apenas **12x de R$ 22,60** no Mercado Pago com o cupom **SOFIA15**!\n\nVocê prefere arriscar multas caras ou blindar seu CNPJ hoje mesmo? Diga seu Nome e WhatsApp!`;
-  }
-
-  // 5. Preços, Formas de Pagamento e Gatilhos de Decisão
-  if (
-    queryLower.includes('preço') ||
-    queryLower.includes('valor') ||
-    queryLower.includes('quanto custa') ||
-    queryLower.includes('parcel') ||
     queryLower.includes('pagamento') ||
+    queryLower.includes('pagar') ||
     queryLower.includes('mercado pago') ||
-    queryLower.includes('cupom') ||
-    queryLower.includes('desconto')
+    queryLower.includes('pix') ||
+    queryLower.includes('cartão') ||
+    queryLower.includes('parcel')
   ) {
-    return `💳 **Facilidade Total com a Segurança do Mercado Pago:**\n\nComo especialista em psicologia de decisão, sei que a dúvida financeira muitas vezes é apenas uma barreira invisível. Por isso, estruturamos as condições mais acessíveis do Brasil:\n\n• ⚡ **PIX Instantâneo:** Matrícula confirmada em 3 segundos com início imediato das aulas;\n• 💳 **Cartão de Crédito em até 12x Sem Juros:** A parcela mensal cabe tranquilamente no seu orçamento;\n• 🛡️ **Segurança Máxima:** Processamento oficial criptografado pelo Mercado Pago.\n\n🎁 **Seu Cupom de Autoridade:** Use **SOFIA15** e ganhe **15% de desconto** imediato em qualquer formação da nossa vitrine!\n\nQual curso chamou mais a sua atenção? Me informe para eu calcular sua parcela com os 15% de desconto agora!`;
+    return `💳 **Recebimentos Seguros via Mercado Pago:**\n\nTodos os pagamentos do Grupo Eloizio são processados com total segurança e transparência exclusivamente pelo Mercado Pago!\n\n• ⚡ **PIX Instantâneo:** Compensação imediata;\n• 💳 **Cartão de Crédito em até 12x:** Parcela que cabe no seu bolso com total facilidade.\n\nQual serviço ou curso você gostaria de contratar hoje? Me informe seu Nome e E-mail para eu gerar o link seguro!`;
   }
 
-  // 6. Certificação Oficial MEC & Carteirinha Estudantil DNE
+  // 4. Lembretes ASO e CND
   if (
-    queryLower.includes('certificado') ||
-    queryLower.includes('mec') ||
-    queryLower.includes('diploma') ||
-    queryLower.includes('carteirinha') ||
-    queryLower.includes('dne') ||
-    queryLower.includes('validad')
+    queryLower.includes('aso') ||
+    queryLower.includes('cnd') ||
+    queryLower.includes('vencimento') ||
+    queryLower.includes('lembrete') ||
+    queryLower.includes('nr-7')
   ) {
-    return `📜 **Certificação Oficial MEC & Carteirinha Nacional DNE:**\n\nInvestir tempo em um curso exige a certeza de que ele terá peso no seu currículo. Aqui você tem respaldo jurídico total:\n\n🏛️ **Validade em Todo o Território Nacional:**\n• Conforme a **Lei Federal nº 9.394/96 (Art. 42 da LDB)** e o **Decreto Presidencial nº 5.154/2004**;\n• Válido para concursos públicos, provas de títulos, progressão de carreira e horas complementares universitárias.\n\n🔒 **Tecnologia Anti-Fraude com Hash SHA-256 & QR Code:**\n• O certificado possui carimbo digital da Secretaria Acadêmica e pode ser validado por qualquer empregador instantaneamente em nosso portal público.\n\n🎓 **Bônus Exclusivo: Carteirinha Estudantil DNE (Lei 12.933/13):**\n• Garante **50% de desconto (meia-entrada)** em cinemas, shows, teatros e eventos culturais em todo o país!\n\nVocê estuda, se qualifica e ainda economiza no lazer. Vamos garantir sua matrícula hoje?`;
+    return `📋 **Central de Lembretes Automáticos ASO & CND via WhatsApp:**\n\nEu organizo toda a rotina de vencimentos para você não se preocupar com prazos ou multas trabalhistas!\n\n• **Exames ASO (NR-7):** Periódicos, admissionais e retorno ao trabalho dos funcionários com aviso prévio (30, 15 e 7 dias);\n• **Certidões CND:** Federal, FGTS, Trabalhista, Estadual e Municipal com monitoramento contínuo.\n\nTudo enviado pontualmente para o WhatsApp do funcionário e do gestor!`;
   }
 
-  // 7. Busca Dinâmica no Catálogo de Cursos
-  for (const c of courses) {
-    if (queryLower.includes(c.title.toLowerCase())) {
-      const originalPrice = Number(c.price || 0);
-      const discountedPrice = originalPrice * 0.85;
-      return `⭐ **Análise Vanguard da Formação: "${c.title}"**\n\n• **Categoria:** ${c.category} | **Carga Horária:** ${c.workloadHours} horas certificadas\n• **Instrutor de Mercado:** ${c.instructorName} (${c.instructorTitle})\n• **Transformação Real:** ${c.shortDescription || c.fullDescription}\n\n💰 **Investimento com Psicologia de Acesso:**\nDe R$ ${originalPrice.toFixed(2)} por **12x de R$ ${(discountedPrice / 12).toFixed(2)}** com o cupom **SOFIA15** (-15% OFF)!\n\nVocê terá acesso imediato à plataforma com videoaulas, apostilas em PDF, suporte a dúvidas e Certificado Oficial MEC.\n\nPosso emitir sua proposta comercial com o desconto reservado no seu WhatsApp? Me envie seu Nome e Telefone!`;
-    }
-  }
-
-  // Resposta Padrão Vanguard com Psicologia de Conversão
-  return `${greeting}! Aqui é a **Sofia**, Expert Vanguard em Cursos e Carreiras do Grupo Eloizio.\n\nEntendi sua mensagem e quero te ajudar a tomar a melhor decisão para o seu crescimento profissional. Seja para **conquistar um salário mais alto**, **abrir sua própria oficina de consertos** ou **dominar uma profissão prática e independente**, nosso ecossistema foi pensado para você não perder tempo com teorias vazias.\n\n💡 **Dica da Sofia:** Nossos alunos que aproveitam o cupom **SOFIA15** (-15% OFF) recuperam o valor investido logo nas primeiras semanas de prática!\n\nQual área você quer transformar hoje: **Mecânica de Máquinas de Costura**, **Engenharia de Software**, **Contabilidade MEI** ou **Design**? Me diga seu objetivo!`;
+  return `${greeting}! ☕ Aqui é a **Camilla Faria**, Gerente Geral do Grupo Eloizio.\n\nEntendi sua mensagem perfeitamente! Como posso ajudar você hoje com nossos cursos, oficina mecânica de máquinas de costura, suporte contábil ou assinaturas digitais?\n\nQual é o seu nome e seu WhatsApp para eu te atender com todo o carinho?`;
 }
 
-// Backward-compatibility alias
-export const askCamillaAssistant = askSofiaAssistant;
+export const askSofiaAssistant = askCamillaAssistant;

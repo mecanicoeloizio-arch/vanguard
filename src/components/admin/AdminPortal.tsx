@@ -10,6 +10,7 @@ import {
   BarChart3,
   ShieldCheck,
   Bell,
+  BellRing,
   PlusCircle,
   Download,
   Printer,
@@ -43,6 +44,7 @@ import { SystemSettingsPanel } from './SystemSettingsPanel';
 import { CourseTextImportModal } from './CourseTextImportModal';
 import { DocumentViewerModal } from '../documents/DocumentTemplates';
 import { CamillaCourseStudio } from './CamillaCourseStudio';
+import { CamillaExpirationReminders } from './CamillaExpirationReminders';
 import { WebmailPortal } from '../mail/WebmailPortal';
 import { ElowaWhatsAppPortal } from '../elowa/ElowaWhatsAppPortal';
 import { EloSignApp } from '../elosign/EloSignApp';
@@ -77,7 +79,7 @@ const AdminPortalContent: React.FC<{ currentUser: any }> = ({ currentUser }) => 
   } = useApp();
 
   const [activeTab, setActiveTab] = useState<
-    'camilla_studio' | 'courses' | 'mail_server' | 'elowa_server' | 'elosign_server' | 'elocontabil_server' | 'secretaria' | 'coordinator' | 'enrollments' | 'financial' | 'reports_erp' | 'security' | 'push' | 'leads' | 'simulation' | 'settings'
+    'camilla_studio' | 'camilla_reminders' | 'courses' | 'mail_server' | 'elowa_server' | 'elosign_server' | 'elocontabil_server' | 'secretaria' | 'coordinator' | 'enrollments' | 'financial' | 'reports_erp' | 'security' | 'push' | 'leads' | 'simulation' | 'settings'
   >('camilla_studio');
 
   // Document Viewer in Admin / Secretaria / Coordenação
@@ -318,6 +320,7 @@ const AdminPortalContent: React.FC<{ currentUser: any }> = ({ currentUser }) => 
       <div className="flex items-center gap-2 overflow-x-auto pb-2 border-b border-slate-200 no-scrollbar">
         {[
           { id: 'camilla_studio', label: 'Estúdio Camilla: Criar Cursos Livres & Publicar com Autonomia', icon: Sparkles },
+          { id: 'camilla_reminders', label: 'Central Camilla: Lembretes ASO & CND (WhatsApp)', icon: BellRing },
           { id: 'courses', label: 'Gestão de Cursos (Formulário & Texto)', icon: BookOpen },
           { id: 'mail_server', label: 'Servidor de E-mail & Webmail (PHPMailer)', icon: Mail },
           { id: 'elowa_server', label: 'EloWa: WhatsApp Multi-Device (21 99613-4073)', icon: MessageSquare },
@@ -329,7 +332,7 @@ const AdminPortalContent: React.FC<{ currentUser: any }> = ({ currentUser }) => 
           { id: 'financial', label: 'Módulo Financeiro & Mensalidades', icon: DollarSign },
           { id: 'settings', label: 'Módulos, CLI, Segurança & Tokens', icon: Key },
           { id: 'simulation', label: 'Auditoria de Processos & Transações', icon: Sparkles },
-          { id: 'leads', label: 'Leads & Sofia Vanguard IA (Vendas)', icon: Bot },
+          { id: 'leads', label: 'Leads & Camilla Faria IA (Atendimento & Vendas)', icon: Bot },
           { id: 'reports_erp', label: 'Relatórios Acadêmicos & ERP', icon: Layers },
           { id: 'security', label: 'Segurança & Criptografia LGPD', icon: ShieldCheck },
           { id: 'push', label: 'Disparo de Notificações Push', icon: Bell },
@@ -344,9 +347,13 @@ const AdminPortalContent: React.FC<{ currentUser: any }> = ({ currentUser }) => 
                 isActive
                   ? tab.id === 'camilla_studio'
                     ? 'bg-linear-to-r from-purple-600 via-indigo-600 to-indigo-700 text-white shadow-md shadow-indigo-500/30 ring-2 ring-purple-300'
+                    : tab.id === 'camilla_reminders'
+                    ? 'bg-linear-to-r from-amber-500 to-orange-500 text-slate-950 shadow-md shadow-amber-500/30 ring-2 ring-amber-300 font-black'
                     : 'bg-indigo-600 text-white shadow-md shadow-indigo-500/25'
                   : tab.id === 'camilla_studio'
                     ? 'bg-purple-50 text-purple-900 hover:bg-purple-100 border border-purple-200'
+                    : tab.id === 'camilla_reminders'
+                    ? 'bg-amber-50 text-amber-950 hover:bg-amber-100 border border-amber-300 font-bold'
                     : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
               }`}
             >
@@ -355,6 +362,11 @@ const AdminPortalContent: React.FC<{ currentUser: any }> = ({ currentUser }) => 
               {tab.id === 'camilla_studio' && (
                 <span className="px-1.5 py-0.2 rounded-full bg-amber-400 text-slate-950 font-black text-[9px] uppercase tracking-wider">
                   Autonomia
+                </span>
+              )}
+              {tab.id === 'camilla_reminders' && (
+                <span className="px-1.5 py-0.2 rounded-full bg-emerald-600 text-white font-black text-[9px] uppercase tracking-wider">
+                  WhatsApp
                 </span>
               )}
               {tab.id === 'leads' && (
@@ -373,6 +385,13 @@ const AdminPortalContent: React.FC<{ currentUser: any }> = ({ currentUser }) => 
       {/* TAB 0: ESTÚDIO CAMILLA (AUTONOMIA DE CRIAÇÃO E PUBLICAÇÃO DE CURSOS LIVRES) */}
       {activeTab === 'camilla_studio' && (
         <CamillaCourseStudio onCoursePublished={() => setActiveTab('courses')} />
+      )}
+
+      {/* TAB: CENTRAL CAMILLA: LEMBRETES AUTOMÁTICOS DE VENCIMENTO ASO & CND */}
+      {activeTab === 'camilla_reminders' && (
+        <div className="space-y-4">
+          <CamillaExpirationReminders />
+        </div>
       )}
 
       {/* TAB: SERVIDOR DE E-MAIL & WEBMAIL (PHPMailer 6.9+) */}
@@ -1225,14 +1244,14 @@ const AdminPortalContent: React.FC<{ currentUser: any }> = ({ currentUser }) => 
                 <div>
                   <div className="flex items-center gap-2">
                     <h3 className="font-black text-white text-lg">
-                      Gestão de Leads & Especialista Virtual Sofia IA
+                      Gestão de Leads & Atendente Virtual Camilla Faria IA
                     </h3>
                     <span className="px-2 py-0.5 rounded-full text-[10px] font-black uppercase bg-emerald-500 text-slate-950">
                       Funil Ativo
                     </span>
                   </div>
                   <p className="text-xs text-indigo-200 mt-0.5">
-                    Monitoramento em tempo real de visitantes atendidos, propostas comerciais com cupom SOFIA15 (-15%) e conversão via WhatsApp e E-mail.
+                    Monitoramento em tempo real de visitantes atendidos pela Gerente Geral Camilla Faria, propostas comerciais com cupom PARABENS15 (-15%) e conversão via WhatsApp (21 99613-4073).
                   </p>
                 </div>
               </div>

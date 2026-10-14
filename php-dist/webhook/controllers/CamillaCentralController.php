@@ -49,12 +49,21 @@ class CamillaCentralController {
         $whatsappLimpo = preg_replace('/[^0-9]/', '', $whatsapp);
 
         // 1. Verificar se cliente já existe no cadastro unificado
-        $stmtCliente = $db->prepare("SELECT * FROM clientes_unificados WHERE whatsapp = ? LIMIT 1");
-        $stmtCliente->execute([$whatsappLimpo]);
-        $cliente = $stmtCliente->fetch();
-
-        $nomeCliente = $cliente ? $cliente['nome'] : '';
-        $emailCliente = $cliente ? $cliente['email'] : '';
+        $nomeCliente = '';
+        $emailCliente = '';
+        try {
+            if ($db) {
+                $stmtCliente = $db->prepare("SELECT * FROM clientes_unificados WHERE whatsapp = ? LIMIT 1");
+                $stmtCliente->execute([$whatsappLimpo]);
+                $cliente = $stmtCliente->fetch();
+                if ($cliente) {
+                    $nomeCliente = $cliente['nome'] ?? '';
+                    $emailCliente = $cliente['email'] ?? '';
+                }
+            }
+        } catch (Throwable $e) {
+            // Continua com atendimento mesmo se tabela ainda não tiver sido migrada
+        }
 
         // 2. Classificação de Intenção e Resposta da Camilla
         $projetoDirecionado = 'central';

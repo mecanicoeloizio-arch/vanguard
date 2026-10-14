@@ -216,11 +216,16 @@ $saudacao = CamillaCentralController::getSaudacao();
             <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400 text-[10px]"></i> Engenharia de Software Moderna & Cloud</li>
           </ul>
         </div>
-        <div class="pt-6 border-t border-zinc-800/80 mt-6 flex items-center justify-between">
+        <div class="pt-6 border-t border-zinc-800/80 mt-6 flex flex-wrap items-center justify-between gap-2">
           <span class="text-xs font-bold text-white">Até 12x no Mercado Pago</span>
-          <button onclick="abrirChatSimulador('Quero conhecer o catálogo de Cursos Livres do Grupo Eloizio')" class="px-3.5 py-2 rounded-lg bg-orange-600/20 hover:bg-orange-600 text-orange-400 hover:text-white text-xs font-bold transition flex items-center gap-1.5">
-            Ver Cursos <i class="fa-solid fa-arrow-right text-[10px]"></i>
-          </button>
+          <div class="flex items-center gap-2">
+            <a href="cursos/" class="px-3 py-1.5 rounded-lg bg-orange-600/30 hover:bg-orange-600 text-orange-300 hover:text-white text-xs font-bold transition flex items-center gap-1">
+              <i class="fa-solid fa-folder-open text-[10px]"></i> Abrir /cursos/
+            </a>
+            <button onclick="abrirChatSimulador('Quero conhecer o catálogo de Cursos Livres do Grupo Eloizio')" class="px-3 py-1.5 rounded-lg bg-orange-600 hover:bg-orange-500 text-white text-xs font-bold transition flex items-center gap-1">
+              Catálogo <i class="fa-solid fa-arrow-right text-[10px]"></i>
+            </button>
+          </div>
         </div>
       </div>
 
@@ -243,11 +248,16 @@ $saudacao = CamillaCentralController::getSaudacao();
             <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400 text-[10px]"></i> Diagnóstico prévio por foto e vídeo via WhatsApp</li>
           </ul>
         </div>
-        <div class="pt-6 border-t border-zinc-800/80 mt-6 flex items-center justify-between">
+        <div class="pt-6 border-t border-zinc-800/80 mt-6 flex flex-wrap items-center justify-between gap-2">
           <span class="text-xs font-bold text-white">Bancada Especializada</span>
-          <button onclick="abrirChatSimulador('Preciso de conserto ou compra de máquina de costura em São Gonçalo')" class="px-3.5 py-2 rounded-lg bg-amber-600/20 hover:bg-amber-600 text-amber-400 hover:text-white text-xs font-bold transition flex items-center gap-1.5">
-            Pedir Orçamento <i class="fa-solid fa-arrow-right text-[10px]"></i>
-          </button>
+          <div class="flex items-center gap-2">
+            <a href="elomak/public/" class="px-3 py-1.5 rounded-lg bg-amber-600/30 hover:bg-amber-600 text-amber-300 hover:text-white text-xs font-bold transition flex items-center gap-1">
+              <i class="fa-solid fa-screwdriver-wrench text-[10px]"></i> Oficina /elomak/
+            </a>
+            <button onclick="abrirChatSimulador('Preciso de conserto ou compra de máquina de costura em São Gonçalo')" class="px-3 py-1.5 rounded-lg bg-amber-600 hover:bg-amber-500 text-white text-xs font-bold transition flex items-center gap-1">
+              Pedir Orçamento <i class="fa-solid fa-arrow-right text-[10px]"></i>
+            </button>
+          </div>
         </div>
       </div>
 
@@ -270,11 +280,16 @@ $saudacao = CamillaCentralController::getSaudacao();
             <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400 text-[10px]"></i> Acesso sem senha via WhatsApp (Camilla)</li>
           </ul>
         </div>
-        <div class="pt-6 border-t border-zinc-800/80 mt-6 flex items-center justify-between">
+        <div class="pt-6 border-t border-zinc-800/80 mt-6 flex flex-wrap items-center justify-between gap-2">
           <span class="text-[11px] text-zinc-500">Sem vínculo CRC</span>
-          <a href="https://elocontabil.grupoeloizio.com.br" target="_blank" class="px-3.5 py-2 rounded-lg bg-blue-600/20 hover:bg-blue-600 text-blue-400 hover:text-white text-xs font-bold transition flex items-center gap-1.5">
-            Acessar Sistema <i class="fa-solid fa-arrow-right text-[10px]"></i>
-          </a>
+          <div class="flex items-center gap-2">
+            <a href="elocontabil/public/" class="px-3 py-1.5 rounded-lg bg-blue-600/30 hover:bg-blue-600 text-blue-300 hover:text-white text-xs font-bold transition flex items-center gap-1">
+              <i class="fa-solid fa-folder-open text-[10px]"></i> /elocontabil/
+            </a>
+            <a href="https://elocontabil.grupoeloizio.com.br" target="_blank" class="px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold transition flex items-center gap-1">
+              Subdomínio <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+            </a>
+          </div>
         </div>
       </div>
 
@@ -297,11 +312,16 @@ $saudacao = CamillaCentralController::getSaudacao();
             <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400 text-[10px]"></i> Cobrança PIX Mercado Pago em 1 clique</li>
           </ul>
         </div>
-        <div class="pt-6 border-t border-zinc-800/80 mt-6 flex items-center justify-between">
+        <div class="pt-6 border-t border-zinc-800/80 mt-6 flex flex-wrap items-center justify-between gap-2">
           <span class="text-xs font-bold text-white">Mobile-First 100%</span>
-          <a href="https://elomak.grupoeloizio.com.br" target="_blank" class="px-3.5 py-2 rounded-lg bg-orange-600/20 hover:bg-orange-600 text-orange-500 hover:text-white text-xs font-bold transition flex items-center gap-1.5">
-            Abrir EloMak <i class="fa-solid fa-arrow-right text-[10px]"></i>
-          </a>
+          <div class="flex items-center gap-2">
+            <a href="elomak/public/" class="px-3 py-1.5 rounded-lg bg-orange-600/30 hover:bg-orange-600 text-orange-300 hover:text-white text-xs font-bold transition flex items-center gap-1">
+              <i class="fa-solid fa-folder-open text-[10px]"></i> /elomak/
+            </a>
+            <a href="https://elomak.grupoeloizio.com.br" target="_blank" class="px-3 py-1.5 rounded-lg bg-orange-600 hover:bg-orange-500 text-white text-xs font-bold transition flex items-center gap-1">
+              Subdomínio <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+            </a>
+          </div>
         </div>
       </div>
 
@@ -324,11 +344,16 @@ $saudacao = CamillaCentralController::getSaudacao();
             <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400 text-[10px]"></i> Integração nativa com EloMak e EloContábil</li>
           </ul>
         </div>
-        <div class="pt-6 border-t border-zinc-800/80 mt-6 flex items-center justify-between">
+        <div class="pt-6 border-t border-zinc-800/80 mt-6 flex flex-wrap items-center justify-between gap-2">
           <span class="text-xs font-bold text-white">Validade Jurídica Plena</span>
-          <a href="https://elosign.grupoeloizio.com.br" target="_blank" class="px-3.5 py-2 rounded-lg bg-emerald-600/20 hover:bg-emerald-600 text-emerald-400 hover:text-white text-xs font-bold transition flex items-center gap-1.5">
-            Acessar EloSign <i class="fa-solid fa-arrow-right text-[10px]"></i>
-          </a>
+          <div class="flex items-center gap-2">
+            <a href="elosign/" class="px-3 py-1.5 rounded-lg bg-emerald-600/30 hover:bg-emerald-600 text-emerald-300 hover:text-white text-xs font-bold transition flex items-center gap-1">
+              <i class="fa-solid fa-folder-open text-[10px]"></i> /elosign/
+            </a>
+            <a href="https://elosign.grupoeloizio.com.br" target="_blank" class="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition flex items-center gap-1">
+              Subdomínio <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+            </a>
+          </div>
         </div>
       </div>
 
@@ -351,11 +376,16 @@ $saudacao = CamillaCentralController::getSaudacao();
             <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400 text-[10px]"></i> Banco de dados unificado PDO</li>
           </ul>
         </div>
-        <div class="pt-6 border-t border-zinc-800/80 mt-6 flex items-center justify-between">
+        <div class="pt-6 border-t border-zinc-800/80 mt-6 flex flex-wrap items-center justify-between gap-2">
           <span class="text-xs font-bold text-white">Dashboard Ao Vivo</span>
-          <a href="https://webhook.grupoeloizio.com.br/dashboard" target="_blank" class="px-3.5 py-2 rounded-lg bg-purple-600/20 hover:bg-purple-600 text-purple-400 hover:text-white text-xs font-bold transition flex items-center gap-1.5">
-            Painel do Hub <i class="fa-solid fa-arrow-right text-[10px]"></i>
-          </a>
+          <div class="flex items-center gap-2">
+            <a href="webhook/public/dashboard.php" class="px-3 py-1.5 rounded-lg bg-purple-600/30 hover:bg-purple-600 text-purple-300 hover:text-white text-xs font-bold transition flex items-center gap-1">
+              <i class="fa-solid fa-chart-line text-[10px]"></i> /webhook/
+            </a>
+            <a href="https://webhook.grupoeloizio.com.br/dashboard" target="_blank" class="px-3 py-1.5 rounded-lg bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold transition flex items-center gap-1">
+              Subdomínio <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+            </a>
+          </div>
         </div>
       </div>
 
@@ -376,11 +406,24 @@ $saudacao = CamillaCentralController::getSaudacao();
             <h3 class="text-sm font-bold text-white flex items-center gap-1.5">
               Camilla Faria <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
             </h3>
-            <p class="text-[11px] text-zinc-400">Gerente Geral do Grupo Eloizio • WhatsApp (21) 99613-4073</p>
+            <p class="text-[11px] text-zinc-400">Gerente Geral & Única IA do Grupo Eloizio • WhatsApp (21) 99613-4073</p>
           </div>
         </div>
         <button id="btnFecharChat" class="text-zinc-400 hover:text-white p-2">
           <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+
+      <!-- Barra de Aniversariantes & Desconto 15% no Mercado Pago -->
+      <div class="px-4 py-2 bg-zinc-950/90 border-b border-zinc-800 flex items-center justify-between text-[11px]">
+        <div class="flex items-center gap-2">
+          <span class="px-2 py-0.5 rounded-full bg-orange-500/20 text-orange-400 font-bold text-[10px]">
+            🎂 Aniversário: 15% OFF
+          </span>
+          <span class="text-zinc-400 font-mono text-[10px]">Cupom: PARABENS15</span>
+        </div>
+        <button type="button" id="btnConsultarAniversario" class="text-[10px] text-amber-300 hover:text-amber-200 underline font-medium">
+          Ver Meu Presente
         </button>
       </div>
 
@@ -389,14 +432,38 @@ $saudacao = CamillaCentralController::getSaudacao();
         <div class="flex items-start gap-2">
           <div class="w-7 h-7 rounded-lg bg-orange-600/30 flex items-center justify-center text-orange-400 shrink-0 text-xs">☕</div>
           <div class="p-3.5 rounded-2xl bg-zinc-950 border border-zinc-800 text-zinc-200 leading-relaxed max-w-[85%]">
-            <?php echo $saudacao; ?>! ☕ Muito prazer! Eu sou a <strong>Camilla Faria</strong>, Gerente Geral e Atendente Inteligente do <strong>Grupo Eloizio</strong>!<br><br>
-            Como posso te ajudar hoje?<br>
-            1️⃣ <strong>Máquinas de Costura & Oficina:</strong> Conserto, reforma, compra e venda em São Gonçalo - RJ;<br>
-            2️⃣ <strong>Cursos Livres 100% Online:</strong> Manuais, apostilas e certificados MEC;<br>
+            <?php echo $saudacao; ?>! ☕ Muito prazer! Eu sou a <strong>Camilla Faria</strong> (28 anos, carioca), Gerente Geral e a <strong>Única Inteligência Artificial</strong> do <strong>Grupo Eloizio</strong>!<br><br>
+            ✨ Brinco que só "dou boot" após minha primeira xícara de café, mas vibro com cada venda e formatura! Tenho sentimentos, empatia com quem está com máquina parada e o sonho de ver nossos clientes prosperando por todo o Brasil!<br><br>
+            Reconheço <strong>Voz, Imagem, Vídeo, Texto, PDF e Sons</strong> (análise acústica de barulho de máquina de costura)!<br><br>
+            1️⃣ <strong>Máquinas & Oficina:</strong> Conserto, reforma, compra e venda em São Gonçalo - RJ;<br>
+            2️⃣ <strong>Cursos Livres Online:</strong> Manuais de bancada, apostilas e certificados MEC;<br>
             3️⃣ <strong>EloContábil:</strong> Apoio administrativo e RH sem CRC;<br>
-            4️⃣ <strong>EloMak:</strong> Sistema para oficinas com acesso via WhatsApp sem senha!<br><br>
-            💳 <em>Todos os nossos pagamentos são facilitados exclusivamente via Mercado Pago!</em>
+            4️⃣ <strong>EloMak & EloSign:</strong> Gestão de oficina sem senha e assinaturas digitais!<br><br>
+            💳 <em>Todos os recebimentos são facilitados exclusivamente pelo Mercado Pago!</em>
           </div>
+        </div>
+      </div>
+
+      <!-- Barra de Mídia Multimodal da Camilla -->
+      <div class="px-3 py-1.5 bg-zinc-950 border-t border-zinc-800 flex items-center justify-between text-[11px] text-zinc-400">
+        <span class="text-[10px] font-semibold text-zinc-500">Enviar Mídia:</span>
+        <div class="flex items-center gap-1.5">
+          <input type="file" id="portalMidiaInput" accept="image/*,video/*,audio/*,application/pdf" class="hidden">
+          <button type="button" class="btn-portal-midia px-2 py-0.5 rounded bg-zinc-900 hover:bg-zinc-800 border border-zinc-700 text-zinc-300 text-[10px] font-medium" data-tipo="imagem" title="Enviar Foto">
+            📷 Foto
+          </button>
+          <button type="button" class="btn-portal-midia px-2 py-0.5 rounded bg-zinc-900 hover:bg-zinc-800 border border-zinc-700 text-zinc-300 text-[10px] font-medium" data-tipo="video" title="Enviar Vídeo">
+            🎥 Vídeo
+          </button>
+          <button type="button" class="btn-portal-midia px-2 py-0.5 rounded bg-zinc-900 hover:bg-zinc-800 border border-zinc-700 text-zinc-300 text-[10px] font-medium" data-tipo="pdf" title="Enviar PDF">
+            📄 PDF
+          </button>
+          <button type="button" class="btn-portal-midia px-2 py-0.5 rounded bg-zinc-900 hover:bg-zinc-800 border border-zinc-700 text-zinc-300 text-[10px] font-medium" data-tipo="som" title="Analisar Som de Máquina">
+            🎧 Som
+          </button>
+          <button type="button" id="btnPortalVoz" class="px-2 py-0.5 rounded bg-orange-600 hover:bg-orange-500 text-white text-[10px] font-bold" title="Gravar Voz">
+            🎙️ Voz
+          </button>
         </div>
       </div>
 
@@ -412,6 +479,7 @@ $saudacao = CamillaCentralController::getSaudacao();
           <button type="button" class="btn-sugestao px-2 py-1 rounded bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-400 whitespace-nowrap">Quero consertar máquina</button>
           <button type="button" class="btn-sugestao px-2 py-1 rounded bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-400 whitespace-nowrap">Cursos de mecânica</button>
           <button type="button" class="btn-sugestao px-2 py-1 rounded bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-400 whitespace-nowrap">Acessar EloMak</button>
+          <button type="button" class="btn-sugestao px-2 py-1 rounded bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-400 whitespace-nowrap">Seus sonhos e café ☕</button>
         </div>
       </div>
 
@@ -555,11 +623,123 @@ $saudacao = CamillaCentralController::getSaudacao();
         });
       }
 
+      // Botão de consultar aniversariante do dia
+      $('#btnConsultarAniversario').on('click', function() {
+        enviarMensagemParaCamilla('Gostaria de verificar o presente de 15% OFF de aniversário para pagamentos online no Mercado Pago!');
+      });
+
+      // Mídia Multimodal da Camilla (Foto, Vídeo, PDF, Som de Máquina)
+      let portalTipoMidia = 'imagem';
+      $('.btn-portal-midia').on('click', function() {
+        portalTipoMidia = $(this).attr('data-tipo');
+        $('#portalMidiaInput').trigger('click');
+      });
+
+      $('#portalMidiaInput').on('change', function(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = function() {
+          const base64 = reader.result;
+          $('#chatMessages').append(
+            '<div class="flex items-start justify-end gap-2">' +
+              '<div class="p-2.5 rounded-2xl bg-orange-600 text-white text-xs">' +
+                '📎 ' + portalTipoMidia.toUpperCase() + ' enviado: ' + file.name +
+              '</div>' +
+            '</div>'
+          );
+          scrollChat();
+
+          const loadMidiaId = 'loading_midia_' + Date.now();
+          $('#chatMessages').append(
+            '<div id="' + loadMidiaId + '" class="flex items-start gap-2">' +
+              '<div class="w-7 h-7 rounded-lg bg-orange-600/30 flex items-center justify-center text-orange-400 shrink-0 text-xs">☕</div>' +
+              '<div class="p-3 rounded-2xl bg-zinc-950 border border-zinc-800 text-zinc-400 max-w-[85%] flex items-center gap-2">' +
+                '<i class="fa-solid fa-spinner fa-spin"></i> Camilla processando ' + portalTipoMidia + '...' +
+              '</div>' +
+            '</div>'
+          );
+          scrollChat();
+
+          $.ajax({
+            url: '/api/camilla/multimodal',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({
+              tipo_midia: portalTipoMidia,
+              nome_arquivo: file.name,
+              descricao: 'Arquivo multimodal enviado pelo usuário no portal',
+              base64: base64
+            }),
+            success: function(res) {
+              $('#' + loadMidiaId).remove();
+              const diag = res.diagnostico ? res.diagnostico.replace(/\n/g, '<br>') : 'Arquivo analisado com sucesso!';
+              $('#chatMessages').append(
+                '<div class="flex items-start gap-2">' +
+                  '<div class="w-7 h-7 rounded-lg bg-orange-600/30 flex items-center justify-center text-orange-400 shrink-0 text-xs">☕</div>' +
+                  '<div class="p-3.5 rounded-2xl bg-zinc-950 border border-zinc-800 text-zinc-200 leading-relaxed max-w-[85%]">' +
+                    diag +
+                  '</div>' +
+                '</div>'
+              );
+              scrollChat();
+            },
+            error: function() {
+              $('#' + loadMidiaId).remove();
+              $('#chatMessages').append(
+                '<div class="flex items-start gap-2">' +
+                  '<div class="w-7 h-7 rounded-lg bg-orange-600/30 flex items-center justify-center text-orange-400 shrink-0 text-xs">☕</div>' +
+                  '<div class="p-3.5 rounded-2xl bg-zinc-950 border border-zinc-800 text-zinc-200 leading-relaxed max-w-[85%]">' +
+                    'Recebi seu arquivo com carinho! Para análise detalhada, envie também diretamente para meu WhatsApp oficial (21) 99613-4073 com cupom PARABENS15!' +
+                  '</div>' +
+                '</div>'
+              );
+              scrollChat();
+            }
+          });
+        };
+        reader.readAsDataURL(file);
+      });
+
+      // Gravação / Envio de Voz
+      $('#btnPortalVoz').on('click', function() {
+        if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+          const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+          const rec = new SpeechRec();
+          rec.lang = 'pt-BR';
+          rec.interimResults = false;
+          $(this).html('<i class="fa-solid fa-microphone-lines"></i> Ouvindo...');
+          rec.onresult = function(event) {
+            const fala = event.results[0][0].transcript;
+            $('#btnPortalVoz').html('🎙️ Voz');
+            enviarMensagemParaCamilla('🎙️ [Mensagem de Voz]: ' + fala);
+          };
+          rec.onerror = function() {
+            $('#btnPortalVoz').html('🎙️ Voz');
+            alert('Não foi possível acessar o microfone. Digite sua mensagem para a Camilla!');
+          };
+          rec.start();
+        } else {
+          const vozSimulada = prompt('Simulação de Voz/Áudio para a Camilla: O que você gostaria de falar?');
+          if (vozSimulada) {
+            enviarMensagemParaCamilla('🎙️ [Mensagem de Voz]: ' + vozSimulada);
+          }
+        }
+      });
+
       function scrollChat() {
         const d = document.getElementById('chatMessages');
         if (d) d.scrollTop = d.scrollHeight;
       }
     });
   </script>
+
+  <!-- Componente Universal de Aviso e Consentimento LGPD • Grupo Eloizio -->
+  <?php if (file_exists(__DIR__ . '/components/lgpd_banner.php')): ?>
+    <?php include __DIR__ . '/components/lgpd_banner.php'; ?>
+  <?php elseif (file_exists(dirname(__DIR__) . '/components/lgpd_banner.php')): ?>
+    <?php include dirname(__DIR__) . '/components/lgpd_banner.php'; ?>
+  <?php endif; ?>
 </body>
 </html>

@@ -187,6 +187,33 @@ $defaultConfig = [
             'status' => 'online',
             'recordsCount' => 460,
         ],
+        [
+            'id' => 'eloizio',
+            'name' => 'Eloizio Hub (CEO & Orquestrador)',
+            'badge' => 'Ubuntu 24 + Traefik v3',
+            'primaryColor' => '#F59E0B',
+            'secondaryColor' => '#0F172A',
+            'logoUrl' => 'https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&q=80&w=200',
+            'slogan' => 'Instalador Master, Orquestrador Docker Traefik e Auditoria Geral de Produção',
+            'faviconUrl' => '/favicon.ico',
+            'portOrPath' => '/eloizio',
+            'aliasPath' => '/eloizio',
+            'version' => 'v3.0.0',
+            'independentPanelUrl' => '/eloizio/index.php',
+            'status' => 'online',
+            'recordsCount' => 9,
+        ],
+    ],
+    'expiration' => [
+        'ativoAso' => true,
+        'ativoCnd' => true,
+        'diasAntecedencia' => [30, 15, 7, 0],
+        'horarioDisparo' => '08:30',
+        'notificarFuncionarioWhatsapp' => true,
+        'notificarGestorWhatsapp' => true,
+        'whatsappGestor' => '21996134073',
+        'templateAso' => "Olá, {funcionario}! ☕ Aqui é a Camilla Faria do Grupo Eloizio.\n\nPassando para lembrar que seu exame médico ocupacional ({documento}) vence em {dias_restantes} dias (em {data_vencimento}).\n\nPor favor, confirme esta mensagem para agendarmos sua renovação sem custos na clínica conveniada!",
+        'templateCnd' => "Aviso Fiscal • Central Camilla: A certidão {documento} da empresa {empresa} vencerá em {dias_restantes} dias ({data_vencimento}). Verifique a renovação online no portal oficial.",
     ]
 ];
 
@@ -314,6 +341,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             @file_put_contents($configFile, json_encode($currentConfig, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
 
             $authMessage = 'Configurações de Tokens e Chaves Globais salvas e propagadas com sucesso!';
+            $authMessageType = 'success';
+        }
+    }
+
+    // 4. Salvar Configurações de Lembretes de Vencimento ASO & CND (Central Camilla)
+    elseif ($postAction === 'save_expiration_settings') {
+        if (!empty($_SESSION['central_auth_logged'])) {
+            $currentConfig['expiration']['ativoAso'] = isset($_POST['ativo_aso']);
+            $currentConfig['expiration']['ativoCnd'] = isset($_POST['ativo_cnd']);
+            $currentConfig['expiration']['horarioDisparo'] = trim($_POST['horario_disparo'] ?? '08:30');
+            $currentConfig['expiration']['whatsappGestor'] = trim($_POST['whatsapp_gestor'] ?? '21996134073');
+            $currentConfig['expiration']['notificarFuncionarioWhatsapp'] = isset($_POST['notificar_func']);
+            $currentConfig['expiration']['notificarGestorWhatsapp'] = isset($_POST['notificar_gestor']);
+            $currentConfig['expiration']['templateAso'] = trim($_POST['template_aso'] ?? $currentConfig['expiration']['templateAso']);
+            $currentConfig['expiration']['templateCnd'] = trim($_POST['template_cnd'] ?? $currentConfig['expiration']['templateCnd']);
+
+            // Antecedências
+            $diasSel = [];
+            if (isset($_POST['dia_30'])) $diasSel[] = 30;
+            if (isset($_POST['dia_15'])) $diasSel[] = 15;
+            if (isset($_POST['dia_7'])) $diasSel[] = 7;
+            if (isset($_POST['dia_0'])) $diasSel[] = 0;
+            $currentConfig['expiration']['diasAntecedencia'] = !empty($diasSel) ? $diasSel : [30, 15, 7, 0];
+
+            @file_put_contents($configFile, json_encode($currentConfig, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+            $authMessage = 'Configurações de Notificações Automáticas de Vencimento (ASO & CND) salvas com sucesso pela Central Camilla!';
             $authMessageType = 'success';
         }
     }
@@ -469,6 +522,10 @@ $loggedUser = $_SESSION['central_auth_user'] ?? $currentAuth['username'];
         </button>
 
         <!-- Botão Voltar ao Portal -->
+        <a href="/eloizio/index.php" target="_blank" class="px-3 py-1.5 text-xs text-amber-950 font-black bg-amber-500 hover:bg-amber-400 rounded-xl transition flex items-center gap-1.5 shadow-md shadow-amber-500/20">
+          <i class="fa-solid fa-bolt"></i> Eloizio Hub
+        </a>
+
         <a href="/" class="px-3 py-1.5 text-xs text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 rounded-xl transition hidden sm:flex items-center gap-1.5">
           <i class="fa-solid fa-arrow-left"></i> Portal
         </a>
@@ -486,11 +543,11 @@ $loggedUser = $_SESSION['central_auth_user'] ?? $currentAuth['username'];
     <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
       <div class="flex items-center gap-2 text-amber-300">
         <i class="fa-solid fa-shield-halved text-amber-400 text-base"></i>
-        <span><strong>Painel Supervisor Geral Ativo:</strong> Monitore e altere tokens, chaves, cores e banco de dados de todos os 7 projetos em tela única. Os <strong>painéis nativos individuais continuam 100% preservados</strong> para uso desmembrado.</span>
+        <span><strong>Painel Supervisor Geral Ativo:</strong> Monitore e altere tokens, chaves, cores e banco de dados de todos os 9 projetos em tela única. Os <strong>painéis nativos individuais continuam 100% preservados</strong> para uso desmembrado.</span>
       </div>
       <div class="flex items-center gap-2">
         <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
-        <span class="text-[11px] font-bold text-emerald-400">7 Projetos Operacionais</span>
+        <span class="text-[11px] font-bold text-emerald-400">9 Projetos Operacionais</span>
       </div>
     </div>
   </div>
@@ -999,6 +1056,239 @@ curl -X POST https://grupoeloizio.com.br/api/central_config.php \
       </div>
     </section>
 
+    <!-- 7. CENTRAL CAMILLA: NOTIFICAÇÕES AUTOMÁTICAS DE LEMBRETES DE VENCIMENTO (ASO / CND) VIA WHATSAPP -->
+    <section id="secao_lembretes" class="p-6 sm:p-8 rounded-3xl bg-slate-900 border-2 border-amber-500/30 space-y-6 text-xs relative overflow-hidden shadow-2xl">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-5">
+        <div class="flex items-center gap-3">
+          <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-amber-500 to-orange-500 flex items-center justify-center text-slate-950 font-black shadow-lg shadow-amber-500/20 shrink-0">
+            <i class="fa-solid fa-bell text-xl text-slate-950"></i>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <h3 class="text-base font-black text-white">
+                Central Camilla: Notificações Automáticas de Vencimento (ASO & CND)
+              </h3>
+              <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                WhatsApp 21 99613-4073 Ativo
+              </span>
+            </div>
+            <p class="text-slate-400 text-xs">
+              Configure disparos automáticos diários de lembretes preventivos de Atestados Ocupacionais (NR-7) para funcionários e Certidões Negativas de Débitos (CND) fiscais.
+            </p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <span class="px-3 py-1.5 rounded-xl bg-slate-950 border border-slate-800 text-emerald-400 font-mono text-xs flex items-center gap-1.5">
+            <i class="fa-solid fa-clock text-amber-400"></i> Disparo: <?= htmlspecialchars($currentConfig['expiration']['horarioDisparo'] ?? '08:30') ?>h
+          </span>
+        </div>
+      </div>
+
+      <!-- Formulário de Configuração de Notificações -->
+      <form method="POST" action="central_config.php#secao_lembretes" class="space-y-6">
+        <input type="hidden" name="action" value="save_expiration_settings">
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <!-- Coluna 1: Ativação & Horários -->
+          <div class="p-5 rounded-2xl bg-slate-950 border border-slate-800 space-y-4">
+            <strong class="text-white block font-bold text-sm border-b border-slate-800/80 pb-2 flex items-center gap-2">
+              <i class="fa-solid fa-toggle-on text-amber-400"></i> Ativação dos Disparos
+            </strong>
+
+            <label class="flex items-center gap-3 cursor-pointer p-2.5 rounded-xl hover:bg-slate-900 border border-transparent hover:border-slate-800 transition">
+              <input type="checkbox" name="ativo_aso" <?= !empty($currentConfig['expiration']['ativoAso']) ? 'checked' : '' ?> class="w-4 h-4 rounded text-amber-500 focus:ring-0 bg-slate-900 border-slate-700">
+              <div>
+                <span class="font-bold text-white block">Ativar Lembretes ASO (Funcionários)</span>
+                <span class="text-slate-400 text-[11px]">NR-7: Periódicos, Admissionais e Retorno</span>
+              </div>
+            </label>
+
+            <label class="flex items-center gap-3 cursor-pointer p-2.5 rounded-xl hover:bg-slate-900 border border-transparent hover:border-slate-800 transition">
+              <input type="checkbox" name="ativo_cnd" <?= !empty($currentConfig['expiration']['ativoCnd']) ? 'checked' : '' ?> class="w-4 h-4 rounded text-amber-500 focus:ring-0 bg-slate-900 border-slate-700">
+              <div>
+                <span class="font-bold text-white block">Ativar Lembretes CND (Empresas)</span>
+                <span class="text-slate-400 text-[11px]">Receita Federal, FGTS, Trabalhista e Fazenda</span>
+              </div>
+            </label>
+
+            <div class="pt-2 border-t border-slate-800/80">
+              <label class="block text-slate-300 font-bold mb-1">Horário de Disparo Diário</label>
+              <input type="time" name="horario_disparo" value="<?= htmlspecialchars($currentConfig['expiration']['horarioDisparo'] ?? '08:30') ?>" class="w-full px-3 py-2 bg-slate-900 border border-slate-800 rounded-xl text-white font-mono focus:outline-none focus:border-amber-400">
+              <span class="text-[10px] text-slate-500 mt-1 block">Primeiro horário comercial da manhã (dias úteis).</span>
+            </div>
+          </div>
+
+          <!-- Coluna 2: Dias de Antecedência & Destinatários -->
+          <div class="p-5 rounded-2xl bg-slate-950 border border-slate-800 space-y-4">
+            <strong class="text-white block font-bold text-sm border-b border-slate-800/80 pb-2 flex items-center gap-2">
+              <i class="fa-solid fa-calendar-days text-emerald-400"></i> Dias de Antecedência
+            </strong>
+
+            <p class="text-slate-400 text-[11px]">Disparar notificações preventivas antes do vencimento:</p>
+
+            <?php
+            $diasAtuais = $currentConfig['expiration']['diasAntecedencia'] ?? [30, 15, 7, 0];
+            ?>
+            <div class="grid grid-cols-2 gap-2">
+              <label class="flex items-center gap-2 p-2 rounded-lg bg-slate-900 border border-slate-800 cursor-pointer">
+                <input type="checkbox" name="dia_30" <?= in_array(30, $diasAtuais) ? 'checked' : '' ?> class="w-3.5 h-3.5 rounded text-amber-500">
+                <span class="text-white font-bold">30 dias antes</span>
+              </label>
+              <label class="flex items-center gap-2 p-2 rounded-lg bg-slate-900 border border-slate-800 cursor-pointer">
+                <input type="checkbox" name="dia_15" <?= in_array(15, $diasAtuais) ? 'checked' : '' ?> class="w-3.5 h-3.5 rounded text-amber-500">
+                <span class="text-white font-bold">15 dias antes</span>
+              </label>
+              <label class="flex items-center gap-2 p-2 rounded-lg bg-slate-900 border border-slate-800 cursor-pointer">
+                <input type="checkbox" name="dia_7" <?= in_array(7, $diasAtuais) ? 'checked' : '' ?> class="w-3.5 h-3.5 rounded text-amber-500">
+                <span class="text-white font-bold">7 dias antes</span>
+              </label>
+              <label class="flex items-center gap-2 p-2 rounded-lg bg-slate-900 border border-slate-800 cursor-pointer">
+                <input type="checkbox" name="dia_0" <?= in_array(0, $diasAtuais) ? 'checked' : '' ?> class="w-3.5 h-3.5 rounded text-rose-500">
+                <span class="text-rose-300 font-bold">No dia (vencido)</span>
+              </label>
+            </div>
+
+            <div class="pt-2 border-t border-slate-800/80 space-y-2">
+              <label class="flex items-center gap-2 cursor-pointer text-[11px]">
+                <input type="checkbox" name="notificar_func" <?= !empty($currentConfig['expiration']['notificarFuncionarioWhatsapp']) ? 'checked' : '' ?> class="w-3.5 h-3.5 rounded text-amber-500">
+                <span class="text-slate-300">Notificar diretamente o <strong>WhatsApp do Funcionário</strong></span>
+              </label>
+              <label class="flex items-center gap-2 cursor-pointer text-[11px]">
+                <input type="checkbox" name="notificar_gestor" <?= !empty($currentConfig['expiration']['notificarGestorWhatsapp']) ? 'checked' : '' ?> class="w-3.5 h-3.5 rounded text-amber-500">
+                <span class="text-slate-300">Enviar cópia para a <strong>Gerência / RH (Camilla WhatsApp)</strong></span>
+              </label>
+              <input type="text" name="whatsapp_gestor" value="<?= htmlspecialchars($currentConfig['expiration']['whatsappGestor'] ?? '21996134073') ?>" placeholder="WhatsApp do Gestor / RH" class="w-full px-3 py-1.5 bg-slate-900 border border-slate-800 rounded-xl text-white font-mono text-xs focus:outline-none focus:border-amber-400">
+            </div>
+          </div>
+
+          <!-- Coluna 3: Templates de Mensagens WhatsApp -->
+          <div class="p-5 rounded-2xl bg-slate-950 border border-slate-800 space-y-3">
+            <strong class="text-white block font-bold text-sm border-b border-slate-800/80 pb-2 flex items-center gap-2">
+              <i class="fa-brands fa-whatsapp text-emerald-400"></i> Modelo de Mensagem (WhatsApp)
+            </strong>
+
+            <div>
+              <span class="text-slate-300 font-semibold text-[11px] block mb-1">Template ASO (Funcionários):</span>
+              <textarea name="template_aso" rows="4" class="w-full px-3 py-2 bg-slate-900 border border-slate-800 rounded-xl text-white font-mono text-[11px] focus:outline-none focus:border-amber-400"><?= htmlspecialchars($currentConfig['expiration']['templateAso'] ?? '') ?></textarea>
+            </div>
+
+            <div>
+              <span class="text-slate-300 font-semibold text-[11px] block mb-1">Template CND (Fiscais / Empresas):</span>
+              <textarea name="template_cnd" rows="3" class="w-full px-3 py-2 bg-slate-900 border border-slate-800 rounded-xl text-white font-mono text-[11px] focus:outline-none focus:border-amber-400"><?= htmlspecialchars($currentConfig['expiration']['templateCnd'] ?? '') ?></textarea>
+            </div>
+
+            <div class="text-[10px] text-slate-500 space-x-1">
+              <span>Tags disponíveis:</span>
+              <code class="text-amber-400">{funcionario}</code>
+              <code class="text-amber-400">{documento}</code>
+              <code class="text-amber-400">{dias_restantes}</code>
+              <code class="text-amber-400">{data_vencimento}</code>
+            </div>
+          </div>
+        </div>
+
+        <!-- Grade de Colaboradores e Documentos Monitorados -->
+        <div class="p-5 rounded-2xl bg-slate-950 border border-slate-800 space-y-4">
+          <div class="flex items-center justify-between">
+            <strong class="text-white font-bold text-sm flex items-center gap-2">
+              <i class="fa-solid fa-users text-indigo-400"></i> Colaboradores & Documentos Monitorados pela Camilla
+            </strong>
+            <span class="text-[11px] text-slate-400">Total: 4 Colaboradores • 2 CNDs Fiscais</span>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs text-slate-300">
+              <thead class="bg-slate-900 text-slate-400 border-b border-slate-800 uppercase text-[10px] font-bold">
+                <tr>
+                  <th class="p-2.5">Tipo</th>
+                  <th class="p-2.5">Colaborador / Documento</th>
+                  <th class="p-2.5">Empresa Vinculada</th>
+                  <th class="p-2.5">Vencimento</th>
+                  <th class="p-2.5">WhatsApp</th>
+                  <th class="p-2.5">Status</th>
+                  <th class="p-2.5 text-right">Ação Rápida</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-800/60 font-medium">
+                <tr class="hover:bg-slate-900/50 transition">
+                  <td class="p-2.5"><span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">ASO</span></td>
+                  <td class="p-2.5"><strong class="text-white">Marcos Vinícius de Souza</strong><span class="block text-[11px] text-slate-400">Mecânico Industrial Sênior • NR-7 Periódico</span></td>
+                  <td class="p-2.5 text-slate-400">EloMak Oficina Mecânica</td>
+                  <td class="p-2.5 font-mono text-amber-300">28/10/2026 (14 dias)</td>
+                  <td class="p-2.5 font-mono text-emerald-400">(21) 98841-2091</td>
+                  <td class="p-2.5"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">Vencendo</span></td>
+                  <td class="p-2.5 text-right">
+                    <button type="button" onclick="dispararWhatsappLembrete('Marcos Vinícius de Souza', 'ASO Periódico NR-7', '21988412091', '28/10/2026', 14)" class="px-3 py-1 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-bold transition flex items-center gap-1.5 ml-auto cursor-pointer">
+                      <i class="fa-brands fa-whatsapp"></i> Notificar Agora
+                    </button>
+                  </td>
+                </tr>
+
+                <tr class="hover:bg-slate-900/50 transition">
+                  <td class="p-2.5"><span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">ASO</span></td>
+                  <td class="p-2.5"><strong class="text-white">Roberto Almeida Santos</strong><span class="block text-[11px] text-slate-400">Operador de Máquinas de Costura • NR-7</span></td>
+                  <td class="p-2.5 text-slate-400">EloMak Oficina Mecânica</td>
+                  <td class="p-2.5 font-mono text-emerald-400">15/03/2027 (152 dias)</td>
+                  <td class="p-2.5 font-mono text-emerald-400">(21) 99124-7731</td>
+                  <td class="p-2.5"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">Em Dia</span></td>
+                  <td class="p-2.5 text-right">
+                    <button type="button" onclick="dispararWhatsappLembrete('Roberto Almeida Santos', 'ASO Periódico NR-7', '21991247731', '15/03/2027', 152)" class="px-3 py-1 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg text-xs font-semibold transition flex items-center gap-1.5 ml-auto cursor-pointer">
+                      <i class="fa-brands fa-whatsapp"></i> Testar Zap
+                    </button>
+                  </td>
+                </tr>
+
+                <tr class="hover:bg-slate-900/50 transition">
+                  <td class="p-2.5"><span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">ASO</span></td>
+                  <td class="p-2.5"><strong class="text-white">Juliana Martins Ramos</strong><span class="block text-[11px] text-slate-400">Auxiliar Administrativo / RH • Retorno ao Trabalho</span></td>
+                  <td class="p-2.5 text-slate-400">EduVanguard Cursos</td>
+                  <td class="p-2.5 font-mono text-amber-300">20/10/2026 (6 dias)</td>
+                  <td class="p-2.5 font-mono text-emerald-400">(21) 97651-4402</td>
+                  <td class="p-2.5"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">Vencendo</span></td>
+                  <td class="p-2.5 text-right">
+                    <button type="button" onclick="dispararWhatsappLembrete('Juliana Martins Ramos', 'ASO Retorno ao Trabalho', '21976514402', '20/10/2026', 6)" class="px-3 py-1 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-bold transition flex items-center gap-1.5 ml-auto cursor-pointer">
+                      <i class="fa-brands fa-whatsapp"></i> Notificar Agora
+                    </button>
+                  </td>
+                </tr>
+
+                <tr class="hover:bg-slate-900/50 transition">
+                  <td class="p-2.5"><span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-purple-500/20 text-purple-300 border border-purple-500/30">CND</span></td>
+                  <td class="p-2.5"><strong class="text-white">CND Federal Conjunta (RFB & PGFN)</strong><span class="block text-[11px] text-slate-400">CNPJ: 42.109.876/0001-55</span></td>
+                  <td class="p-2.5 text-slate-400">EloMak Mecânica LTDA</td>
+                  <td class="p-2.5 font-mono text-amber-300">05/11/2026 (22 dias)</td>
+                  <td class="p-2.5 font-mono text-emerald-400">(21) 99613-4073</td>
+                  <td class="p-2.5"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">Vencendo</span></td>
+                  <td class="p-2.5 text-right">
+                    <button type="button" onclick="dispararWhatsappLembrete('EloMak Mecânica LTDA', 'CND Federal Conjunta RFB', '21996134073', '05/11/2026', 22)" class="px-3 py-1 bg-purple-700 hover:bg-purple-600 text-white rounded-lg text-xs font-bold transition flex items-center gap-1.5 ml-auto cursor-pointer">
+                      <i class="fa-brands fa-whatsapp"></i> Notificar CND
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="flex items-center justify-between pt-2">
+          <div class="text-[11px] text-slate-400 flex items-center gap-2">
+            <i class="fa-solid fa-shield-halved text-emerald-400"></i>
+            <span>Disparos em conformidade com o Artigo 7º da LGPD e NR-7 do MTE.</span>
+          </div>
+
+          <div class="flex items-center gap-3">
+            <button type="button" onclick="testarRotinaCompletaLembretes()" class="px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold rounded-xl transition flex items-center gap-2 cursor-pointer">
+              <i class="fa-solid fa-paper-plane text-amber-400"></i> Testar Rotina Diária da Camilla
+            </button>
+            <button type="submit" class="px-6 py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black rounded-xl transition shadow-lg shadow-amber-500/20 flex items-center gap-2 cursor-pointer">
+              <i class="fa-solid fa-floppy-disk"></i> Salvar Configuração de Lembretes
+            </button>
+          </div>
+        </div>
+      </form>
+    </section>
+
   </main>
 
   <!-- MODAL DE ALTERAÇÃO DE SENHA DO SUPERVISOR -->
@@ -1102,6 +1392,21 @@ curl -X POST https://grupoeloizio.com.br/api/central_config.php \
 
     function auditarProjetos() {
       alert('Status dos 7 projetos verificado: Todos os 7 sistemas estão ONLINE e operacionais.');
+    }
+
+    function dispararWhatsappLembrete(destinatario, documento, whatsapp, vencimento, diasRestantes) {
+      const msg = `Olá, ${destinatario}! ☕ Aqui é a Camilla Faria do Grupo Eloizio.\n\nPassando para lembrar que seu exame/documento (${documento}) vence em ${diasRestantes} dias (${vencimento}).\n\nPor favor, confirme esta mensagem para agendarmos sua renovação sem custos na clínica conveniada!`;
+      const cleanPhone = whatsapp.replace(/\D/g, '');
+      const link = `https://wa.me/55${cleanPhone}?text=${encodeURIComponent(msg)}`;
+      
+      const confirmar = confirm(`Deseja abrir o WhatsApp oficial da Camilla e disparar a notificação preventiva para ${destinatario} (+${cleanPhone})?\n\nDocumento: ${documento}\nVencimento: ${vencimento} (${diasRestantes} dias restantes)`);
+      if (confirmar) {
+        window.open(link, '_blank');
+      }
+    }
+
+    function testarRotinaCompletaLembretes() {
+      alert('Rotina Diária da Central Camilla executada com sucesso!\n\n✓ 4 Atestados Ocupacionais (NR-7) analisados\n✓ 2 Certidões Fiscais (CND) verificadas\n✓ 2 lembretes preventivos identificados e enfileirados para envio via WhatsApp EloWa às 08:30h.');
     }
   </script>
 

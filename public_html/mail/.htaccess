@@ -1,0 +1,26 @@
+# Grupo Eloizio Webmail Server Engine
+# Subdomínio: webmail.grupoeloizio.com.br
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /mail/
+
+    # Se a requisição vier pelo subdomínio webmail.grupoeloizio.com.br
+    RewriteCond %{HTTP_HOST} ^webmail\.grupoeloizio\.com\.br$ [NC]
+    RewriteCond %{REQUEST_URI} !^/mail/
+    RewriteRule ^(.*)$ /mail/$1 [L]
+
+    # Prevenir listagem de diretório
+    Options -Indexes
+
+    # Proteger arquivos sensíveis
+    <FilesMatch "\.(json|lock|env|log)$">
+        Order allow,deny
+        Deny from all
+    </FilesMatch>
+</IfModule>
+
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-XSS-Protection "1; mode=block"
+    Header set X-Frame-Options "SAMEORIGIN"
+</IfModule>

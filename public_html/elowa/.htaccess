@@ -1,0 +1,23 @@
+# EloWa WhatsApp Server Apache / LiteSpeed Configuration
+Options -Indexes
+DirectoryIndex index.php
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^api/(.*)$ api.php?action=$1 [QSA,L]
+</IfModule>
+
+# Proteger dados sensíveis JSON de sessões e credenciais
+<FilesMatch "^(instances|messages|elowa_logs)\.json$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+# Habilitar CORS para Webhooks e Dashboard
+<IfModule mod_headers.c>
+    Header set Access-Control-Allow-Origin "*"
+    Header set Access-Control-Allow-Methods "GET, POST, OPTIONS"
+    Header set Access-Control-Allow-Headers "Content-Type, Authorization"
+</IfModule>

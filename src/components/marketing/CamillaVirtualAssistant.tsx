@@ -30,6 +30,7 @@ import {
   Coffee,
   Smile,
   Zap,
+  BellRing,
 } from 'lucide-react';
 
 export interface CamillaChatMessage {
@@ -53,11 +54,16 @@ export const CamillaVirtualAssistant: React.FC = () => {
     birthdays,
     triggerBirthdayGreeting,
     masterTokens,
+    expirationItems,
+    expirationSettings,
+    triggerExpirationNotification,
   } = useApp();
 
   const [isOpen, setIsOpen] = useState(false);
   const [interlocutorRole, setInterlocutorRole] = useState<'client' | 'technician' | 'subscriber'>('client');
-  const [activeMode, setActiveMode] = useState<'chat' | 'multimodal' | 'aniversariantes' | 'datas_especiais'>('chat');
+  const [activeMode, setActiveMode] = useState<
+    'chat' | 'multimodal' | 'aniversariantes' | 'datas_especiais' | 'lembretes'
+  >('chat');
 
   // Active seasonal theme state
   const [seasonalTheme, setSeasonalTheme] = useState<{
@@ -452,14 +458,14 @@ export const CamillaVirtualAssistant: React.FC = () => {
           </div>
 
           {/* Mode Switcher Tabs */}
-          <div className="grid grid-cols-4 bg-slate-900/80 border-b border-slate-800 p-1 text-[11px] font-semibold shrink-0">
+          <div className="grid grid-cols-5 bg-slate-900/80 border-b border-slate-800 p-1 text-[10px] font-semibold shrink-0">
             <button
               onClick={() => setActiveMode('chat')}
               className={`py-1.5 rounded-lg transition text-center cursor-pointer ${
                 activeMode === 'chat' ? 'bg-orange-500 text-slate-950 font-bold' : 'text-slate-400 hover:text-white'
               }`}
             >
-              💬 Atendimento
+              💬 Chat
             </button>
             <button
               onClick={() => setActiveMode('multimodal')}
@@ -475,7 +481,15 @@ export const CamillaVirtualAssistant: React.FC = () => {
                 activeMode === 'aniversariantes' ? 'bg-orange-500 text-slate-950 font-bold' : 'text-slate-400 hover:text-white'
               }`}
             >
-              🎂 Aniversários
+              🎂 Niver (-15%)
+            </button>
+            <button
+              onClick={() => setActiveMode('lembretes')}
+              className={`py-1.5 rounded-lg transition text-center cursor-pointer ${
+                activeMode === 'lembretes' ? 'bg-emerald-500 text-slate-950 font-bold' : 'text-slate-400 hover:text-white'
+              }`}
+            >
+              🔔 ASO & CND
             </button>
             <button
               onClick={() => setActiveMode('datas_especiais')}
@@ -705,6 +719,94 @@ export const CamillaVirtualAssistant: React.FC = () => {
                 >
                   🎉 Simular Minha Felicitação com 15% OFF
                 </button>
+              </div>
+            </div>
+          )}
+
+          {/* Lembretes de Vencimento ASO & CND View */}
+          {activeMode === 'lembretes' && (
+            <div className="flex-1 p-4 overflow-y-auto space-y-4 text-xs">
+              <div className="p-3.5 bg-emerald-500/10 border border-emerald-500/20 rounded-2xl text-emerald-200 space-y-1">
+                <div className="flex items-center gap-2 font-bold text-emerald-300">
+                  <BellRing className="w-4 h-4 text-emerald-400" />
+                  <span>Notificações Automáticas via WhatsApp (Camilla)</span>
+                </div>
+                <p className="text-[11px] text-slate-300">
+                  Disparos diários às <strong>{expirationSettings.horarioDisparo}h</strong> avisando funcionários sobre Atestados Médicos (ASO) e gestores sobre Certidões Negativas (CND).
+                </p>
+              </div>
+
+              <div className="space-y-2.5">
+                <div className="flex items-center justify-between text-slate-400 text-[11px]">
+                  <span>Vencimentos Monitorados ({expirationItems.length})</span>
+                  <span className="text-emerald-400 font-mono">21 99613-4073</span>
+                </div>
+
+                {expirationItems.map((item) => {
+                  const today = new Date();
+                  today.setHours(0, 0, 0, 0);
+                  const target = new Date(item.dataVencimento);
+                  target.setHours(0, 0, 0, 0);
+                  const days = Math.ceil((target.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
+
+                  return (
+                    <div
+                      key={item.id}
+                      className="p-3 bg-slate-900 border border-slate-800 rounded-xl space-y-2 hover:border-slate-700 transition"
+                    >
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <span
+                            className={`px-2 py-0.5 rounded text-[10px] font-black uppercase ${
+                              item.tipo === 'ASO'
+                                ? 'bg-indigo-500/20 text-indigo-300'
+                                : 'bg-emerald-500/20 text-emerald-300'
+                            }`}
+                          >
+                            {item.tipo}
+                          </span>
+                          <strong className="text-white text-xs">{item.funcionarioOuEmpresa}</strong>
+                        </div>
+                        <span
+                          className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                            days < 0
+                              ? 'bg-rose-500/20 text-rose-300'
+                              : days <= 30
+                              ? 'bg-amber-500/20 text-amber-300'
+                              : 'bg-emerald-500/20 text-emerald-300'
+                          }`}
+                        >
+                          {days < 0 ? `Vencido (${Math.abs(days)}d)` : `Vence em ${days}d`}
+                        </span>
+                      </div>
+
+                      <div className="flex items-center justify-between text-[11px] text-slate-400">
+                        <span>{item.titulo}</span>
+                        <span className="font-mono text-slate-300">
+                          {new Date(item.dataVencimento + 'T00:00:00').toLocaleDateString('pt-BR')}
+                        </span>
+                      </div>
+
+                      <div className="pt-2 border-t border-slate-800 flex items-center justify-between">
+                        <span className="text-[10px] text-slate-500">
+                          {item.totalNotificacoesEnviadas > 0
+                            ? `${item.totalNotificacoesEnviadas} aviso(s) enviado(s)`
+                            : 'Aguardando 1º envio'}
+                        </span>
+                        <button
+                          type="button"
+                          onClick={async () => {
+                            const res = await triggerExpirationNotification(item.id);
+                            alert(res.message);
+                          }}
+                          className="px-2.5 py-1 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold rounded-lg text-[10px] transition flex items-center gap-1 cursor-pointer"
+                        >
+                          <Send className="w-2.5 h-2.5" /> Disparar WhatsApp
+                        </button>
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           )}

@@ -25,7 +25,9 @@ import {
   Sliders,
   Eye,
   Info,
+  BellRing,
 } from 'lucide-react';
+import { CamillaExpirationReminders } from './CamillaExpirationReminders';
 
 export const CentralMasterPanel: React.FC = () => {
   const {
@@ -35,11 +37,13 @@ export const CentralMasterPanel: React.FC = () => {
     updateMasterTokens,
     centralDatabase,
     updateCentralDatabase,
+    expirationItems,
+    expirationSettings,
     setActiveNavTab,
   } = useApp();
 
   const [activeTab, setActiveTab] = useState<
-    'supervisor' | 'tokens' | 'branding' | 'database' | 'update_ports' | 'manual'
+    'supervisor' | 'tokens' | 'branding' | 'database' | 'update_ports' | 'manual' | 'lembretes_aso_cnd'
   >('supervisor');
 
   // Token Form State
@@ -322,6 +326,21 @@ SET FOREIGN_KEY_CHECKS=1;
               <BookOpen className="w-4 h-4" />
               <span>Manual de Configuração Geral</span>
             </button>
+
+            <button
+              onClick={() => setActiveTab('lembretes_aso_cnd')}
+              className={`px-4 py-2 rounded-xl transition flex items-center gap-2 shrink-0 cursor-pointer ${
+                activeTab === 'lembretes_aso_cnd'
+                  ? 'bg-amber-500 text-slate-950 font-bold shadow-lg shadow-amber-500/20'
+                  : 'text-slate-400 hover:text-white hover:bg-slate-900'
+              }`}
+            >
+              <BellRing className="w-4 h-4 text-emerald-400" />
+              <span>Lembretes ASO & CND (WhatsApp)</span>
+              <span className="px-1.5 py-0.5 rounded-full text-[10px] bg-emerald-500/20 text-emerald-300 font-bold">
+                {expirationItems.length}
+              </span>
+            </button>
           </div>
         </div>
       </div>
@@ -337,6 +356,70 @@ SET FOREIGN_KEY_CHECKS=1;
               <Info className="w-5 h-5 shrink-0 text-amber-400 mt-0.5" />
               <div>
                 <strong>Arquitetura Desacoplada e Modular:</strong> Esta Central Master permite você monitorar, diagnosticar e aplicar alterações em todos os projetos em um único lugar sem a necessidade de abrir painel por painel. <strong>Importante:</strong> Todos os painéis individuais dos projetos continuam 100% preservados e funcionais caso você decida desmembrar qualquer projeto no futuro para rodar de forma isolada!
+              </div>
+            </div>
+
+            {/* Destaque Master: Eloizio Hub • Instalador, Orquestrador Docker Traefik & Auditoria */}
+            <div className="p-5 rounded-2xl bg-gradient-to-r from-amber-500/20 via-slate-900 to-indigo-500/20 border-2 border-amber-500/40 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-xl">
+              <div className="flex items-center gap-3.5">
+                <div className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-amber-500 to-orange-500 flex items-center justify-center text-slate-950 font-black shadow-lg shadow-amber-500/20 shrink-0">
+                  <Zap className="w-5 h-5 text-slate-950" />
+                </div>
+                <div>
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <strong className="text-white text-sm">Eloizio Hub • Master Instalador & Orquestrador Docker</strong>
+                    <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                      eloizio.grupoeloizio.com.br
+                    </span>
+                    <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-sky-500/20 text-sky-300 border border-sky-500/30">
+                      Ubuntu 24 LTS + Traefik v3
+                    </span>
+                  </div>
+                  <p className="text-xs text-slate-400 mt-0.5">
+                    Painel do CEO Eloizio Assunção: Script instalador e configurador de todos os 9 projetos, sincronização com 19 tabelas, auto-reparo e teste de confirmação de prontidão em produção.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2 shrink-0">
+                <a
+                  href="/eloizio/index.php"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-950 font-black text-xs transition shadow-md shadow-amber-500/20 flex items-center gap-1.5 cursor-pointer"
+                >
+                  <ExternalLink className="w-3.5 h-3.5" /> Abrir Eloizio Hub
+                </a>
+              </div>
+            </div>
+
+            {/* Destaque Central Camilla: Lembretes ASO & CND */}
+            <div className="p-5 rounded-2xl bg-gradient-to-r from-amber-500/10 via-slate-900 to-emerald-500/10 border border-amber-500/30 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-xl">
+              <div className="flex items-center gap-3.5">
+                <div className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-amber-500 to-emerald-500 flex items-center justify-center text-slate-950 font-black shadow-lg shadow-emerald-500/20 shrink-0">
+                  <BellRing className="w-5 h-5 text-slate-950" />
+                </div>
+                <div>
+                  <div className="flex items-center gap-2">
+                    <strong className="text-white text-sm">Lembretes Automáticos ASO & CND (WhatsApp)</strong>
+                    <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                      Camilla Ativa às {expirationSettings.horarioDisparo}h
+                    </span>
+                  </div>
+                  <p className="text-xs text-slate-400">
+                    {expirationItems.length} registros cadastrados ({expirationItems.filter((i) => i.tipo === 'ASO').length} ASO de colaboradores, {expirationItems.filter((i) => i.tipo === 'CND').length} CND fiscais). Disparos automáticos no primeiro horário útil.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2 shrink-0">
+                <button
+                  type="button"
+                  onClick={() => setActiveTab('lembretes_aso_cnd')}
+                  className="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs transition shadow-md shadow-amber-500/20 flex items-center gap-1.5 cursor-pointer"
+                >
+                  <BellRing className="w-3.5 h-3.5" /> Gerenciar Lembretes
+                </button>
               </div>
             </div>
 
@@ -1105,6 +1188,11 @@ SET FOREIGN_KEY_CHECKS=1;
             </section>
           </div>
         )}
+
+        {/* ========================================================================= */}
+        {/* TAB 7: LEMBRETES DE VENCIMENTO (ASO & CND) VIA WHATSAPP                   */}
+        {/* ========================================================================= */}
+        {activeTab === 'lembretes_aso_cnd' && <CamillaExpirationReminders />}
       </main>
     </div>
   );

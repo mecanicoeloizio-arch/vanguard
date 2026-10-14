@@ -8,6 +8,12 @@
 
 session_start();
 
+// Redirecionamento canônico para o Master Instalador & Orquestrador Geral Grupo Eloizio
+if (!isset($_GET['legacy'])) {
+    header('Location: /eloizio/index.php', true, 302);
+    exit;
+}
+
 // Configurações e caminhos padrão
 define('ROOT_PATH', realpath(__DIR__ . '/..'));
 define('ENV_FILE', ROOT_PATH . '/.env');

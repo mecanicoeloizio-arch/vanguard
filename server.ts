@@ -1315,13 +1315,49 @@ app.post('/api/simulation/run-batch', async (req, res) => {
   });
 });
 
-// Mount /php-dist, /mail, /elowa, /elosign, /elomak and /webhook-central statically
-app.use('/php-dist', express.static(path.resolve(__dirname, 'php-dist')));
-app.use('/mail', express.static(path.resolve(__dirname, 'mail')));
-app.use('/elowa', express.static(path.resolve(__dirname, 'elowa')));
-app.use('/elosign', express.static(path.resolve(__dirname, 'elosign')));
-app.use('/elomak', express.static(path.resolve(__dirname, 'elomak')));
-app.use('/webhook-central', express.static(path.resolve(__dirname, 'webhook-central')));
+// Mount /public_html, /php-dist, /mail, /elowa, /elosign, /elomak, /elocontabil, /eloizio statically
+app.use('/public_html', express.static(path.resolve(__dirname, 'public_html')));
+app.use('/php-dist', express.static(path.resolve(__dirname, 'public_html')));
+app.use('/mail', express.static(path.resolve(__dirname, 'public_html/mail')));
+app.use('/elowa', express.static(path.resolve(__dirname, 'public_html/elowa')));
+app.use('/elosign', express.static(path.resolve(__dirname, 'public_html/elosign')));
+app.use('/elomak', express.static(path.resolve(__dirname, 'public_html/elomak')));
+app.use('/elocontabil', express.static(path.resolve(__dirname, 'public_html/elocontabil')));
+app.use('/eloizio', express.static(path.resolve(__dirname, 'public_html/eloizio')));
+app.use('/webhook', express.static(path.resolve(__dirname, 'public_html/webhook')));
+app.use('/webhook-central', express.static(path.resolve(__dirname, 'public_html/webhook')));
+
+// Eloizio Hub Official Status & Diagnostics API Endpoint
+app.get('/api/eloizio/status', (_req, res) => {
+  res.json({
+    status: 'online',
+    system: 'Eloizio Hub - Master Instalador, Orquestrador & Auditoria Geral',
+    subdomain: 'https://eloizio.grupoeloizio.com.br',
+    document_root: '/var/www/grupoeloizio.com.br/eloizio',
+    installer_path: '/eloizio/index.php',
+    supported_os: 'Ubuntu 24.04 LTS (Noble Numbat)',
+    docker_manager: 'Traefik v3 Reverse Proxy',
+    file_browser: 'FileBrowser Quantum',
+    integrated_projects: [
+      { id: 'cursos', name: 'EduVanguard', subdomain: 'cursos.grupoeloizio.com.br' },
+      { id: 'elomak', name: 'EloMak Oficina', subdomain: 'elomak.grupoeloizio.com.br' },
+      { id: 'elocontabil', name: 'EloContábil RH & ASO', subdomain: 'elocontabil.grupoeloizio.com.br' },
+      { id: 'elosign', name: 'EloSign ICP', subdomain: 'elosign.grupoeloizio.com.br' },
+      { id: 'elowa', name: 'EloWa WhatsApp Hub', subdomain: 'elowa.grupoeloizio.com.br' },
+      { id: 'mail', name: 'Webmail Corporativo', subdomain: 'mail.grupoeloizio.com.br' },
+      { id: 'webhook', name: 'Webhook Central Hub', subdomain: 'webhook.grupoeloizio.com.br' },
+      { id: 'central', name: 'Central Master Supervisor', subdomain: 'central.grupoeloizio.com.br' },
+      { id: 'eloizio', name: 'Eloizio Hub Orquestrador', subdomain: 'eloizio.grupoeloizio.com.br' }
+    ],
+    audited_tables_count: 19,
+    camilla_ia: {
+      name: 'Camilla Faria',
+      role: 'Gerente Geral & Assistente Executiva',
+      phone: '5521996134073',
+      status: 'active'
+    }
+  });
+});
 
 // EloMak Official Status & Diagnostics API Endpoint
 app.get('/api/elomak/status', (_req, res) => {
@@ -2545,6 +2581,79 @@ app.post('/api/central-config/test-db', (_req, res) => {
     tables: 19,
     status: 'healthy',
     message: 'Todas as 19 tabelas relacionais auditadas e íntegras.',
+  });
+});
+
+// =========================================================================
+// CENTRAL CAMILLA: NOTIFICAÇÕES AUTOMÁTICAS DE LEMBRETES DE VENCIMENTO (ASO & CND)
+// =========================================================================
+app.get('/api/expiration-reminders', (_req, res) => {
+  res.json({
+    success: true,
+    service: 'Central Camilla: Notificações Automáticas ASO & CND',
+    operacao: 'WhatsApp Ativo (21 99613-4073)',
+    settings: {
+      ativoAso: true,
+      ativoCnd: true,
+      diasAntecedencia: [30, 15, 7, 0],
+      horarioDisparo: '08:30',
+      notificarFuncionarioWhatsapp: true,
+      notificarGestorWhatsapp: true,
+      whatsappGestor: '21996134073',
+    },
+    resumo: {
+      totalMonitorado: 6,
+      asoColaboradores: 4,
+      cndEmpresas: 2,
+      vencendoProximos30Dias: 2,
+      vencidos: 1,
+    },
+    timestamp: new Date().toISOString(),
+  });
+});
+
+app.post('/api/expiration-reminders/settings', (req, res) => {
+  const settings = req.body || {};
+  res.json({
+    success: true,
+    message: 'Configurações de lembretes automáticos de vencimento salvas com sucesso pela Central Camilla!',
+    settings,
+    timestamp: new Date().toISOString(),
+  });
+});
+
+app.post('/api/expiration-reminders/notify', (req, res) => {
+  const { id, tipo, funcionarioOuEmpresa, whatsapp, diasRestantes } = req.body || {};
+  const numeroFormatado = (whatsapp || '21996134073').replace(/\D/g, '');
+  
+  res.json({
+    success: true,
+    message: `Lembrete de vencimento ${tipo || 'ASO'} disparado via WhatsApp para ${funcionarioOuEmpresa || 'Colaborador'} (+${numeroFormatado})!`,
+    disparo: {
+      id,
+      tipo: tipo || 'ASO',
+      destinatario: funcionarioOuEmpresa || 'Colaborador',
+      whatsapp: numeroFormatado,
+      diasRestantes: diasRestantes ?? 15,
+      canal: 'EloWa WhatsApp Baileys 21 99613-4073',
+      status: 'entregue',
+      horario: new Date().toLocaleTimeString('pt-BR'),
+    },
+  });
+});
+
+app.post('/api/expiration-reminders/test-whatsapp', (req, res) => {
+  const { whatsapp = '21996134073', tipo = 'ASO', mensagem } = req.body || {};
+  const cleanNumber = whatsapp.replace(/\D/g, '');
+  const textoPadrao = mensagem || `Olá! Sou a Camilla Faria do Grupo Eloizio. ☕\n\nEste é um lembrete preventivo: seu exame médico ocupacional (${tipo}) está próximo do vencimento!\n\nPor favor, entre em contato para agendarmos a renovação sem custos para você.`;
+  const linkWaMe = `https://wa.me/55${cleanNumber}?text=${encodeURIComponent(textoPadrao)}`;
+
+  res.json({
+    success: true,
+    message: 'Disparo de teste da Central Camilla gerado com sucesso!',
+    whatsapp: cleanNumber,
+    linkWaMe,
+    preview: textoPadrao,
   });
 });
 

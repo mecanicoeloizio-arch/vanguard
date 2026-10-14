@@ -425,7 +425,7 @@ export interface EnrollmentDocumentUploads {
 }
 
 export interface CentralProjectBrandConfig {
-  id: 'vanguard' | 'elomak' | 'elocontabil' | 'elosign' | 'portal' | 'elowa' | 'webmail';
+  id: 'vanguard' | 'elomak' | 'elocontabil' | 'elosign' | 'portal' | 'elowa' | 'webmail' | 'eloizio';
   name: string;
   badge: string;
   primaryColor: string;
@@ -769,6 +769,50 @@ export interface EloSignSettings {
   docsUsedThisMonth: number;
   docsLimit: number;
 }
+
+export type ExpirationDocType = 'ASO' | 'CND';
+
+export interface ExpirationReminderItem {
+  id: string;
+  tipo: ExpirationDocType;
+  subtipo:
+    | 'aso_periodico'
+    | 'aso_admissional'
+    | 'aso_demissional'
+    | 'aso_retorno'
+    | 'cnd_receita_federal'
+    | 'cnd_fgts'
+    | 'cnd_trabalhista'
+    | 'cnd_estadual'
+    | 'cnd_municipal';
+  titulo: string;
+  funcionarioOuEmpresa: string;
+  cargoOuCnpj: string;
+  whatsapp: string;
+  email?: string;
+  empresaVinculada: string;
+  dataExameOuEmissao: string;
+  dataVencimento: string; // YYYY-MM-DD
+  status: 'em_dia' | 'vencendo' | 'vencido' | 'renovado';
+  notificacaoAutomatica: boolean;
+  totalNotificacoesEnviadas: number;
+  ultimaNotificacaoEm?: string;
+  observacoes?: string;
+}
+
+export interface ExpirationReminderSettings {
+  ativoAso: boolean;
+  ativoCnd: boolean;
+  diasAntecedencia: number[]; // ex: [30, 15, 7, 0]
+  horarioDisparo: string; // ex: '08:30'
+  notificarFuncionarioWhatsapp: boolean;
+  notificarGestorWhatsapp: boolean;
+  whatsappGestor: string;
+  templateAso: string;
+  templateCnd: string;
+  lastRunAt?: string;
+}
+
 
 
 

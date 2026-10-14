@@ -44,6 +44,8 @@ import {
   CentralDatabaseConfig,
   MasterTokensConfig,
   BirthdayRecord,
+  ExpirationReminderItem,
+  ExpirationReminderSettings,
 } from '../types';
 import {
   INITIAL_USERS,
@@ -81,6 +83,8 @@ import {
   DEFAULT_CENTRAL_DATABASE,
   DEFAULT_MASTER_TOKENS,
   DEFAULT_BIRTHDAYS,
+  DEFAULT_EXPIRATION_SETTINGS,
+  DEFAULT_EXPIRATION_ITEMS,
   computeSHA256Hash,
 } from '../services/storage';
 
@@ -225,6 +229,14 @@ interface AppContextType {
   birthdays: BirthdayRecord[];
   triggerBirthdayGreeting: (id: string) => void;
   addBirthdayRecord: (record: Omit<BirthdayRecord, 'id'>) => void;
+  expirationSettings: ExpirationReminderSettings;
+  updateExpirationSettings: (partial: Partial<ExpirationReminderSettings>) => void;
+  expirationItems: ExpirationReminderItem[];
+  addExpirationItem: (item: Omit<ExpirationReminderItem, 'id'>) => void;
+  updateExpirationItem: (id: string, partial: Partial<ExpirationReminderItem>) => void;
+  deleteExpirationItem: (id: string) => void;
+  triggerExpirationNotification: (id: string) => Promise<{ success: boolean; message: string }>;
+  renewExpirationItem: (id: string, novaDataVencimento: string) => void;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -769,6 +781,80 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       id: `bth_${Date.now()}`,
     };
     setBirthdays((prev) => [newRecord, ...prev]);
+  };
+
+  // ==========================================
+  // CENTRAL CAMILLA: LEMBRETES DE VENCIMENTO (ASO / CND)
+  // ==========================================
+  const [expirationSettings, setExpirationSettings] = useState<ExpirationReminderSettings>(() => {
+    const saved = localStorage.getItem(`${LOCAL_STORAGE_KEY}_exp_settings`);
+    return saved ? JSON.parse(saved) : DEFAULT_EXPIRATION_SETTINGS;
+  });
+
+  const [expirationItems, setExpirationItems] = useState<ExpirationReminderItem[]>(() => {
+    const saved = localStorage.getItem(`${LOCAL_STORAGE_KEY}_exp_items`);
+    return saved ? JSON.parse(saved) : DEFAULT_EXPIRATION_ITEMS;
+  });
+
+  useEffect(() => {
+    localStorage.setItem(`${LOCAL_STORAGE_KEY}_exp_settings`, JSON.stringify(expirationSettings));
+  }, [expirationSettings]);
+
+  useEffect(() => {
+    localStorage.setItem(`${LOCAL_STORAGE_KEY}_exp_items`, JSON.stringify(expirationItems));
+  }, [expirationItems]);
+
+  const updateExpirationSettings = (partial: Partial<ExpirationReminderSettings>) => {
+    setExpirationSettings((prev) => ({ ...prev, ...partial }));
+  };
+
+  const addExpirationItem = (item: Omit<ExpirationReminderItem, 'id'>) => {
+    const newItem: ExpirationReminderItem = {
+      ...item,
+      id: `exp_${Date.now()}`,
+    };
+    setExpirationItems((prev) => [newItem, ...prev]);
+  };
+
+  const updateExpirationItem = (id: string, partial: Partial<ExpirationReminderItem>) => {
+    setExpirationItems((prev) =>
+      prev.map((it) => (it.id === id ? { ...it, ...partial } : it))
+    );
+  };
+
+  const deleteExpirationItem = (id: string) => {
+    setExpirationItems((prev) => prev.filter((it) => it.id !== id));
+  };
+
+  const renewExpirationItem = (id: string, novaDataVencimento: string) => {
+    setExpirationItems((prev) =>
+      prev.map((it) =>
+        it.id === id
+          ? {
+              ...it,
+              dataVencimento: novaDataVencimento,
+              status: 'em_dia' as const,
+              totalNotificacoesEnviadas: 0,
+            }
+          : it
+      )
+    );
+  };
+
+  const triggerExpirationNotification = async (id: string) => {
+    const item = expirationItems.find((it) => it.id === id);
+    if (!item) return { success: false, message: 'Item não encontrado.' };
+
+    const nowStr = `Hoje às ${new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}`;
+    updateExpirationItem(id, {
+      totalNotificacoesEnviadas: (item.totalNotificacoesEnviadas || 0) + 1,
+      ultimaNotificacaoEm: nowStr,
+    });
+
+    return {
+      success: true,
+      message: `Lembrete de ${item.tipo} (${item.titulo}) disparado com sucesso para ${item.funcionarioOuEmpresa} via WhatsApp (${item.whatsapp})!`,
+    };
   };
 
 
@@ -2580,6 +2666,14 @@ Comandos disponíveis:
         birthdays,
         triggerBirthdayGreeting,
         addBirthdayRecord,
+        expirationSettings,
+        updateExpirationSettings,
+        expirationItems,
+        addExpirationItem,
+        updateExpirationItem,
+        deleteExpirationItem,
+        triggerExpirationNotification,
+        renewExpirationItem,
         masterPassword: DEFAULT_MASTER_PASSWORD,
         login,
         loginAsDemo,

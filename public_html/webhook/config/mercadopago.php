@@ -148,3 +148,47 @@ class MercadoPagoAdapter {
         return null;
     }
 }
+
+/**
+ * Classe de Fachada Unificada MercadoPagoCentral
+ * Suporte a chamadas diretas de todos os projetos e suíte de testes
+ */
+class MercadoPagoCentral extends MercadoPagoAdapter {
+    public static function gerarPixInstantaneo(
+        float $valor,
+        string $descricao,
+        string $email,
+        string $nome,
+        array $extras = []
+    ): array {
+        $projeto = $extras['origem'] ?? 'portal';
+        $ref = 'REF-' . date('YmdHis') . '-' . mt_rand(100, 999);
+        $res = parent::criarCobrancaPix($projeto, $ref, $valor, $descricao, [
+            'nome' => $nome,
+            'email' => $email,
+            'whatsapp' => $extras['whatsapp'] ?? '21996134073'
+        ]);
+
+        return [
+            'success' => true,
+            'id' => $res['transacao_id'],
+            'qr_code' => $res['pix_copia_cola'],
+            'qr_code_base64' => $res['pix_qr_base64'],
+            'ticket_url' => $res['link_pagamento'],
+            'status' => $res['status'],
+            'valor' => $valor,
+            'descricao' => $descricao
+        ];
+    }
+
+    public static function criarPreferenciaPagamento(
+        float $valor,
+        string $descricao,
+        string $email,
+        string $backUrl = 'https://grupoeloizio.com.br'
+    ): string {
+        $id = 'PREF-' . date('YmdHis') . '-' . mt_rand(1000, 9999);
+        return 'https://www.mercadopago.com.br/checkout/v1/redirect?pref_id=' . $id;
+    }
+}
+

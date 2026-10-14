@@ -27,14 +27,19 @@ import {
   Layers,
   ChevronRight,
   Printer,
+  BellRing,
 } from 'lucide-react';
+import { CamillaExpirationReminders } from './CamillaExpirationReminders';
 
 interface CamillaCourseStudioProps {
   onCoursePublished?: (course: Course) => void;
 }
 
 export const CamillaCourseStudio: React.FC<CamillaCourseStudioProps> = ({ onCoursePublished }) => {
-  const { courses, addCourse, sendPushNotification, setActiveNavTab } = useApp();
+  const { courses, addCourse, sendPushNotification, setActiveNavTab, expirationItems } = useApp();
+
+  // Seletor de Modo na Central Camilla
+  const [studioTab, setStudioTab] = useState<'create_course' | 'expiration_reminders'>('create_course');
 
   // Estado do Formulário de Criação da Camilla
   const [title, setTitle] = useState('');
@@ -326,59 +331,109 @@ export const CamillaCourseStudio: React.FC<CamillaCourseStudioProps> = ({ onCour
   const totalPagesCount = materials.reduce((acc, m) => acc + (m.pages || 0), 0);
 
   return (
-    <div className="space-y-8 animate-in fade-in duration-300">
-      {/* BANNER OFICIAL: AUTONOMIA DA GERENTE CAMILLA FARIA */}
-      <div className="bg-linear-to-r from-slate-950 via-indigo-950 to-purple-950 text-white rounded-3xl p-6 sm:p-10 shadow-2xl border-2 border-indigo-400/30 relative overflow-hidden">
-        <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 relative z-10">
-          <div className="flex items-start sm:items-center gap-5">
-            <div className="relative shrink-0">
-              <img
-                src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=300"
-                alt="Camilla Faria"
-                className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl object-cover ring-4 ring-indigo-400 shadow-xl"
-              />
-              <span className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-emerald-500 border-2 border-white" title="Autonomia Ativa"></span>
-            </div>
+    <div className="space-y-6 animate-in fade-in duration-300">
+      {/* SELETOR DE MÓDULOS DA CENTRAL CAMILLA FARIA */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-900/90 backdrop-blur-md p-2 rounded-2xl border border-indigo-500/30 shadow-xl">
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() => setStudioTab('create_course')}
+            className={`px-4 py-2.5 rounded-xl text-xs font-bold transition flex items-center gap-2 cursor-pointer ${
+              studioTab === 'create_course'
+                ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-md shadow-indigo-500/20'
+                : 'text-slate-400 hover:text-white hover:bg-slate-800'
+            }`}
+          >
+            <Sparkles className="w-4 h-4 text-amber-300" />
+            <span>Estúdio de Cursos & Publicação</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => setStudioTab('expiration_reminders')}
+            className={`px-4 py-2.5 rounded-xl text-xs font-bold transition flex items-center gap-2 cursor-pointer ${
+              studioTab === 'expiration_reminders'
+                ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950 font-black shadow-md shadow-amber-500/20'
+                : 'text-slate-400 hover:text-white hover:bg-slate-800'
+            }`}
+          >
+            <BellRing className="w-4 h-4 text-emerald-400" />
+            <span>Central Camilla: Notificações ASO & CND (WhatsApp)</span>
+            <span className="px-2 py-0.5 rounded-full text-[10px] bg-emerald-500/20 text-emerald-300 font-bold border border-emerald-500/30">
+              {expirationItems.length}
+            </span>
+          </button>
+        </div>
 
-            <div className="space-y-1.5">
-              <div className="flex items-center gap-2 flex-wrap">
-                <span className="px-3 py-0.5 rounded-full text-[10px] font-black uppercase bg-indigo-500/30 text-indigo-200 border border-indigo-400/40">
-                  Autonomia Executiva Total • Grupo Eloizio
-                </span>
-                <span className="px-3 py-0.5 rounded-full text-[10px] font-black uppercase bg-emerald-500/20 text-emerald-300 border border-emerald-400/40">
-                  ✓ Publicação Instantânea em Produção
-                </span>
+        <div className="text-[11px] text-slate-400 flex items-center gap-2 px-3 py-1 bg-slate-950/60 rounded-xl border border-slate-800">
+          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span>Central Camilla: 21 99613-4073 • IA Operacional</span>
+        </div>
+      </div>
+
+      {studioTab === 'expiration_reminders' ? (
+        <CamillaExpirationReminders />
+      ) : (
+        <>
+          {/* BANNER OFICIAL: AUTONOMIA DA GERENTE CAMILLA FARIA */}
+          <div className="bg-linear-to-r from-slate-950 via-indigo-950 to-purple-950 text-white rounded-3xl p-6 sm:p-10 shadow-2xl border-2 border-indigo-400/30 relative overflow-hidden">
+            <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 relative z-10">
+              <div className="flex items-start sm:items-center gap-5">
+                <div className="relative shrink-0">
+                  <img
+                    src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=300"
+                    alt="Camilla Faria"
+                    className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl object-cover ring-4 ring-indigo-400 shadow-xl"
+                  />
+                  <span className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-emerald-500 border-2 border-white" title="Autonomia Ativa"></span>
+                </div>
+
+                <div className="space-y-1.5">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className="px-3 py-0.5 rounded-full text-[10px] font-black uppercase bg-indigo-500/30 text-indigo-200 border border-indigo-400/40">
+                      Autonomia Executiva Total • Grupo Eloizio
+                    </span>
+                    <span className="px-3 py-0.5 rounded-full text-[10px] font-black uppercase bg-emerald-500/20 text-emerald-300 border border-emerald-400/40">
+                      ✓ Publicação Instantânea em Produção
+                    </span>
+                  </div>
+
+                  <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
+                    Estúdio de Criação & Produção • Camilla Faria
+                  </h2>
+
+                  <p className="text-xs sm:text-sm text-indigo-200 max-w-2xl leading-relaxed">
+                    <em>"Depois da minha primeira xícara de café ☕, coloco a mão na massa para organizar tudo, criar os cursos com acervo completo de <strong>manuais, livros, apostilas e vídeos explicativos</strong> e publicar direto para venda no Mercado Pago!"</em>
+                  </p>
+                </div>
               </div>
 
-              <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
-                Estúdio de Criação & Produção • Camilla Faria
-              </h2>
-
-              <p className="text-xs sm:text-sm text-indigo-200 max-w-2xl leading-relaxed">
-                <em>"Depois da minha primeira xícara de café ☕, coloco a mão na massa para organizar tudo, criar os cursos com acervo completo de <strong>manuais, livros, apostilas e vídeos explicativos</strong> e publicar direto para venda no Mercado Pago!"</em>
-              </p>
+              <div className="flex flex-col sm:flex-row gap-2.5 shrink-0 w-full lg:w-auto">
+                <button
+                  type="button"
+                  onClick={() => setStudioTab('expiration_reminders')}
+                  className="px-4 py-3 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-950 text-xs font-black shadow-lg transition flex items-center justify-center gap-2 cursor-pointer"
+                >
+                  <BellRing className="w-4 h-4 text-slate-950" />
+                  <span>Notificações ASO/CND ({expirationItems.length})</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setActiveNavTab('showcase')}
+                  className="px-4 py-3 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold border border-white/20 transition flex items-center justify-center gap-2 cursor-pointer"
+                >
+                  <Eye className="w-4 h-4 text-sky-300" />
+                  <span>Ver Vitrine ao Vivo</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setPreviewModalOpen(true)}
+                  className="px-4 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-black shadow-lg transition flex items-center justify-center gap-2 cursor-pointer"
+                >
+                  <Sparkles className="w-4 h-4 text-amber-300" />
+                  <span>Pré-visualizar Pacote</span>
+                </button>
+              </div>
             </div>
-          </div>
-
-          <div className="flex flex-col sm:flex-row gap-2.5 shrink-0 w-full lg:w-auto">
-            <button
-              type="button"
-              onClick={() => setActiveNavTab('showcase')}
-              className="px-5 py-3 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold border border-white/20 transition flex items-center justify-center gap-2"
-            >
-              <Eye className="w-4 h-4 text-sky-300" />
-              <span>Ver Vitrine ao Vivo</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => setPreviewModalOpen(true)}
-              className="px-5 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-black shadow-lg transition flex items-center justify-center gap-2"
-            >
-              <Sparkles className="w-4 h-4 text-amber-300" />
-              <span>Pré-visualizar Pacote</span>
-            </button>
-          </div>
-        </div>
 
         {/* Indicadores de Autonomia */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-6 mt-6 border-t border-indigo-800/40 text-xs">
@@ -964,6 +1019,8 @@ export const CamillaCourseStudio: React.FC<CamillaCourseStudioProps> = ({ onCour
             </div>
           </div>
         </div>
+      )}
+        </>
       )}
     </div>
   );

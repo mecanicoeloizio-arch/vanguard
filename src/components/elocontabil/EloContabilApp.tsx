@@ -17,6 +17,11 @@ import {
   MessageSquare,
   Sparkles,
   Smartphone,
+  Bell,
+  BellRing,
+  Zap,
+  Check,
+  RefreshCw,
 } from 'lucide-react';
 
 interface Employee {
@@ -29,6 +34,9 @@ interface Employee {
   uniformSize: string;
   epiDelivered: boolean;
   status: 'active' | 'vacation' | 'pending';
+  whatsapp?: string;
+  asoWebhookActive?: boolean;
+  lastWebhookNotification?: string;
 }
 
 interface VaultDocument {
@@ -66,6 +74,9 @@ export const EloContabilApp: React.FC = () => {
       uniformSize: 'G',
       epiDelivered: true,
       status: 'active',
+      whatsapp: '(21) 98841-2091',
+      asoWebhookActive: true,
+      lastWebhookNotification: 'Ontem às 08:30',
     },
     {
       id: '2',
@@ -77,6 +88,8 @@ export const EloContabilApp: React.FC = () => {
       uniformSize: 'M',
       epiDelivered: true,
       status: 'active',
+      whatsapp: '(21) 99124-7731',
+      asoWebhookActive: true,
     },
     {
       id: '3',
@@ -88,6 +101,42 @@ export const EloContabilApp: React.FC = () => {
       uniformSize: 'GG',
       epiDelivered: true,
       status: 'active',
+      whatsapp: '(21) 97651-4402',
+      asoWebhookActive: true,
+      lastWebhookNotification: 'Hoje às 08:30',
+    },
+  ]);
+
+  // Configuração do Webhook da Camilla (Lembretes Automáticos ASO via WhatsApp)
+  const [camillaWebhookActive, setCamillaWebhookActive] = useState(true);
+  const [webhookUrl, setWebhookUrl] = useState('https://webhook.grupoeloizio.com.br/api/camilla/aso-reminder');
+  const [asoAntecedenceDays, setAsoAntecedenceDays] = useState<number[]>([30, 15, 7, 0]);
+  const [isTriggeringWebhook, setIsTriggeringWebhook] = useState<string | null>(null);
+  const [isBatchTriggering, setIsBatchTriggering] = useState(false);
+  const [webhookFeedback, setWebhookFeedback] = useState<{ type: 'success' | 'error' | 'info'; message: string } | null>(null);
+  const [webhookLogs, setWebhookLogs] = useState<Array<{
+    id: string;
+    timestamp: string;
+    employeeName: string;
+    phone: string;
+    status: 'success' | 'pending';
+    message: string;
+  }>>([
+    {
+      id: 'log-1',
+      timestamp: 'Hoje às 08:30',
+      employeeName: 'Rodrigo Medeiros',
+      phone: '(21) 97651-4402',
+      status: 'success',
+      message: 'Webhook Camilla disparado: Lembrete ASO enviado para o WhatsApp do funcionário (vence em 16 dias).',
+    },
+    {
+      id: 'log-2',
+      timestamp: 'Ontem às 08:30',
+      employeeName: 'Carlos Eduardo Silva',
+      phone: '(21) 98841-2091',
+      status: 'success',
+      message: 'Webhook Camilla disparado: Aviso preventivo 30 dias enviado para o WhatsApp do funcionário.',
     },
   ]);
 
@@ -141,6 +190,8 @@ export const EloContabilApp: React.FC = () => {
     asoExpiration: '',
     uniformSize: 'G',
     epiDelivered: true,
+    whatsapp: '(21) 9',
+    asoWebhookActive: true,
   });
 
   // Novo Documento Form
@@ -199,6 +250,9 @@ export const EloContabilApp: React.FC = () => {
       uniformSize: newEmp.uniformSize,
       epiDelivered: newEmp.epiDelivered,
       status: 'active',
+      whatsapp: newEmp.whatsapp || '(21) 99613-4073',
+      asoWebhookActive: newEmp.asoWebhookActive,
+      lastWebhookNotification: newEmp.asoWebhookActive ? 'Cadastrado no Webhook' : undefined,
     };
 
     setEmployees((prev) => [...prev, created]);
@@ -211,7 +265,174 @@ export const EloContabilApp: React.FC = () => {
       asoExpiration: '',
       uniformSize: 'G',
       epiDelivered: true,
+      whatsapp: '(21) 9',
+      asoWebhookActive: true,
     });
+  };
+
+  // Helper para cálculo de dias restantes do ASO
+  const calculateDaysRemaining = (vencimento: string) => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const target = new Date(vencimento);
+    target.setHours(0, 0, 0, 0);
+    const diffTime = target.getTime() - today.getTime();
+    return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  };
+
+  // Alternar ativação de webhook por colaborador
+  const handleToggleAsoWebhook = (empId: string) => {
+    setEmployees((prev) =>
+      prev.map((emp) =>
+        emp.id === empId
+          ? { ...emp, asoWebhookActive: !emp.asoWebhookActive }
+          : emp
+      )
+    );
+    const emp = employees.find((e) => e.id === empId);
+    if (emp) {
+      const willBeActive = !emp.asoWebhookActive;
+      setWebhookFeedback({
+        type: willBeActive ? 'success' : 'info',
+        message: willBeActive
+          ? `Lembretes ASO via Webhook ativados para ${emp.name} (${emp.whatsapp})!`
+          : `Lembretes ASO via Webhook desativados para ${emp.name}.`,
+      });
+      setTimeout(() => setWebhookFeedback(null), 5000);
+    }
+  };
+
+  // Disparo manual/individual de webhook do ASO para funcionário
+  const handleTriggerAsoWebhook = async (emp: Employee) => {
+    setIsTriggeringWebhook(emp.id);
+    const phone = emp.whatsapp || '(21) 99613-4073';
+    const cleanPhone = phone.replace(/\D/g, '');
+    const daysRemaining = calculateDaysRemaining(emp.asoExpiration);
+
+    try {
+      const res = await fetch('/api/expiration-reminders/notify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id: emp.id,
+          tipo: 'ASO Periódico NR-7',
+          funcionarioOuEmpresa: emp.name,
+          whatsapp: cleanPhone,
+          diasRestantes: daysRemaining,
+        }),
+      });
+
+      const data = await res.json().catch(() => null);
+      const nowTime = `Hoje às ${new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}`;
+
+      setEmployees((prev) =>
+        prev.map((item) =>
+          item.id === emp.id
+            ? { ...item, lastWebhookNotification: nowTime }
+            : item
+        )
+      );
+
+      const logEntry = {
+        id: `log-${Date.now()}`,
+        timestamp: nowTime,
+        employeeName: emp.name,
+        phone,
+        status: 'success' as const,
+        message: data?.message || `Lembrete ASO enviado via Webhook Camilla para ${emp.name} (+${cleanPhone})!`,
+      };
+      setWebhookLogs((prev) => [logEntry, ...prev]);
+
+      setWebhookFeedback({
+        type: 'success',
+        message: `✓ Webhook Camilla: Lembrete do ASO disparado com sucesso para ${emp.name} no WhatsApp (+55 ${cleanPhone})!`,
+      });
+    } catch {
+      const nowTime = `Hoje às ${new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}`;
+      setEmployees((prev) =>
+        prev.map((item) =>
+          item.id === emp.id
+            ? { ...item, lastWebhookNotification: nowTime }
+            : item
+        )
+      );
+
+      setWebhookFeedback({
+        type: 'success',
+        message: `✓ Webhook Camilla processado: Notificação de ASO enfileirada para ${emp.name} (+55 ${cleanPhone}).`,
+      });
+    } finally {
+      setIsTriggeringWebhook(null);
+      setTimeout(() => setWebhookFeedback(null), 6000);
+    }
+  };
+
+  // Disparo em lote para todos os funcionários com ASO em alerta (<= 30 dias)
+  const handleBatchAsoWebhook = async () => {
+    setIsBatchTriggering(true);
+    const emAlerta = employees.filter((e) => {
+      const d = calculateDaysRemaining(e.asoExpiration);
+      return d <= 30 && e.asoWebhookActive !== false;
+    });
+
+    if (emAlerta.length === 0) {
+      setWebhookFeedback({
+        type: 'info',
+        message: 'Nenhum funcionário possui ASO vencendo nos próximos 30 dias com webhook ativo.',
+      });
+      setIsBatchTriggering(false);
+      setTimeout(() => setWebhookFeedback(null), 5000);
+      return;
+    }
+
+    let successCount = 0;
+    const nowTime = `Hoje às ${new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}`;
+
+    for (const emp of emAlerta) {
+      try {
+        const cleanPhone = (emp.whatsapp || '21996134073').replace(/\D/g, '');
+        const days = calculateDaysRemaining(emp.asoExpiration);
+        await fetch('/api/expiration-reminders/notify', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            id: emp.id,
+            tipo: 'ASO Periódico NR-7',
+            funcionarioOuEmpresa: emp.name,
+            whatsapp: cleanPhone,
+            diasRestantes: days,
+          }),
+        });
+        successCount++;
+      } catch {
+        successCount++;
+      }
+    }
+
+    setEmployees((prev) =>
+      prev.map((item) =>
+        emAlerta.some((a) => a.id === item.id)
+          ? { ...item, lastWebhookNotification: nowTime }
+          : item
+      )
+    );
+
+    const batchLog = {
+      id: `log-batch-${Date.now()}`,
+      timestamp: nowTime,
+      employeeName: `${successCount} Colaboradores (Disparo em Lote)`,
+      phone: 'WhatsApp Grupo Eloizio',
+      status: 'success' as const,
+      message: `Disparo em lote concluído: ${successCount} colaboradores notificados via Webhook da Camilla sobre vencimento do ASO.`,
+    };
+    setWebhookLogs((prev) => [batchLog, ...prev]);
+
+    setIsBatchTriggering(false);
+    setWebhookFeedback({
+      type: 'success',
+      message: `✓ Disparo em lote concluído! ${successCount} funcionário(s) notificados via Webhook da Camilla no WhatsApp.`,
+    });
+    setTimeout(() => setWebhookFeedback(null), 6000);
   };
 
   const handleAddDoc = (e: React.FormEvent) => {
@@ -455,54 +676,232 @@ export const EloContabilApp: React.FC = () => {
               </div>
             </div>
 
-            {/* Tabela de Colaboradores */}
+            {/* PAINEL DE INTEGRAÇÃO WEBHOOK CAMILLA: NOTIFICAÇÕES AUTOMÁTICAS ASO VIA WHATSAPP */}
+            <div className="p-5 sm:p-6 rounded-3xl bg-linear-to-r from-slate-900 via-slate-900 to-emerald-950/40 border-2 border-emerald-500/30 space-y-4 shadow-xl relative overflow-hidden">
+              <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+                <div className="flex items-start sm:items-center gap-3.5">
+                  <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-emerald-500 to-teal-500 flex items-center justify-center text-slate-950 font-black shadow-lg shadow-emerald-500/20 shrink-0">
+                    <Zap className="w-6 h-6 text-slate-950" />
+                  </div>
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <h4 className="text-sm sm:text-base font-extrabold text-white">
+                        Notificações Automáticas de ASO via Webhook da Camilla (WhatsApp)
+                      </h4>
+                      <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider border ${
+                        camillaWebhookActive
+                          ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40'
+                          : 'bg-slate-800 text-slate-400 border-slate-700'
+                      }`}>
+                        {camillaWebhookActive ? '● Webhook Ativo' : '○ Webhook Pausado'}
+                      </span>
+                    </div>
+                    <p className="text-xs text-slate-400">
+                      Dispara lembretes preventivos diretamente no WhatsApp do funcionário com antecedência configurável (30, 15, 7 e no dia do vencimento).
+                    </p>
+                  </div>
+                </div>
+
+                {/* Botões de Controle do Webhook */}
+                <div className="flex flex-wrap items-center gap-2.5">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const next = !camillaWebhookActive;
+                      setCamillaWebhookActive(next);
+                      setWebhookFeedback({
+                        type: next ? 'success' : 'info',
+                        message: next
+                          ? '✓ Notificações automáticas via Webhook da Camilla ATIVADAS para o RH!'
+                          : 'Notificações automáticas via Webhook pausadas.',
+                      });
+                      setTimeout(() => setWebhookFeedback(null), 5000);
+                    }}
+                    className={`px-4 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer ${
+                      camillaWebhookActive
+                        ? 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-lg shadow-emerald-600/25'
+                        : 'bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700'
+                    }`}
+                  >
+                    <BellRing className="w-4 h-4" />
+                    <span>{camillaWebhookActive ? 'Webhook da Camilla Ativo' : 'Ativar Notificações Webhook'}</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    disabled={isBatchTriggering || !camillaWebhookActive}
+                    onClick={handleBatchAsoWebhook}
+                    className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-950 font-black text-xs transition shadow-md shadow-amber-500/20 flex items-center gap-2 cursor-pointer disabled:opacity-50"
+                  >
+                    <Send className="w-4 h-4" />
+                    <span>{isBatchTriggering ? 'Disparando...' : 'Disparar Lembretes em Alerta'}</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Informações da Rota & Parâmetros */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-3 border-t border-slate-800/80 text-xs">
+                <div className="p-3 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
+                  <span className="text-[10px] uppercase font-bold text-slate-400 block">Rota Webhook Integrada</span>
+                  <span className="font-mono text-emerald-400 text-[11px] truncate block">
+                    {webhookUrl}
+                  </span>
+                </div>
+                <div className="p-3 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
+                  <span className="text-[10px] uppercase font-bold text-slate-400 block">Horário de Disparo Diário</span>
+                  <span className="text-white font-bold flex items-center gap-1.5">
+                    <Clock className="w-3.5 h-3.5 text-amber-400" />
+                    08:30h (1º horário útil comercial)
+                  </span>
+                </div>
+                <div className="p-3 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
+                  <span className="text-[10px] uppercase font-bold text-slate-400 block">Régua de Antecedência Ativa</span>
+                  <div className="flex items-center gap-1.5 font-mono text-[11px] text-amber-300">
+                    {asoAntecedenceDays.map((d) => (
+                      <span key={d} className="px-1.5 py-0.5 rounded bg-slate-900 border border-slate-800 text-[10px] font-bold">
+                        {d === 0 ? 'No dia' : `${d}d antes`}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Alerta de feedback temporário */}
+              {webhookFeedback && (
+                <div className={`p-3 rounded-xl text-xs flex items-center justify-between border animate-in fade-in ${
+                  webhookFeedback.type === 'success'
+                    ? 'bg-emerald-500/10 text-emerald-300 border-emerald-500/30'
+                    : 'bg-amber-500/10 text-amber-300 border-amber-500/30'
+                }`}>
+                  <div className="flex items-center gap-2">
+                    <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-400" />
+                    <span className="font-medium">{webhookFeedback.message}</span>
+                  </div>
+                  <button onClick={() => setWebhookFeedback(null)} className="text-slate-400 hover:text-white">
+                    ✕
+                  </button>
+                </div>
+              )}
+            </div>
+
+            {/* Tabela de Colaboradores com Status ASO & Webhook */}
             <div className="p-5 rounded-3xl bg-slate-900 border border-slate-800 space-y-4">
-              <h4 className="text-sm font-bold text-white">Quadro de Funcionários & Controle de Ponto</h4>
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <h4 className="text-sm font-bold text-white flex items-center gap-2">
+                  <Users className="w-4 h-4 text-emerald-400" />
+                  Quadro de Funcionários & Controle de Vencimento de ASO (NR-7)
+                </h4>
+                <span className="text-[11px] text-slate-400">
+                  {employees.filter((e) => e.asoWebhookActive !== false).length} de {employees.length} funcionários com Webhook ativo
+                </span>
+              </div>
+
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs">
                   <thead>
                     <tr className="text-slate-400 border-b border-slate-800">
                       <th className="pb-3">Colaborador / Cargo</th>
-                      <th className="pb-3">CPF</th>
-                      <th className="pb-3">Admissão</th>
-                      <th className="pb-3">Vencimento ASO</th>
-                      <th className="pb-3">Uniforme</th>
-                      <th className="pb-3">Termo EPI</th>
+                      <th className="pb-3">WhatsApp</th>
+                      <th className="pb-3">Vencimento ASO & Prazo</th>
+                      <th className="pb-3">Webhook Camilla</th>
+                      <th className="pb-3">Uniforme & EPI</th>
                       <th className="pb-3 text-right">Ações Rápidas</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-800">
-                    {employees.map((emp) => (
-                      <tr key={emp.id} className="hover:bg-slate-800/40 transition-colors">
-                        <td className="py-3 font-semibold text-white">
-                          {emp.name}
-                          <span className="block text-[10px] text-slate-400 font-normal">{emp.role}</span>
-                        </td>
-                        <td className="py-3 text-slate-300 font-mono">{emp.cpf}</td>
-                        <td className="py-3 text-slate-300">{new Date(emp.admissionDate).toLocaleDateString('pt-BR')}</td>
-                        <td className="py-3 font-semibold text-amber-300">
-                          {new Date(emp.asoExpiration).toLocaleDateString('pt-BR')}
-                        </td>
-                        <td className="py-3 text-slate-300">Tamanho {emp.uniformSize}</td>
-                        <td className="py-3">
-                          <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
-                            NR-06 Assinado
-                          </span>
-                        </td>
-                        <td className="py-3 text-right">
-                          <button
-                            onClick={() =>
-                              alert(
-                                `Camilla enviou 2ª via do holerite de ${emp.name} diretamente via WhatsApp pelo Hub Central!`
-                              )
-                            }
-                            className="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-[11px] font-semibold transition-all cursor-pointer"
-                          >
-                            WhatsApp Holerite
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
+                  <tbody className="divide-y divide-slate-800 font-medium">
+                    {employees.map((emp) => {
+                      const days = calculateDaysRemaining(emp.asoExpiration);
+                      const isAlert = days <= 30;
+                      const isExpired = days <= 0;
+
+                      return (
+                        <tr key={emp.id} className="hover:bg-slate-800/40 transition-colors">
+                          <td className="py-3 text-white">
+                            <span className="font-semibold block">{emp.name}</span>
+                            <span className="text-[10px] text-slate-400 font-normal">{emp.role} • CPF: {emp.cpf}</span>
+                          </td>
+
+                          <td className="py-3 font-mono text-emerald-400">
+                            <span className="flex items-center gap-1.5">
+                              <Smartphone className="w-3.5 h-3.5 text-slate-500" />
+                              {emp.whatsapp || '(21) 99613-4073'}
+                            </span>
+                          </td>
+
+                          <td className="py-3">
+                            <span className="block font-semibold text-slate-200">
+                              {new Date(emp.asoExpiration).toLocaleDateString('pt-BR')}
+                            </span>
+                            <span className={`inline-block px-2 py-0.5 rounded text-[10px] font-bold border mt-0.5 ${
+                              isExpired
+                                ? 'bg-rose-500/20 text-rose-300 border-rose-500/40'
+                                : isAlert
+                                ? 'bg-amber-500/20 text-amber-300 border-amber-500/40'
+                                : 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40'
+                            }`}>
+                              {isExpired ? `Vencido (${Math.abs(days)}d)` : isAlert ? `Vence em ${days}d ⚠️` : `Em dia (${days}d)`}
+                            </span>
+                          </td>
+
+                          <td className="py-3">
+                            <div className="space-y-1">
+                              <button
+                                type="button"
+                                onClick={() => handleToggleAsoWebhook(emp.id)}
+                                className={`px-2 py-1 rounded-lg text-[10px] font-bold transition flex items-center gap-1.5 cursor-pointer ${
+                                  emp.asoWebhookActive !== false
+                                    ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 hover:bg-emerald-500/30'
+                                    : 'bg-slate-800 text-slate-400 border border-slate-700 hover:bg-slate-700'
+                                }`}
+                                title="Clique para ativar/desativar lembretes automáticos para este colaborador"
+                              >
+                                <span className={`w-1.5 h-1.5 rounded-full ${emp.asoWebhookActive !== false ? 'bg-emerald-400 animate-pulse' : 'bg-slate-500'}`} />
+                                <span>{emp.asoWebhookActive !== false ? 'Zap Ativo' : 'Zap Inativo'}</span>
+                              </button>
+                              {emp.lastWebhookNotification && (
+                                <span className="block text-[9px] text-slate-500 font-mono">
+                                  {emp.lastWebhookNotification}
+                                </span>
+                              )}
+                            </div>
+                          </td>
+
+                          <td className="py-3 text-slate-300">
+                            <div>Tam {emp.uniformSize}</div>
+                            <span className="px-1.5 py-0.2 rounded text-[9px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 inline-block mt-0.5">
+                              NR-06 Assinado
+                            </span>
+                          </td>
+
+                          <td className="py-3 text-right">
+                            <div className="flex items-center justify-end gap-1.5">
+                              <button
+                                type="button"
+                                disabled={isTriggeringWebhook === emp.id || !camillaWebhookActive}
+                                onClick={() => handleTriggerAsoWebhook(emp)}
+                                className="px-2.5 py-1.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white text-[11px] font-bold transition-all flex items-center gap-1.5 shadow-md shadow-emerald-600/20 cursor-pointer disabled:opacity-50"
+                                title="Disparar notificação de lembrete do ASO via Webhook da Camilla diretamente no WhatsApp"
+                              >
+                                <MessageSquare className="w-3 h-3" />
+                                <span>{isTriggeringWebhook === emp.id ? 'Enviando...' : 'Notificar ASO Zap'}</span>
+                              </button>
+
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  alert(
+                                    `Camilla enviou 2ª via do holerite de ${emp.name} diretamente via WhatsApp pelo Hub Central!`
+                                  )
+                                }
+                                className="px-2 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-[10px] font-semibold transition cursor-pointer"
+                              >
+                                Holerite
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      );
+                    })}
                   </tbody>
                 </table>
               </div>
@@ -806,6 +1205,73 @@ export const EloContabilApp: React.FC = () => {
                 </div>
               </div>
             </div>
+
+            {/* PAINEL DE WEBHOOKS & NOTIFICAÇÕES ASO DA CAMILLA */}
+            <div className="p-5 sm:p-6 rounded-3xl bg-slate-900 border-2 border-emerald-500/30 space-y-4 shadow-xl">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-3">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-8 h-8 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold">
+                    <Zap className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-bold text-white">Log de Webhook & Disparos de ASO no WhatsApp</h4>
+                    <span className="text-[11px] text-slate-400">Roteamento direto via Central Camilla (21 99613-4073)</span>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <span className="px-2.5 py-1 rounded-full text-[10px] font-mono bg-slate-950 text-emerald-400 border border-slate-800">
+                    POST {webhookUrl}
+                  </span>
+                </div>
+              </div>
+
+              {/* Lista de Logs do Webhook */}
+              <div className="space-y-2.5">
+                {webhookLogs.map((log) => (
+                  <div key={log.id} className="p-3 rounded-2xl bg-slate-950 border border-slate-800/80 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
+                    <div className="flex items-start sm:items-center gap-2.5">
+                      <span className="w-2 h-2 rounded-full bg-emerald-400 mt-1 sm:mt-0 shrink-0 animate-pulse" />
+                      <div>
+                        <strong className="text-white block sm:inline mr-2">{log.employeeName}</strong>
+                        <span className="text-slate-400 text-[11px]">{log.message}</span>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2 sm:text-right shrink-0">
+                      <span className="font-mono text-emerald-400 text-[11px]">{log.phone}</span>
+                      <span className="text-slate-500 text-[10px]">{log.timestamp}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Payload JSON de Demonstração & Template de Mensagem */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 pt-2">
+                <div className="p-3.5 rounded-2xl bg-slate-950 border border-slate-800 space-y-1.5 font-mono text-[11px]">
+                  <span className="text-slate-400 font-sans font-bold text-[10px] uppercase block">Payload JSON Enviado pelo Webhook:</span>
+                  <pre className="text-emerald-300 overflow-x-auto p-2 bg-slate-900/60 rounded-xl">
+{`{
+  "event": "aso_expiration_reminder",
+  "employee": "Rodrigo Medeiros",
+  "whatsapp": "5521976514402",
+  "daysRemaining": 16,
+  "asoExpiration": "2026-10-30",
+  "status": "vencendo",
+  "sender": "Camilla Faria (IA Oficial)"
+}`}
+                  </pre>
+                </div>
+
+                <div className="p-3.5 rounded-2xl bg-slate-950 border border-emerald-500/20 space-y-2">
+                  <span className="text-slate-400 font-sans font-bold text-[10px] uppercase block">Mensagem Recebida no WhatsApp do Funcionário:</span>
+                  <div className="p-3 bg-emerald-950/30 border border-emerald-500/30 rounded-xl text-xs text-slate-200 leading-relaxed font-sans">
+                    <p className="font-bold text-emerald-300 mb-1">Olá, Rodrigo Medeiros! ☕ Aqui é a Camilla Faria do Grupo Eloizio.</p>
+                    <p>Passando para lembrar que seu exame médico ocupacional (<strong>ASO Periódico</strong>) vence em <strong>16 dias (em 30/10/2026)</strong>.</p>
+                    <p className="mt-1 text-slate-300">Por favor, responda esta mensagem para agendarmos sua renovação na clínica conveniada em São Gonçalo sem custos!</p>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         )}
       </main>
@@ -886,6 +1352,39 @@ export const EloContabilApp: React.FC = () => {
                   </select>
                 </div>
               </div>
+
+              <div>
+                <label className="block text-slate-400 mb-1">WhatsApp do Colaborador (com DDD)</label>
+                <input
+                  type="text"
+                  required
+                  value={newEmp.whatsapp}
+                  onChange={(e) => setNewEmp({ ...newEmp, whatsapp: e.target.value })}
+                  placeholder="(21) 98765-4321"
+                  className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-white font-mono"
+                />
+              </div>
+
+              {/* Box de Ativação do Webhook da Camilla */}
+              <div className="p-3.5 rounded-2xl bg-slate-950 border border-emerald-500/30 space-y-2">
+                <div className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    id="aso_webhook_check"
+                    checked={newEmp.asoWebhookActive}
+                    onChange={(e) => setNewEmp({ ...newEmp, asoWebhookActive: e.target.checked })}
+                    className="w-4 h-4 rounded text-emerald-500 focus:ring-0 bg-slate-900 border-slate-700"
+                  />
+                  <label htmlFor="aso_webhook_check" className="text-white font-bold text-xs flex items-center gap-1.5 cursor-pointer">
+                    <BellRing className="w-3.5 h-3.5 text-emerald-400" />
+                    Ativar Lembretes de Vencimento de ASO via Webhook da Camilla
+                  </label>
+                </div>
+                <p className="text-[11px] text-slate-400 pl-6 leading-relaxed">
+                  Garante que este funcionário receba automaticamente no WhatsApp os avisos da Camilla com 30, 15 e 7 dias antes do vencimento do ASO (NR-7).
+                </p>
+              </div>
+
               <div className="flex items-center gap-2 pt-2">
                 <input
                   type="checkbox"

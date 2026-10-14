@@ -18,7 +18,7 @@ import { AcademicCalendarAndLibrary } from './components/academic/AcademicCalend
 import { SystemManualsView } from './components/docs/SystemManualsView';
 import { CertificateValidator } from './components/public/CertificateValidator';
 import { AuthModal } from './components/auth/AuthModal';
-import { SofiaVirtualAssistant } from './components/marketing/SofiaVirtualAssistant';
+import { CamillaVirtualAssistant } from './components/marketing/CamillaVirtualAssistant';
 import { TalentCooperativePortal } from './components/cooperative/TalentCooperativePortal';
 import { EnrollmentFormModal } from './components/academic/EnrollmentFormModal';
 import { WebmailPortal } from './components/mail/WebmailPortal';
@@ -63,7 +63,7 @@ const AppModals: React.FC = () => {
       <MercadoPagoModal />
       <HelpDeskModal />
       <AuthModal />
-      <SofiaVirtualAssistant />
+      <CamillaVirtualAssistant />
       <LGPDBanner />
       <EnrollmentFormModal
         isOpen={showEnrollmentModal}
