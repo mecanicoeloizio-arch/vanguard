@@ -1,31 +1,31 @@
-# ==============================================================================
-# Grupo Eloizio - Configurações Apache / cPanel / Hostinger (.htaccess)
-# ==============================================================================
-
-DirectoryIndex index.php index.html
-
 <IfModule mod_rewrite.c>
     RewriteEngine On
     RewriteBase /
-</IfModule>
 
-# Proteção de Arquivos Sensíveis
-<FilesMatch "\.(sql|sh|md|lock)$">
-    Require all denied
-</FilesMatch>
+    # Forçar HTTPS se disponível
+    # RewriteCond %{HTTPS} off
+    # RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+    # Roteamento de API
+    RewriteRule ^api/(.*)$ api/index.php [QSA,L]
+
+    # Deixar subpastas físicas passarem diretamente
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^ - [L]
+
+    # Caso arquivo não exista, direciona para index.php do portal
+    RewriteRule ^(.*)$ index.php [QSA,L]
+</IfModule>
 
 # Cabeçalhos de Segurança
 <IfModule mod_headers.c>
     Header set X-Content-Type-Options "nosniff"
-    Header set X-Frame-Options "SAMEORIGIN"
     Header set X-XSS-Protection "1; mode=block"
     Header set Referrer-Policy "strict-origin-when-cross-origin"
 </IfModule>
 
-# Compactação GZIP para Máximo Desempenho
+# Compressão GZIP para máxima velocidade
 <IfModule mod_deflate.c>
-    AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css application/javascript application/json
+    AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript application/json
 </IfModule>
-
-# Charset padrão
-AddDefaultCharset UTF-8

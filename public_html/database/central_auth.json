@@ -1,0 +1,7 @@
+{
+  "username": "admin",
+  "password_hash": "$2y$10$e0MYzXyjpJS7Pd0RVvHwHeXFzNqV.ZgK9XjC/3E2zZ4O9kU4LdYg2",
+  "plain_hint": "admin123",
+  "last_changed": "2026-10-14 00:00:00",
+  "notes": "Senha padrao inicial: admin123. Modificavel apos login na Central Master."
+}

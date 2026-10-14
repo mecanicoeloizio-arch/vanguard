@@ -415,5 +415,20 @@ declare(strict_types=1);
   });
   </script>
 
+  <!-- Componente Universal de Aviso e Consentimento LGPD • Grupo Eloizio -->
+  <?php 
+  $lgpdPaths = [
+      __DIR__ . '/../components/lgpd_banner.php',
+      dirname(__DIR__, 2) . '/components/lgpd_banner.php',
+      __DIR__ . '/components/lgpd_banner.php',
+      dirname(__DIR__) . '/components/lgpd_banner.php'
+  ];
+  foreach ($lgpdPaths as $path) {
+      if (file_exists($path)) {
+          include $path;
+          break;
+      }
+  }
+  ?>
 </body>
 </html>

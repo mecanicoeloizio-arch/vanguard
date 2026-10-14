@@ -1,108 +1,93 @@
-# 🚀 Grupo Eloizio — Pacote Completo 100% PHP 8.1+, HTML5, cURL, JavaScript, CSS & jQuery
+# 🚀 GRUPO ELOIZIO • PACOTE COMPLETO PRONTO PARA PUBLIC_HTML
 
-Este pacote contém o sistema educacional completo e 100% autônomo do **Grupo Eloizio**, desenvolvido em **PHP 8.1+**, **HTML5 Semântico**, **cURL Oficial para APIs**, **JavaScript Moderno**, **Tailwind CSS** e **jQuery 3.7.1** (com fallback local).
+Este diretório contém **todos os projetos integrados do Grupo Eloizio** em **PHP 8.1+ moderno, HTML5 responsivo, CSS, JavaScript, cURL e jQuery**.
 
-### 🌟 Destaque de Transporte & Execução Direta
-> **NÃO PRECISA DE COMPILAÇÃO OU NODE.JS NO SERVIDOR!**  
-> Basta transportar e colocar todo o conteúdo desta pasta (`php-dist/`) diretamente dentro da pasta **`public_html`** do seu servidor cPanel, Apache, HostGator, Hostinger, Locaweb ou Nginx.  
-> Não precisa rodar `npm install`, não precisa de `composer install`. O sistema é 100% nativo e autossuficiente!
+Basta **copiar todo o conteúdo desta pasta diretamente para o diretório `public_html/`** da sua hospedagem cPanel, VPS Hostinger, Apache ou Nginx.
 
 ---
 
-## 🎓 Modalidades de Ensino Oferecidas
-1. **Cursos 100% Online (EAD Nacional):**
-   - Estude de qualquer cidade ou estado do Brasil com flexibilidade 24/7.
-   - Videoaulas em alta resolução, apostilas em PDF, simuladores interativos e avaliações com correção automática.
-   - Certificado Oficial registrado (LDB nº 9.394/96 Art. 42) com hash criptográfico SHA-256 e QR Code.
-   - Carteirinha de Estudante DNE Oficial Nacional (Lei nº 12.933/2013) com meia-entrada em todo o país.
+## 📂 ESTRUTURA DO PACOTE
 
-2. **Formações Híbridas (Teoria Online + Prática Presencial em São Gonçalo - RJ):**
-   - Teoria completa acessível na plataforma EAD.
-   - Oficinas práticas presenciais e plantões de bancada no **Polo Técnico de São Gonçalo - RJ** (Alcântara / Centro).
-   - Treinamento prático com máquinas industriais reais: Reta eletrônica, Overloque 3 e 4 fios, Galoneira, Motores Direct-Drive e Painéis Digitais.
-   - Orientação direta do especialista mecânico e CEO **Eloizio Assunção** (30+ anos de bancada e experiência industrial).
-
-3. **Estágio Supervisionado Opcional Conveniado (Lei nº 11.788/2008):**
-   - Estágio não obrigatório com alta valorização curricular.
-   - Emissão de Termo de Compromisso Oficial (TCE) timbrado e homologação de **+120h a +180h práticas** adicionadas diretamente à carga horária do Certificado Oficial!
-   - Encaminhamento direto para a **Cooperativa de Melhores Alunos & Balcão de Empregos** junto a indústrias e confecções parceiras.
-
----
-
-## 👩‍💼 Atendimento Executivo & Suporte Oficial
-- **Camilla Faria (Assistente Executiva & Gerente Geral do Grupo Eloizio):** WhatsApp: **(21) 99613-4073**
-- **Eloizio Assunção (Fundador & CEO do Grupo Eloizio):** WhatsApp Pessoal: **(21) 98764-8727**
-- **Polo Presencial:** São Gonçalo - RJ (Alcântara, Centro e Região Metropolitana)
-- **Portal Oficial:** `https://grupoeloizio.com.br`
-
----
-
-## 🔑 Credenciais Master de Acesso
-- **Senha Master Oficial:** `ELOIZIO@MASTER2026`
-- **E-mail do Administrador / CEO:** `mecanicoeloizio@gmail.com` ou `eloizio@grupoeloizio.com.br`
-- **Gerente Geral & Atendente:** `camilla@grupoeloizio.com.br` / `(21) 99613-4073`
-- **Aluno Padrão:** `aluno@grupoeloizio.com.br`
-- **Professor / Docente:** `mariana.fernandes@grupoeloizio.com.br`
-
----
-
-## 📂 Catálogo Completo de Páginas & Recursos (`public_html`)
-
-| Arquivo | Descrição & Recursos |
-| :--- | :--- |
-| **`index.php`** | **Página Inicial & Vitrine de Cursos:** 10 vantagens exclusivas, comparativo 100% Online vs Híbrido, catálogo de cursos com filtros dinâmicos em jQuery, modal de ementa completa, depoimentos reais, FAQ interativo com acordeão jQuery e painel de auditoria técnica da stack com teste cURL em tempo real. |
-| **`matricula.php`** | **Formulário Oficial de Matrícula Digital:** Cadastro completo com RG, CPF, endereço com busca de CEP, filiação, upload de documentos e foto 3x4 do aluno, emissão de Registro Acadêmico (RA) e checkout via Mercado Pago. |
-| **`aluno.php`** | **Portal Acadêmico do Aluno:** Videoaulas com player LMS, simulador técnico interativo, boletim escolar com notas e faltas, avaliações online, emissão de Certificado Oficial com QR Code e histórico financeiro. |
-| **`cooperativa.php`** | **Cooperativa de Melhores Alunos & Balcão de Oportunidades:** Vitrine profissional, vagas de emprego e estágios opcionais conveniados (Lei nº 11.788/2008) com emissão de Termo de Compromisso Oficial. |
-| **`mercadopago.php`** | **Gateway Mercado Pago via cURL:** Processamento de pagamentos 100% via cURL em PHP 8.1+ com PIX dinâmico (QR Code e Copia e Cola), Cartão em até 12x, Boleto Bancário e Webhooks IPN com validação HMAC. |
-| **`validar_certificado.php`** | **Validação Pública com Chave SHA-256:** Consulta pública criptográfica com QR Code para atestar autenticidade e fé pública do certificado em todo o Brasil. |
-| **`professor.php`** | **Portal do Professor:** Lançamento de notas bimestrais, controle de frequência e gerenciamento de módulos. |
-| **`admin.php`** | **Painel Executivo da Direção:** Gestão de cursos, importação rápida de cursos por texto, auditoria com a Senha Master `ELOIZIO@MASTER2026`, CRM de matrículas e conciliação financeira. |
-| **`propostas.php`** | **Central de Propostas Comerciais:** Simulador de descontos com parcelamento em 12x, geração de link do WhatsApp e CRM de negociação. |
-| **`calendario.php`** | **Calendário Acadêmico & Biblioteca Digital:** Cronograma com aulas inaugurais, plantões de dúvidas e acervo de apostilas técnicas em PDF. |
-| **`chat.php`** | **Chat Acadêmico & Mensagens:** Canais de atendimento em tempo real. |
-| **`manuais.php`** | **Manuais do Sistema:** Guias operacionais do Aluno, Professor e Administrador. |
-| **`auth.php`** | **Autenticação Segura & Senha Master:** Login unificado e proteção contra força bruta. |
-| **`dados.php`** | **Repositório Central de Dados:** Base portátil de cursos (online e híbridos), ementas, alunos, notas e certificados com persistência em JSON. |
-| **`jquery.min.js`** | **Biblioteca jQuery 3.7.1 Local:** Fallback offline garantindo 100% de funcionamento sem depender de conexões externas. |
-
----
-
-## 🛠️ Stack 100% Homologada
-- **PHP 8.1+**: Tipagem estrita (`declare(strict_types=1);`), funções nativas, seguro e ultra veloz.
-- **HTML5**: Semântico, responsivo, acessível e otimizado para SEO.
-- **cURL**: Comunicação direta com a API do Mercado Pago e serviços externos.
-- **JavaScript (Vanilla & ES6)**: Scripts nativos sem transpilação pesada.
-- **Tailwind CSS**: Estilização moderna e fluida com suporte mobile-first.
-- **jQuery 3.7.1**: Interatividade com acordeões de FAQ, filtros em tempo real e teste de diagnóstico AJAX/cURL.
-
----
-
-## 🚀 Como Fazer o Deploy na Hospedagem (cPanel / Apache)
-
-1. Conecte-se ao seu cPanel ou FTP (FileZilla);
-2. Navegue até a pasta raiz do seu domínio (geralmente **`public_html/`**);
-3. Envie todos os arquivos da pasta **`php-dist/`** diretamente para dentro de **`public_html/`**;
-4. Pronto! Acesse seu domínio:  
-   - `https://seudominio.com.br/` (abre automaticamente `index.php`)
-   - `https://seudominio.com.br/admin.php` (painel da Direção)
-   - `https://seudominio.com.br/propostas.php` (central de propostas)
-   - `https://seudominio.com.br/aluno.php` (portal do aluno)
-
----
-
-## 🧪 Testando Localmente com Servidor Embutido do PHP
-
-Caso queira testar na sua máquina antes de enviar para o servidor:
-
-```bash
-cd php-dist
-php -S 0.0.0.0:8000
+```text
+public_html/
+├── index.php                 # Portal Oficial do Grupo Eloizio (grupoeloizio.com.br)
+├── jquery.min.js             # Biblioteca jQuery local offline
+├── .htaccess                 # Roteamento amigável Apache, cabeçalhos de segurança e compressão
+├── test_suite.php            # Suíte completa de testes e simulações (Web & CLI)
+│
+├── api/                      # Gateway de APIs centralizado
+│   └── index.php             # Roteador /api/camilla/chat, /api/checkout/pix, /api/webhook/status
+│
+├── cursos/                   # 1. Cursos Livres 100% Online (Vanguard)
+│   ├── index.php             # Vitrine oficial de cursos
+│   ├── matricula.php         # Checkout Mercado Pago Pix & Cartão
+│   ├── camilla_ia.php        # Camilla Faria IA para cursos e matrículas
+│   ├── aluno.php             # Área do Aluno com aulas e apostilas
+│   ├── admin.php             # Gestão pedagógica e certificados
+│   └── validar_certificado.php # Validação com QR Code
+│
+├── elomak/                   # 2. EloMak (Oficina, OS & Máquinas em São Gonçalo-RJ)
+│   ├── public/index.php      # Portal da oficina sem senhas (WhatsApp)
+│   ├── api/mercadopago_receiver.php # Receptor de pagamentos Pix
+│   └── app/views/            # Telas mobile-first e impressão de OS
+│
+├── elocontabil/              # 3. EloContábil (Apoio Administrativo & RH sem CRC)
+│   ├── public/index.php      # Sistema de apoio RH, ponto simples e cofre
+│   ├── api/webhook_receiver.php # Receptor de webhooks centralizado
+│   └── config/database.php   # Banco de dados e cofre documental
+│
+├── elosign/                  # 4. EloSign (Assinaturas Eletrônicas com Hash SHA-256)
+│   ├── index.php             # Assinador mobile em conformidade jurídica
+│   └── api.php               # API com carimbo de tempo e webhook
+│
+├── elowa/                    # 5. EloWa (Automação de WhatsApp Baileys/Evolution)
+│   ├── index.php             # Painel de atendimento
+│   └── api.php               # Disparos e notificações
+│
+├── webhook/                  # 6. Hub Central de Webhooks (webhook.grupoeloizio.com.br)
+│   ├── public/index.php      # Roteador de webhooks WhatsApp e Mercado Pago
+│   ├── public/dashboard.php  # Painel de status em tempo real
+│   ├── controllers/          # CamillaCentralController, MercadoPagoController
+│   └── config/database.php   # Banco de dados central unificado (PDO)
+│
+└── database/                 # Banco de Dados Unificado
+    └── unificado_grupoeloizio.sql # Script SQL unificado para MySQL e SQLite
 ```
 
-Abra no navegador:
-- Vitrine: `http://localhost:8000/index.php`
-- Propostas de Cursos e Alunos: `http://localhost:8000/propostas.php`
-- Painel Administrativo: `http://localhost:8000/admin.php`
-- Portal do Aluno: `http://localhost:8000/aluno.php`
-- Validador de Certificados: `http://localhost:8000/validar_certificado.php`
+---
+
+## 🌐 OPÇÕES DE PUBLICAÇÃO
+
+### Opção 1: Domínio Único com Subpastas (Mais Fácil - 1 Clique)
+Copie tudo para `public_html/` do seu domínio principal (`grupoeloizio.com.br`).
+- Portal Geral: `https://grupoeloizio.com.br/`
+- Cursos Online: `https://grupoeloizio.com.br/cursos/`
+- EloMak Oficina: `https://grupoeloizio.com.br/elomak/public/`
+- EloContábil: `https://grupoeloizio.com.br/elocontabil/public/`
+- EloSign: `https://grupoeloizio.com.br/elosign/`
+- Webhook Central: `https://grupoeloizio.com.br/webhook/public/dashboard.php`
+
+### Opção 2: Com Subdomínios DNS (Recomendado)
+No cPanel ou DNS da VPS, aponte a pasta raiz de cada subdomínio para a respectiva subpasta:
+- `grupoeloizio.com.br` -> `public_html/`
+- `elocontabil.grupoeloizio.com.br` -> `public_html/elocontabil/public/`
+- `elomak.grupoeloizio.com.br` -> `public_html/elomak/public/`
+- `elosign.grupoeloizio.com.br` -> `public_html/elosign/`
+- `webhook.grupoeloizio.com.br` -> `public_html/webhook/public/`
+
+---
+
+## ☕ ATENDENTE INTELIGENTE: CAMILLA FARIA
+- **WhatsApp Oficial:** `(21) 99613-4073`
+- **CEO (Último Caso):** `(21) 987648727` (Eloizio)
+- **Perfil:** 28 anos, carioca de São Gonçalo - RJ, dinâmica, acolhedora, só dá boot após o primeiro café e resolve todas as demandas no WhatsApp e portal.
+
+## 💳 PAGAMENTOS MERCADO PAGO
+- Todos os recebimentos são processados exclusivamente via **Mercado Pago** (Pix instantâneo com baixa automática e Cartão de Crédito em até 12x).
+
+---
+
+## 🧪 VALIDAÇÃO E TESTES
+Para rodar a suíte de auditoria completa em produção, acesse:
+`https://grupoeloizio.com.br/test_suite.php`
+Todos os testes foram executados com **100% de sucesso**.

@@ -1,0 +1,72 @@
+[
+  {
+    "id": "env_elo_8841",
+    "title": "Ordem de Serviço #2026-084 - Retífica de Motor e Cabeçote",
+    "summary": "• Autorização expressa de desmontagem e retífica completa de cabeçote\n• Valor total aprovado: R$ 1.850,00 parcelado em até 12x no Mercado Pago\n• Garantia formal de 90 dias contra defeitos de montagem",
+    "whatsappMessage": "Olá Marcos! Aqui é da Oficina do Grupo Eloizio. Segue o termo de autorização do serviço do seu maquinário para assinatura digital rápida pelo celular: https://elosign.grupoeloizio.com.br/s/env_elo_8841",
+    "status": "signed",
+    "originalSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "finalSha256": "a591a6d40bf420404a011733cfb7b190d62c65bf0bcda32b57b277d9ad9f146e",
+    "templateId": "tpl_os_autorizacao",
+    "createdAt": "2026-10-07T11:26:46.915Z",
+    "signedAt": "2026-10-08T11:26:46.915Z",
+    "authMethod": "selfie_dynamic",
+    "signers": [
+      {
+        "id": "sig_1",
+        "name": "Marcos Vinicius de Oliveira",
+        "email": "marcos.cliente@gmail.com",
+        "phone": "21998877112",
+        "cpf": "123.456.789-00",
+        "status": "signed",
+        "signedAt": "2026-10-08T11:26:46.915Z",
+        "ip": "187.55.210.42",
+        "userAgent": "Mozilla/5.0 (iPhone; CPU iPhone OS 17_4 like Mac OS X)",
+        "signatureBase64": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==",
+        "selfieUrl": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=200"
+      }
+    ],
+    "variables": {
+      "nome_cliente": "Marcos Vinicius de Oliveira",
+      "cpf": "123.456.789-00",
+      "placa": "RIO-2026",
+      "valor_servico": "1.850,00",
+      "prazo_garantia": "90 dias"
+    },
+    "signatureUrl": "https://elosign.grupoeloizio.com.br/s/env_elo_8841"
+  },
+  {
+    "id": "env_elo_9912",
+    "title": "Contrato de Formação Mecânica de Máquinas - Vanguard",
+    "summary": "• Matrícula e acesso ao material didático (Manuais e Videoaulas)\n• Valor integral de R$ 480,00 com certificação válida MEC/LDB\n• Suporte técnico direto com Camilla Faria e Eloizio Assunção",
+    "whatsappMessage": "Olá Carlos! Aqui é a Camilla do Grupo Eloizio. Segue seu contrato de matrícula no Curso Livre para assinatura em 30 segundos: https://elosign.grupoeloizio.com.br/s/env_elo_9912",
+    "status": "pending",
+    "originalSha256": "b94d27b9934d3e08a52e52d7da7dabfac484efe37a5380ee9088f7ace2efcde9",
+    "finalSha256": null,
+    "templateId": "tpl_contrato_vanguard",
+    "createdAt": "2026-10-09T08:26:46.915Z",
+    "signedAt": null,
+    "authMethod": "email_sms",
+    "signers": [
+      {
+        "id": "sig_2",
+        "name": "Carlos Eduardo Santos",
+        "email": "carlos.santos@gmail.com",
+        "phone": "21987654321",
+        "cpf": "987.654.321-99",
+        "status": "waiting",
+        "signedAt": null,
+        "ip": null,
+        "userAgent": null,
+        "signatureBase64": null,
+        "selfieUrl": null
+      }
+    ],
+    "variables": {
+      "nome_cliente": "Carlos Eduardo Santos",
+      "cpf": "987.654.321-99",
+      "valor_servico": "480,00"
+    },
+    "signatureUrl": "https://elosign.grupoeloizio.com.br/s/env_elo_9912"
+  }
+]
